@@ -166,7 +166,7 @@ class TelemetrySystem {
     this.lapStartTime = Date.now();
   }
 
-  drawMinimap(track, kart) {
+  drawMinimap(track, kart, aiRacers = []) {
     if (!this.minimapCtx) return;
     const ctx = this.minimapCtx;
     const w = this.minimapCanvas.width;
@@ -201,12 +201,20 @@ class TelemetrySystem {
       ctx.fill();
     }
 
-    // Kart position marker
+    // AI Racers on Minimap
+    for (const ai of aiRacers) {
+      ctx.fillStyle = ai.primaryColor;
+      ctx.beginPath();
+      ctx.arc(ai.x * scale + offsetX, ai.y * scale + offsetY, 3.5, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Player Kart position marker
     ctx.fillStyle = '#00f0ff';
     ctx.shadowColor = '#00f0ff';
-    ctx.shadowBlur = 6;
+    ctx.shadowBlur = 7;
     ctx.beginPath();
-    ctx.arc(kart.x * scale + offsetX, kart.y * scale + offsetY, 4, 0, Math.PI * 2);
+    ctx.arc(kart.x * scale + offsetX, kart.y * scale + offsetY, 4.5, 0, Math.PI * 2);
     ctx.fill();
     ctx.shadowBlur = 0;
   }

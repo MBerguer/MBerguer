@@ -5,10 +5,50 @@
   const canvas = document.getElementById('circuit-canvas');
   const ctx = canvas.getContext('2d');
 
-  // World & Camera
-  const kart = new window.Kart(300, 720);
+  // Track & Telemetry Systems
   const track = new window.Track();
   const telemetry = window.telemetrySystem;
+
+  // Player Kart (Tincho #1 - Cyan & Carbon)
+  const kart = new window.Kart(300, 720, {
+    number: '1',
+    primaryColor: '#00f0ff',
+    secondaryColor: '#e10600',
+    helmetColor: '#f8fafc',
+    visorColor: '#ffb800'
+  });
+
+  // 2 AI Competitor Racers on Track
+  const aiRacers = [
+    new window.AiRacer(
+      track.centerline[3].x,
+      track.centerline[3].y,
+      track.centerline,
+      {
+        number: '7',
+        primaryColor: '#e10600',
+        secondaryColor: '#ffffff',
+        helmetColor: '#e10600',
+        visorColor: '#000000',
+        startIndex: 4,
+        targetSpeed: 420
+      }
+    ),
+    new window.AiRacer(
+      track.centerline[7].x,
+      track.centerline[7].y,
+      track.centerline,
+      {
+        number: '24',
+        primaryColor: '#a855f7',
+        secondaryColor: '#10b981',
+        helmetColor: '#10b981',
+        visorColor: '#00f0ff',
+        startIndex: 8,
+        targetSpeed: 390
+      }
+    )
+  ];
 
   const camera = {
     x: kart.x,
@@ -151,7 +191,6 @@
     btnCloseDrawer.addEventListener('click', () => telemetry.closeDrawer());
   }
 
-  // Lap trigger detection
   let passedSector4 = false;
 
   // Master Loop
@@ -160,10 +199,15 @@
     lastTime = now;
 
     if (currentMode === 'gp') {
-      // 1. Update Physics
+      // 1. Update Player Physics
       kart.update(dt, input);
 
-      // Track checkpoints & dynamic elements
+      // 2. Update AI Competitors
+      for (const ai of aiRacers) {
+        ai.updateAi(dt);
+      }
+
+      // 3. Track checkpoints & dynamic elements
       track.update(dt, kart, (cp) => {
         telemetry.openProject(cp.id);
         if (cp.id === 'tesis-futbol') passedSector4 = true;
@@ -173,13 +217,13 @@
         }
       });
 
-      // 2. Smooth Camera Follow
+      // 4. Smooth Camera Follow on Player
       const targetCamX = kart.x;
       const targetCamY = kart.y;
       camera.x += (targetCamX - camera.x) * camera.smooth;
       camera.y += (targetCamY - camera.y) * camera.smooth;
 
-      // 3. Render World
+      // 5. Render World
       const rect = canvas.getBoundingClientRect();
       const viewW = rect.width;
       const viewH = rect.height;
@@ -187,21 +231,25 @@
       ctx.clearRect(0, 0, viewW, viewH);
 
       ctx.save();
-      // Center camera on kart
       ctx.translate(viewW / 2, viewH / 2);
       ctx.translate(-camera.x, -camera.y);
 
       // Draw Track & Checkpoints
       track.draw(ctx, kart);
 
-      // Draw Kart & Particles
+      // Draw AI Racers
+      for (const ai of aiRacers) {
+        ai.draw(ctx);
+      }
+
+      // Draw Player Kart & Particles
       kart.draw(ctx);
 
       ctx.restore();
 
-      // 4. Update HUD
+      // 6. Update HUD
       telemetry.updateHUD(kart);
-      telemetry.drawMinimap(track, kart);
+      telemetry.drawMinimap(track, kart, aiRacers);
     }
 
     requestAnimationFrame(loop);
