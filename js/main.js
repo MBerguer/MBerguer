@@ -1,5 +1,5 @@
 /**
- * Berguer GP - Master Game Loop & Event Orchestration
+ * Tincho GP - Master Game Loop & Event Orchestration
  */
 (function() {
   const canvas = document.getElementById('circuit-canvas');
@@ -128,7 +128,7 @@
     if (currentMode === 'gp') {
       currentMode = 'console';
       consoleView.classList.add('active');
-      btnToggleMode.innerHTML = '<span>🏎️ Play Berguer GP</span>';
+      btnToggleMode.innerHTML = '<span>🏎️ Play Tincho GP</span>';
       btnToggleMode.classList.add('active');
     } else {
       currentMode = 'gp';

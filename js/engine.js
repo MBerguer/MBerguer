@@ -1,5 +1,5 @@
 /**
- * Berguer GP - Procedural Web Audio Engine
+ * Tincho GP - Procedural Web Audio Engine
  * Pure synthesized sound without any external audio assets.
  */
 class SoundEngine {

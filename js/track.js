@@ -1,5 +1,5 @@
 /**
- * Berguer GP - Circuit Geometry, Sectors & Interactive Checkpoints
+ * Tincho GP - Circuit Geometry, Sectors & Interactive Checkpoints
  */
 class Track {
   constructor() {

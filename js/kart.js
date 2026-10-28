@@ -1,5 +1,5 @@
 /**
- * Berguer GP - High-Precision Kart Physics & Rendering
+ * Tincho GP - High-Precision Kart Physics & Rendering
  */
 class Kart {
   constructor(x, y) {
