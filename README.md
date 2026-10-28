@@ -19,6 +19,24 @@
 
 ---
 
+### 🕹️ TINCHO GRAND PRIX // LIVE ON-TRACK ARCADE
+
+<!-- ANIMATED ARCADE EMBEDDED DIRECTLY IN MARKDOWN (CLICK TO PLAY LIVE AT 60 FPS) -->
+<div align="center">
+
+<a href="https://mberguer.github.io" target="_blank">
+  <img src="assets/tincho-gp-arcade.svg" width="100%" alt="Tincho GP Live Track Arcade" />
+</a>
+
+<p align="center">
+  <sub>👆 <b>Haz click en el arcade superior para pilotar el kart en tiempo real (60 FPS + audio de motor sintetizado).</b></sub><br/>
+  <sub>Controles: <code>W</code> <code>A</code> <code>S</code> <code>D</code> / Flechas para acelerar y doblar &bull; <code>ESPACIO</code> / <code>SHIFT</code> para derrapar en las curvas.</sub>
+</p>
+
+</div>
+
+---
+
 ### 🍱 BENTO GRID // PIT-WALL SYSTEMS ARCHITECTURE
 
 <div align="center">
@@ -81,24 +99,55 @@
 
 ---
 
-### 🕹️ TINCHO GP — EL JUEGO WEB INTERACTIVO
+### 🔍 TELEMETRY DEEP DIVES (EXPANDIBLE DIRECTO EN GITHUB)
 
-<div align="center">
+<details>
+<summary><b>🏎️ SECTOR 01: tsp-light-panel (FIA Standard 3504-2019 en Rust)</b></summary>
+<br/>
 
-```ascii
- ╔═══════════════════════════════════════════════════════════════════════════════════════╗
- ║  🏎️  TINCHO GRAND PRIX // PLAYABLE IN YOUR BROWSER                                   ║
- ║  Maneja el kart, derrapa en las chicanes y descubre cada proyecto en la pista.       ║
- ║                                                                                       ║
- ║  >> [ JUGAR TINCHO GP: https://mberguer.github.io ] <<                                ║
- ╚═══════════════════════════════════════════════════════════════════════════════════════╝
-```
+- **Lenguaje & Concurrencia:** Rust (Nightly / 2021) • Modelo de actores asíncrono sobre `tokio`.
+- **Event Sourcing:** Log de eventos append-only con snapshots en disco para reproducción determinística milisegundo a milisegundo.
+- **WebSocket Gateway:** Servidor en `axum` con mensajes serializados mediante `ts-rs` hacia la UI React con trazado vectorial SVG.
+- **Repositorio:** [github.com/MBerguer/tsp-light-panel](https://github.com/MBerguer/tsp-light-panel)
+</details>
 
-<p>
-  <sub>Controles: <code>W</code> <code>A</code> <code>S</code> <code>D</code> / Flechas para pilotar &bull; <code>ESPACIO</code> / <code>SHIFT</code> para derrapar con humo &bull; Físicas reales en Canvas 60 FPS &bull; Sonido procedural con Web Audio API.</sub>
-</p>
+<details>
+<summary><b>🎮 SECTOR 02: Abuse 2026 (Port de Motor a 64-bit + Raytracing en C++20)</b></summary>
+<br/>
 
-</div>
+- **Arquitectura Gráfica:** Modernización del loop original de DOS a un pipeline con Shaders y trazado de rayos bidimensional en tiempo real.
+- **Oclusión Volumétrica:** Sombras y luces dinámicas proyectadas desde los disparos y fuentes ambientales sobre mapas de oclusión de sprites retro.
+- **Frame Pacing:** Físicas determinísticas a 60 Hz con renderizado interpolado desacoplado para monitores de 144Hz+.
+- **Repositorio:** [github.com/MBerguer/Abuse_2026](https://github.com/MBerguer/Abuse_2026)
+</details>
+
+<details>
+<summary><b>⚡ SECTOR 03: alloy-zksync (Infraestructura Rust de Alto Rendimiento)</b></summary>
+<br/>
+
+- **Zero-Allocation State:** Serialización criptográfica Zero-Copy optimizada para pipelines masivos en la EVM de ZKsync Era.
+- **Eficiencia de CPU:** Eliminación de overhead de asignación en memoria para soportar alto throughput transaccional.
+- **Repositorio:** [github.com/MBerguer/alloy-zksync](https://github.com/MBerguer/alloy-zksync)
+</details>
+
+<details>
+<summary><b>⚽ SECTOR 04: tesis-futbol (Predicción de Trayectorias bajo Incertidumbre)</b></summary>
+<br/>
+
+- **Investigación de Posgrado:** Maestría en Machine Learning y Data Engineering (Universidad de la República).
+- **Modelación Estocástica:** Modelos gráficos probabilísticos aplicados a trayectorias dinámicas multiobjeto en entornos de alta entropía.
+- **Pipeline de Datos:** Extracción de features espacio-temporales e inferencia de baja latencia.
+- **Repositorio:** [github.com/MBerguer/tesis-futbol](https://github.com/MBerguer/tesis-futbol)
+</details>
+
+<details>
+<summary><b>📄 SECTOR 05: UdelaRTeX (La Suite Tipográfica de la UdelaR)</b></summary>
+<br/>
+
+- **Estandarización Académica:** Plantillas oficiales para tesis, monografías y papers científicos adoptadas por miles de universitarios.
+- **Automatización CI/CD:** Compilación reproducible y chequeos tipográficos automáticos.
+- **Repositorio:** [github.com/MBerguer/UdelaRTeX](https://github.com/MBerguer/UdelaRTeX)
+</details>
 
 ---
 

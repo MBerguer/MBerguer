@@ -1,0 +1,206 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 260" width="100%" height="260">
+  <defs>
+    <!-- Cyan Neon Glow -->
+    <filter id="glow-cyan" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="4" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <!-- Red Neon Glow -->
+    <filter id="glow-red" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="5" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <!-- Headlight Cone Gradient -->
+    <linearGradient id="headlight-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00f0ff" stop-opacity="0.6" />
+      <stop offset="60%" stop-color="#00f0ff" stop-opacity="0.15" />
+      <stop offset="100%" stop-color="#00f0ff" stop-opacity="0" />
+    </linearGradient>
+
+    <!-- Asphalt Background Gradient -->
+    <linearGradient id="track-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0b0f19" />
+      <stop offset="100%" stop-color="#05070c" />
+    </linearGradient>
+
+    <!-- CSS Keyframe Animations -->
+    <style>
+      @keyframes kartMotion {
+        0% {
+          transform: translate(60px, 140px) rotate(-15deg);
+        }
+        25% {
+          transform: translate(240px, 90px) rotate(8deg);
+        }
+        50% {
+          transform: translate(450px, 140px) rotate(-22deg); /* Deep drift apex */
+        }
+        75% {
+          transform: translate(620px, 100px) rotate(12deg);
+        }
+        100% {
+          transform: translate(780px, 130px) rotate(-5deg);
+        }
+      }
+
+      @keyframes driftSmoke {
+        0% { opacity: 0.8; transform: scale(0.5); }
+        50% { opacity: 0.4; transform: scale(1.4) translate(-15px, 5px); }
+        100% { opacity: 0; transform: scale(2.2) translate(-30px, 10px); }
+      }
+
+      @keyframes rpmPulse {
+        0% { width: 40px; }
+        50% { width: 150px; }
+        80% { width: 175px; }
+        100% { width: 40px; }
+      }
+
+      @keyframes fiaBlink {
+        0%, 45% { fill: #10b981; filter: drop-shadow(0 0 6px #10b981); }
+        50%, 85% { fill: #ffb800; filter: drop-shadow(0 0 8px #ffb800); }
+        90%, 100% { fill: #e10600; filter: drop-shadow(0 0 10px #e10600); }
+      }
+
+      @keyframes coinBlink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.25; }
+      }
+
+      .animated-kart {
+        animation: kartMotion 4.2s infinite ease-in-out alternate;
+      }
+
+      .animated-smoke {
+        animation: driftSmoke 0.9s infinite ease-out;
+        transform-origin: center;
+      }
+
+      .rpm-live-bar {
+        animation: rpmPulse 4.2s infinite ease-in-out;
+      }
+
+      .fia-led {
+        animation: fiaBlink 6s infinite steps(1);
+      }
+
+      .insert-coin {
+        animation: coinBlink 1.4s infinite ease-in-out;
+        font-family: 'JetBrains Mono', 'Fira Code', monospace;
+        font-weight: 800;
+        letter-spacing: 2px;
+      }
+
+      .mono-text {
+        font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      }
+    </style>
+  </defs>
+
+  <!-- PADDOCK BACKGROUND -->
+  <rect width="800" height="260" rx="10" fill="#070a10" stroke="rgba(0, 240, 255, 0.3)" stroke-width="1.5" />
+
+  <!-- GRID MATRIX LINES -->
+  <g stroke="rgba(255, 255, 255, 0.04)" stroke-width="1">
+    <line x1="0" y1="52" x2="800" y2="52" />
+    <line x1="0" y1="104" x2="800" y2="104" />
+    <line x1="0" y1="156" x2="800" y2="156" />
+    <line x1="0" y1="208" x2="800" y2="208" />
+    <line x1="160" y1="0" x2="160" y2="260" />
+    <line x1="320" y1="0" x2="320" y2="260" />
+    <line x1="480" y1="0" x2="480" y2="260" />
+    <line x1="640" y1="0" x2="640" y2="260" />
+  </g>
+
+  <!-- ASPHALT CIRCUIT PATH (S-CHICANE) -->
+  <!-- Outer Curb Base -->
+  <path d="M 0,160 Q 200,60 400,160 T 800,110" fill="none" stroke="#1e293b" stroke-width="96" stroke-linecap="round" />
+  <!-- FIA Kerb Strips (Red & White) -->
+  <path d="M 0,160 Q 200,60 400,160 T 800,110" fill="none" stroke="#e10600" stroke-width="88" stroke-dasharray="14 14" stroke-linecap="round" />
+  <path d="M 0,160 Q 200,60 400,160 T 800,110" fill="none" stroke="#ffffff" stroke-width="88" stroke-dasharray="0 14 14 0" stroke-linecap="round" />
+  <!-- Racing Asphalt -->
+  <path d="M 0,160 Q 200,60 400,160 T 800,110" fill="none" stroke="#0e1320" stroke-width="76" stroke-linecap="round" />
+  <!-- Rubber Groove -->
+  <path d="M 0,160 Q 200,60 400,160 T 800,110" fill="none" stroke="rgba(0,0,0,0.5)" stroke-width="38" stroke-linecap="round" />
+  <!-- Fluorescent Guide Line -->
+  <path d="M 0,160 Q 200,60 400,160 T 800,110" fill="none" stroke="rgba(0, 240, 255, 0.2)" stroke-width="2" stroke-dasharray="12 18" />
+
+  <!-- FIA TRACK SAFETY GANTRY (SIMULATING tsp-light-panel) -->
+  <g transform="translate(380, 48)">
+    <rect x="-35" y="-12" width="70" height="24" rx="4" fill="#111827" stroke="#374151" stroke-width="1.5" />
+    <circle cx="-18" cy="0" r="5" class="fia-led" />
+    <circle cx="0" cy="0" r="5" class="fia-led" />
+    <circle cx="18" cy="0" r="5" class="fia-led" />
+    <text x="0" y="24" fill="#94a3b8" font-size="8" text-anchor="middle" class="mono-text">FIA 3504-2019 PANEL</text>
+  </g>
+
+  <!-- LIVE ANIMATED KART ON TRACK -->
+  <g class="animated-kart">
+    <!-- Drift Smoke Particles -->
+    <circle cx="-24" cy="-8" r="7" fill="rgba(200, 220, 240, 0.5)" class="animated-smoke" />
+    <circle cx="-24" cy="8" r="9" fill="rgba(200, 220, 240, 0.5)" class="animated-smoke" style="animation-delay: 0.2s;" />
+
+    <!-- Headlight Cone (Volumetric Raycast) -->
+    <polygon points="12,-4 95,-32 105,0 95,32 12,4" fill="url(#headlight-grad)" />
+
+    <!-- Rear Wing -->
+    <rect x="-24" y="-15" width="6" height="30" rx="1" fill="#020617" stroke="#1e293b" />
+
+    <!-- Kart Chassis (Cyan Racing Livery) -->
+    <rect x="-20" y="-10" width="38" height="20" rx="5" fill="#00f0ff" filter="url(#glow-cyan)" />
+
+    <!-- Sidepods & Carbon Aerofoils -->
+    <rect x="-10" y="-14" width="22" height="3" fill="#1e293b" />
+    <rect x="-10" y="11" width="22" height="3" fill="#1e293b" />
+
+    <!-- Front Nose Cone (FIA Red Accent) -->
+    <polygon points="16,-12 28,0 16,12" fill="#e10600" />
+
+    <!-- 4 Wheels -->
+    <rect x="-16" y="-16" width="10" height="5" rx="1.5" fill="#090d16" stroke="#ffb800" stroke-width="0.8" />
+    <rect x="-16" y="11" width="10" height="5" rx="1.5" fill="#090d16" stroke="#ffb800" stroke-width="0.8" />
+    <rect x="10" y="-16" width="10" height="5" rx="1.5" fill="#090d16" stroke="#ffb800" stroke-width="0.8" />
+    <rect x="10" y="11" width="10" height="5" rx="1.5" fill="#090d16" stroke="#ffb800" stroke-width="0.8" />
+
+    <!-- Driver Helmet (Martín Berguer) -->
+    <circle cx="2" cy="0" r="5.5" fill="#f8fafc" />
+    <rect x="3" y="-3.5" width="3.5" height="7" rx="1" fill="#ffb800" />
+  </g>
+
+  <!-- COCKPIT TELEMETRY OVERLAY (TOP LEFT) -->
+  <g transform="translate(20, 20)">
+    <rect width="190" height="66" rx="6" fill="rgba(13, 18, 30, 0.9)" stroke="rgba(0, 240, 255, 0.3)" stroke-width="1" />
+    <text x="12" y="24" fill="#94a3b8" font-size="9" class="mono-text" font-weight="700">LIVE TELEMETRY // SECTOR 1</text>
+    
+    <text x="12" y="52" fill="#ffffff" font-size="28" font-weight="800" class="mono-text">218</text>
+    <text x="68" y="52" fill="#00f0ff" font-size="11" font-weight="700" class="mono-text">KM/H</text>
+
+    <rect x="110" y="32" width="22" height="22" rx="3" fill="#111827" stroke="#ffb800" stroke-width="1" />
+    <text x="121" y="48" fill="#ffb800" font-size="14" font-weight="800" text-anchor="middle" class="mono-text">5</text>
+
+    <!-- Live RPM Gauge Bar -->
+    <rect x="12" y="58" width="166" height="4" rx="2" fill="rgba(255,255,255,0.1)" />
+    <rect x="12" y="58" width="40" height="4" rx="2" fill="url(#headlight-grad)" class="rpm-live-bar" />
+  </g>
+
+  <!-- INTERACTIVE CALL TO ACTION (BOTTOM RIGHT) -->
+  <g transform="translate(530, 200)">
+    <rect width="250" height="44" rx="6" fill="#e10600" filter="url(#glow-red)" />
+    <text x="125" y="27" fill="#ffffff" font-size="11" text-anchor="middle" class="insert-coin">
+      ▶ DRIVE TINCHO GP (LIVE)
+    </text>
+  </g>
+
+  <!-- PADDOCK BANNER (BOTTOM LEFT) -->
+  <text x="24" y="242" fill="#64748b" font-size="10" class="mono-text">
+    MARTÍN BERGUER // RUST CONCURRENCY &amp; MOTORSPORT SYSTEMS
+  </text>
+</svg>
