@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Martín Berguer | Grand Prix & Systems Telemetry</title>
+  <meta name="description" content="Interactive 2D Racing & Pit-Wall Telemetry Portfolio of Martín Berguer - Staff Systems Engineer specializing in Rust, F1 Simulation, and Low-Latency Computing.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <header id="top-bar">
+    <div class="brand-section">
+      <span class="brand-badge">BERGUER GP</span>
+      <span class="brand-title">Martín Berguer</span>
+      <span class="brand-sub">// Staff Systems & Simulation Engineer (Rust / F1 Telemetry)</span>
+    </div>
+
+    <!-- TIMING HUD (TOP CENTER) -->
+    <div id="timing-hud">
+      <div class="timing-item">
+        <span class="timing-title">LAP TIME</span>
+        <span class="timing-val" id="lap-time-val">00:00.00</span>
+      </div>
+      <div class="timing-item">
+        <span class="timing-title">BEST LAP</span>
+        <span class="timing-val" id="best-lap-val">--:--.--</span>
+      </div>
+    </div>
+
+    <!-- TOP ACTIONS -->
+    <div class="top-actions">
+      <button id="btn-toggle-mode" class="btn-telemetry">
+        <span>📋 Pit-Wall Console</span>
+      </button>
+      <button id="btn-sound" class="btn-sound" title="Toggle Engine Audio">🔇</button>
+      <a href="https://github.com/MBerguer" target="_blank" class="btn-telemetry" style="text-decoration:none;">
+        <span>GitHub ↗</span>
+      </a>
+      <a href="https://linkedin.com/in/mberguer" target="_blank" class="btn-telemetry" style="text-decoration:none;">
+        <span>LinkedIn ↗</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- GAME VIEW (CANVAS & HUD) -->
+  <main id="game-container">
+    <canvas id="circuit-canvas"></canvas>
+
+    <!-- COCKPIT TELEMETRY (BOTTOM LEFT) -->
+    <div id="cockpit-hud" class="hud-cluster">
+      <div class="speed-row">
+        <div>
+          <span class="speed-value" id="speed-num">0</span>
+          <span class="speed-unit">KM/H</span>
+        </div>
+        <div class="gear-badge" id="gear-num">1</div>
+      </div>
+
+      <div class="rpm-container">
+        <div class="rpm-bar-bg">
+          <div class="rpm-bar-fill" id="rpm-fill"></div>
+        </div>
+        <div class="telemetry-meta">
+          <span>RPM: <b id="rpm-num" style="color:#fff;">1200</b></span>
+          <span>LATERAL: <b id="g-num" style="color:var(--accent-cyan);">0.0G</b></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MINIMAP (TOP RIGHT) -->
+    <div id="minimap-container" class="hud-cluster">
+      <canvas id="minimap-canvas" width="140" height="140"></canvas>
+      <span class="minimap-label">CIRCUIT TELEMETRY</span>
+    </div>
+
+    <!-- CONTROLS HINT (BOTTOM RIGHT) -->
+    <div id="controls-hint" class="hud-cluster">
+      <div><span class="key-badge">W</span> <span class="key-badge">A</span> <span class="key-badge">S</span> <span class="key-badge">D</span> / Arrows: Drive</div>
+      <div><span class="key-badge">SPACE</span> / <span class="key-badge">SHIFT</span>: Drift & Skid</div>
+      <div>Drive through <b style="color:var(--accent-cyan);">Hologram Sectors</b> to inspect projects</div>
+    </div>
+
+    <!-- MOBILE TOUCH CONTROLS -->
+    <div id="mobile-controls">
+      <div class="d-pad">
+        <button id="btn-touch-left" class="touch-btn">◀</button>
+        <button id="btn-touch-right" class="touch-btn">▶</button>
+      </div>
+      <div class="pedal-pad">
+        <button id="btn-touch-drift" class="touch-btn" style="background:rgba(225,6,0,0.4);">💨</button>
+        <button id="btn-touch-down" class="touch-btn">▼</button>
+        <button id="btn-touch-up" class="touch-btn" style="background:rgba(16,185,129,0.4);">▲</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- PROJECT TELEMETRY DRAWER (SLIDE-OVER) -->
+  <aside id="project-drawer">
+    <div class="drawer-header">
+      <span class="drawer-sector-tag" id="drawer-sector">SECTOR 01</span>
+      <button id="btn-close-drawer" class="btn-close-drawer" title="Close Drawer">✕</button>
+    </div>
+
+    <div class="drawer-body">
+      <div>
+        <h2 class="drawer-title" id="drawer-title">Project Title</h2>
+        <p class="drawer-subtitle" id="drawer-sub">Project Subtitle</p>
+      </div>
+
+      <!-- SPECS GRID -->
+      <div class="spec-grid" id="drawer-specs"></div>
+
+      <!-- ARCHITECTURE SECTION -->
+      <div>
+        <h4 class="drawer-section-title">⚡ Systems Architecture</h4>
+        <div class="drawer-desc" id="drawer-arch"></div>
+      </div>
+
+      <!-- TECH TAGS -->
+      <div>
+        <h4 class="drawer-section-title">🛠️ Technology Core</h4>
+        <div class="tech-tags" id="drawer-tags"></div>
+      </div>
+    </div>
+
+    <div class="drawer-footer">
+      <a id="drawer-gh-link" href="#" target="_blank" class="btn-action-primary">
+        <span>Inspect Repository on GitHub</span> ↗
+      </a>
+    </div>
+  </aside>
+
+  <!-- PIT-WALL CONSOLE VIEW (ACCESSIBLE / FAST RECRUITER MODE) -->
+  <section id="console-view">
+    <div class="console-container">
+      <div class="console-card" style="border-left: 4px solid var(--accent-cyan);">
+        <h1 style="font-size: 26px; margin-bottom: 8px;">Martín Berguer // Pit-Wall Engineering Console</h1>
+        <p style="color: var(--text-muted); font-size: 14px; line-height: 1.6;">
+          Staff Systems & Simulation Engineer focused on high-throughput concurrency, real-time telemetry, and low-latency architectures in <b>Rust</b> and <b>C++</b>. Based in Montevideo, Uruguay (UTC-3), operating globally.
+        </p>
+      </div>
+
+      <h3 style="font-family: var(--font-mono); font-size: 14px; color: var(--accent-cyan); letter-spacing: 1px;">
+        🏁 THE 5 CHAMPIONSHIP SYSTEMS
+      </h3>
+
+      <div class="console-grid">
+        <!-- 1. tsp-light-panel -->
+        <div class="console-card">
+          <div style="font-family: var(--font-mono); font-size: 11px; color: var(--accent-f1-red); font-weight: 700; margin-bottom: 6px;">
+            SECTOR 01 // FIA STANDARD 3504-2019
+          </div>
+          <h3 style="font-size: 18px; margin-bottom: 8px;">tsp-light-panel</h3>
+          <p style="color: #cbd5e1; font-size: 13px; line-height: 1.5; margin-bottom: 14px;">
+            Simulador web integral de paneles luminosos de Fórmula 1. Motor puro en <b>Rust</b> con modelo de actores sobre <code>tokio</code>, event sourcing para replay determinístico y gateway WebSocket tipado en <code>axum</code>.
+          </p>
+          <div class="tech-tags" style="margin-bottom: 16px;">
+            <span class="tech-tag">Rust</span>
+            <span class="tech-tag">Tokio Actors</span>
+            <span class="tech-tag">Event Sourcing</span>
+            <span class="tech-tag">Axum WS</span>
+          </div>
+          <a href="https://github.com/MBerguer/tsp-light-panel" target="_blank" class="btn-action-primary" style="padding: 6px 12px; font-size: 11px;">
+            View Repo ↗
+          </a>
+        </div>
+
+        <!-- 2. Abuse 2026 -->
+        <div class="console-card">
+          <div style="font-family: var(--font-mono); font-size: 11px; color: var(--accent-purple); font-weight: 700; margin-bottom: 6px;">
+            SECTOR 02 // C++ RAYTRACING ENGINE
+          </div>
+          <h3 style="font-size: 18px; margin-bottom: 8px;">Abuse 2026</h3>
+          <p style="color: #cbd5e1; font-size: 13px; line-height: 1.5; margin-bottom: 14px;">
+            Port y reconstrucción completa del clásico de culto de 1996 de Crack dot Com a 64-bit moderno con <b>C++20</b> y pipeline de trazado de rayos (raytracing 2D) con iluminación y oclusión dinámica a 144+ FPS.
+          </p>
+          <div class="tech-tags" style="margin-bottom: 16px;">
+            <span class="tech-tag">C++20</span>
+            <span class="tech-tag">2D Raytracing</span>
+            <span class="tech-tag">Game Engine</span>
+            <span class="tech-tag">Vulkan/OpenGL</span>
+          </div>
+          <a href="https://github.com/MBerguer/Abuse_2026" target="_blank" class="btn-action-primary" style="padding: 6px 12px; font-size: 11px;">
+            View Repo ↗
+          </a>
+        </div>
+
+        <!-- 3. alloy-zksync -->
+        <div class="console-card">
+          <div style="font-family: var(--font-mono); font-size: 11px; color: var(--accent-cyan); font-weight: 700; margin-bottom: 6px;">
+            SECTOR 03 // LOW-OVERHEAD CRYPTO
+          </div>
+          <h3 style="font-size: 18px; margin-bottom: 8px;">alloy-zksync</h3>
+          <p style="color: #cbd5e1; font-size: 13px; line-height: 1.5; margin-bottom: 14px;">
+            Extensión en <b>Rust</b> para el framework Alloy optimizada para el rollup Zero-Knowledge ZKsync Era. Serialización de transacciones sin asignación de memoria (zero-copy) y canal asíncrono de alto rendimiento.
+          </p>
+          <div class="tech-tags" style="margin-bottom: 16px;">
+            <span class="tech-tag">Rust</span>
+            <span class="tech-tag">Alloy Core</span>
+            <span class="tech-tag">ZK-Rollups</span>
+            <span class="tech-tag">Zero-Copy</span>
+          </div>
+          <a href="https://github.com/MBerguer/alloy-zksync" target="_blank" class="btn-action-primary" style="padding: 6px 12px; font-size: 11px;">
+            View Repo ↗
+          </a>
+        </div>
+
+        <!-- 4. tesis-futbol -->
+        <div class="console-card">
+          <div style="font-family: var(--font-mono); font-size: 11px; color: var(--accent-amber); font-weight: 700; margin-bottom: 6px;">
+            SECTOR 04 // MACHINE LEARNING & PROBABILISTIC
+          </div>
+          <h3 style="font-size: 18px; margin-bottom: 8px;">tesis-futbol (MSc ML UdelaR)</h3>
+          <p style="color: #cbd5e1; font-size: 13px; line-height: 1.5; margin-bottom: 14px;">
+            Tesis de Maestría en Machine Learning y Data Engineering (UdelaR). Predicción de trayectorias y comportamiento en entornos deportivos dinámicos de alta entropía bajo incertidumbre inherente con modelos gráficos probabilísticos.
+          </p>
+          <div class="tech-tags" style="margin-bottom: 16px;">
+            <span class="tech-tag">Python</span>
+            <span class="tech-tag">Probabilistic Models</span>
+            <span class="tech-tag">PyTorch</span>
+            <span class="tech-tag">Real-Time ETL</span>
+          </div>
+          <a href="https://github.com/MBerguer/tesis-futbol" target="_blank" class="btn-action-primary" style="padding: 6px 12px; font-size: 11px;">
+            View Repo ↗
+          </a>
+        </div>
+
+        <!-- 5. UdelaRTeX -->
+        <div class="console-card">
+          <div style="font-family: var(--font-mono); font-size: 11px; color: var(--accent-emerald); font-weight: 700; margin-bottom: 6px;">
+            SECTOR 05 // ACADEMIC STANDARDS
+          </div>
+          <h3 style="font-size: 18px; margin-bottom: 8px;">UdelaRTeX</h3>
+          <p style="color: #cbd5e1; font-size: 13px; line-height: 1.5; margin-bottom: 14px;">
+            La suite tipográfica de referencia adoptada por miles de investigadores, docentes y estudiantes en la Universidad de la República. Automatización CI/CD y estandarización tipográfica rigurosa.
+          </p>
+          <div class="tech-tags" style="margin-bottom: 16px;">
+            <span class="tech-tag">LaTeX</span>
+            <span class="tech-tag">Open Source</span>
+            <span class="tech-tag">CI/CD Automation</span>
+            <span class="tech-tag">UdelaR</span>
+          </div>
+          <a href="https://github.com/MBerguer/UdelaRTeX" target="_blank" class="btn-action-primary" style="padding: 6px 12px; font-size: 11px;">
+            View Repo ↗
+          </a>
+        </div>
+      </div>
+
+      <!-- FOOTER CONTACT -->
+      <div class="console-card" style="text-align: center;">
+        <h4 style="margin-bottom: 6px;">Interested in low-latency systems or motorsport engineering?</h4>
+        <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 16px;">
+          Available for Staff / Lead Engineering, High-Throughput Concurrency & Simulation projects.
+        </p>
+        <a href="mailto:martin.berguer@gmail.com" class="btn-action-primary" style="display: inline-flex; width: auto; padding: 10px 24px;">
+          <span>Get in Touch: martin.berguer@gmail.com</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCRIPTS -->
+  <script src="js/engine.js"></script>
+  <script src="js/kart.js"></script>
+  <script src="js/track.js"></script>
+  <script src="js/telemetry.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
