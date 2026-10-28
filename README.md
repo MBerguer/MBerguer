@@ -1,107 +1,127 @@
 <div align="center">
 
-<!-- HERO BANNER ANIMADO -->
-<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=0,2,25,40,100&height=220&section=header&text=Martín%20Berguer&fontSize=52&fontAlignY=38&animation=fadeIn&fontColor=ffffff&desc=Staff%20Distributed%20Systems%20%7C%20Web3%20%7C%20AI%20%26%20High-Performance&descAlignY=62&descSize=19" width="100%" alt="Martín Berguer Banner" />
+```
+  ██████╗ ███████╗██████╗  ██████╗ ██╗   ██╗███████╗██████╗      ██████╗ ██████╗ 
+  ██╔══██╗██╔════╝██╔══██╗██╔════╝ ██║   ██║██╔════╝██╔══██╗    ██╔════╝ ██╔══██╗
+  ██████╔╝█████╗  ██████╔╝██║  ███╗██║   ██║█████╗  ██████╔╝    ██║  ███╗██████╔╝
+  ██╔══██╗██╔══╝  ██╔══██╗██║   ██║██║   ██║██╔══╝  ██╔══██╗    ██║   ██║██╔═══╝ 
+  ██████╔╝███████╗██║  ██║╚██████╔╝╚██████╔╝███████╗██║  ██║    ╚██████╔╝██║     
+  ╚═════╝ ╚══════╝╚═╝  ╚═╝ ╚═════╝  ╚═════╝ ╚══════╝╚═╝  ╚═╝     ╚═════╝ ╚═╝     
+               [ TELEMETRY & LOW-LATENCY SYSTEMS CONSOLE ]
+```
 
-<!-- TYPING ANIMADO EN TIEMPO REAL -->
+### **MARTÍN BERGUER**
+**Staff Systems & Simulation Engineer**  
+`Rust` • `Low-Latency Concurrency` • `Motorsport Telemetry` • `Applied ML under Uncertainty`
+
 <p align="center">
-  <img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&weight=600&size=20&duration=3000&pause=1000&color=00F0FF&center=true&vCenter=true&width=650&lines=Building+high-throughput+distributed+systems;Substrate%2C+Rust+%26+Zero-Knowledge+architectures;Machine+Learning+under+uncertainty+(UdelaR);Motorsport+telemetry+%26+low-latency+computing" alt="Typing SVG" />
+  <a href="https://linkedin.com/in/mberguer" target="_blank"><img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=flat-square&logo=linkedin&logoColor=white" alt="LinkedIn" /></a>
+  <img src="https://img.shields.io/badge/Focus-Rust_Systems_%26_Engine_Simulation-DEA584?style=flat-square&logo=rust&logoColor=black" alt="Rust Systems" />
+  <img src="https://img.shields.io/badge/MSc-ML_%26_Data_Eng_(UdelaR)-00529B?style=flat-square" alt="UdelaR MSc" />
+  <img src="https://img.shields.io/badge/FIA_Standard-3504--2019_Simulation-E10600?style=flat-square&logo=f1&logoColor=white" alt="FIA 3504-2019" />
+  <img src="https://img.shields.io/badge/Base-Montevideo_%2F_Remote-10B981?style=flat-square" alt="Location" />
 </p>
-
-<!-- QUICK STATUS BADGES -->
-<p align="center">
-  <a href="https://linkedin.com/in/mberguer" target="_blank">
-    <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" />
-  </a>
-  <a href="https://polkadot.network/development/academy/" target="_blank">
-    <img src="https://img.shields.io/badge/PBA_Hong_Kong-Certified_Graduate-E6007A?style=for-the-badge&logo=polkadot&logoColor=white" alt="PBA Graduate" />
-  </a>
-  <a href="https://udelar.edu.uy" target="_blank">
-    <img src="https://img.shields.io/badge/UdelaR-MSc_ML_%26_Data_Eng-00529B?style=for-the-badge" alt="UdelaR MSc" />
-  </a>
-  <img src="https://img.shields.io/badge/Remote-Global_%2F_UTC--3-00C853?style=for-the-badge&logo=googlemaps&logoColor=white" alt="Remote Global" />
-</p>
-
-</div>
 
 ---
 
-### ⚡ Architectural Pillars & Specializations
+</div>
 
 ```ascii
- ┌──────────────────────────────┬──────────────────────────────┬──────────────────────────────┐
- │  🦀 Distributed & Web3       │  🤖 Applied AI & Data        │  🏎️ High-Perf & Motorsport   │
- ├──────────────────────────────┼──────────────────────────────┼──────────────────────────────┤
- │  • Rust / Substrate / FRAME  │  • Probabilistic ML Models   │  • Low-latency architectures │
- │  • Zero-Knowledge / ZKVM     │  • Real-time inference ETL   │  • Telemetry & sensor data   │
- │  • Consensus & Cryptoecon.   │  • Multi-Agent orchestration │  • CUDA / GPGPU computing    │
- └──────────────────────────────┴──────────────────────────────┴──────────────────────────────┘
+ ╔════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+ ║  PIT-WALL TELEMETRY STATUS                                                          SIGNAL: LOCKED ║
+ ╠══════════════════════╦══════════════════════════════════════════╦══════════════════════════════════════╣
+ ║  PRIMARY ENGINE      ║  CONCURRENCY & ACTORS                    ║  DOMAIN INTERSECTION                 ║
+ ║  🦀 Rust (Nightly)   ║  Tokio • Event-Sourcing • Zero-Copy      ║  Motorsport Sim • Graphics • ML      ║
+ ╚══════════════════════╩══════════════════════════════════════════╩══════════════════════════════════════╝
 ```
 
 ---
 
-### 🛠️ Core Tech Stack & Tooling
+### 🏁 THE 5 FLAGSHIP ENGINES
 
-<div align="center">
-  <img src="https://skillicons.dev/icons?i=rust,python,ts,go,cpp,postgres,docker,kubernetes,gcp,aws,react,nextjs&perline=6" alt="Tech Stack" />
-</div>
+```
+  SECTOR 01 ─────────────────────────────────────────────────────────────
+```
+#### 🏎️ [`tsp-light-panel`](https://github.com/MBerguer/tsp-light-panel) — FIA F1 Track Safety Panel Simulator
+> **Full-scale web simulator of Formula 1 trackside light panel systems compliant with FIA Standard 3504-2019.**
+- **Architecture:** Pure Rust domain engine with an actor model orchestrated via `tokio`.
+- **Determinism:** Append-only event store with snapshotting for bit-accurate race replay and telemetry rewind.
+- **Safety State Machine:** Hierarchical authority model (`Race Control` > `Marshal Post` > `Trackside Panel`).
+- **Telemetry Gateway:** Typed WebSocket pipeline built on `axum`, feeding a reactive SVG track visualization and operational race dashboards.
+- *Stack:* `Rust` • `Tokio` • `Axum` • `Event Sourcing` • `WebSocket` • `TypeScript`
 
-<br/>
+```
+  SECTOR 02 ─────────────────────────────────────────────────────────────
+```
+#### 🎮 [`Abuse_2026`](https://github.com/MBerguer/Abuse_2026) — Cult 1996 DOS Shooter Engine Port + Raytracing
+> **Modern 64-bit engine reconstruction of Crack dot Com's classic 1996 sci-fi shooter *Abuse*, upgraded with real-time lighting.**
+- **Engine Modernization:** Decoupled legacy DOS memory management and rendering loops into modern cross-platform pipelines.
+- **Lighting Pipeline:** Real-time 2D raytracing and dynamic lighting cast through occlusion maps, reviving 90s sprite aesthetics with modern GPU illumination.
+- **Precision:** Preserved original physics and projectile mechanics while achieving uncapped 144+ FPS frame pacing.
+- *Stack:* `C++20` • `Vulkan / OpenGL` • `Custom Shaders` • `Real-Time Raytracing` • `Game Systems`
 
-<details>
-<summary><b>🔍 Detailed Systems Breakdown</b> (Click to expand)</summary>
+```
+  SECTOR 03 ─────────────────────────────────────────────────────────────
+```
+#### ⚡ [`alloy-zksync`](https://github.com/MBerguer/alloy-zksync) — High-Performance Zero-Knowledge Rust Engine
+> **Rust systems extension integrating the high-speed Alloy ecosystem with ZKsync Era cryptographic execution.**
+- **Low-Overhead Infrastructure:** Memory-efficient state serialization, custom transaction types, and zero-knowledge proof payload encoding in pure Rust.
+- **Throughput:** Engineered to eliminate allocation bottlenecks in high-frequency cryptographic submission pipelines.
+- *Stack:* `Rust` • `Alloy Core` • `ZK-Rollups` • `Async Concurrency` • `Cryptographic State`
 
-| Domain | Core Technologies & Frameworks |
-| :--- | :--- |
-| **Languages** | `Rust`, `Python`, `TypeScript`, `Go`, `C++`, `SQL` |
-| **Web3 & Cryptography** | `Substrate`, `FRAME Pallets`, `Ink!`, `Alloy`, `ZKVM / ZK-SNARKs`, `EVM`, `Polkadot SDK` |
-| **AI & Data Engineering** | `PySpark`, `PyTorch / Scikit-Learn`, `Pandas`, `FastAPI`, `Multi-Agent Systems` |
-| **High Performance** | `CUDA`, `GPGPU`, SIMD optimization, Memory profiling, Cache-efficient structures |
-| **Cloud & Infrastructure** | `Docker`, `Kubernetes`, `Terraform`, `GCP`, `AWS`, `Prometheus`, `Grafana`, `CI/CD` |
-</details>
+```
+  SECTOR 04 ─────────────────────────────────────────────────────────────
+```
+#### ⚽ [`tesis-futbol`](https://github.com/MBerguer/tesis-futbol) — Behavioral Trajectory Prediction under Uncertainty
+> **Master's Thesis Research (UdelaR) — Probabilistic state modeling and real-time trajectory forecasting in high-entropy sports environments.**
+- **Applied Inherent Uncertainty:** Formulated continuous-space Markov decision models and spatial-temporal neural architectures to forecast adversarial entity movements.
+- **Data Engineering:** High-frequency event streaming, distributed feature extraction, and sub-millisecond inference pipelines.
+- *Stack:* `Python` • `PyTorch` • `Probabilistic Modeling` • `Distributed ETL` • `Real-Time Inference`
 
----
-
-### 📊 Live GitHub Telemetry
-
-<div align="center">
-  <table border="0" cellspacing="0" cellpadding="0">
-    <tr valign="top">
-      <td>
-        <img src="https://github-readme-stats.vercel.app/api?username=MBerguer&show_icons=true&theme=tokyonight&hide_border=true&count_private=true&include_all_commits=true" width="415" alt="GitHub Stats" />
-      </td>
-      <td>
-        <img src="https://github-readme-streak-stats.herokuapp.com/?user=MBerguer&theme=tokyonight&hide_border=true" width="415" alt="Streak Stats" />
-      </td>
-    </tr>
-    <tr>
-      <td colspan="2" align="center">
-        <br/>
-        <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=MBerguer&layout=compact&theme=tokyonight&hide_border=true&langs_count=8" width="560" alt="Top Languages" />
-      </td>
-    </tr>
-  </table>
-</div>
-
----
-
-### 🏆 Engineering Highlights & Background
-
-- **🎓 Polkadot Blockchain Academy (Cohort 4, Hong Kong):** Certified graduate in Substrate runtime architecture, cryptographic primitives, FRAME pallet development and Byzantine-fault-tolerant consensus mechanics.
-- **🏎️ Motorsport Systems (FIA / AUVO):** Engineering telemetry analysis, dynamic rule vulnerability assessment and vehicle data acquisition pipelines.
-- **🔬 Master's in Machine Learning & Data Engineering (UdelaR):** Research thesis focused on probabilistic modeling, state estimation and decision making under high environmental uncertainty.
-- **🌐 Distributed Scale:** Designed, deployed, and maintained mission-critical cloud infrastructure, multi-region pipelines and microservices processing enterprise-grade throughput.
+```
+  SECTOR 05 ─────────────────────────────────────────────────────────────
+```
+#### 📄 [`UdelaRTeX`](https://github.com/MBerguer/UdelaRTeX) — The Academic Typesetting Standard for UdelaR
+> **The comprehensive open-source LaTeX suite and template framework adopted across Uruguay's largest university.**
+- **Academic Impact:** Empowers thousands of engineering, science, and mathematics students and faculty members to produce peer-review and publication-ready documents.
+- **Precision Engineering:** Automated build matrices, typographic micro-spacing, and official institutional branding specifications.
+- *Stack:* `TeX / LaTeX` • `CI/CD Automation` • `Open Source Tooling`
 
 ---
 
-### 📬 Connect & Collaborate
+### 🕹️ BERGUER GRAND PRIX — THE INTERACTIVE EXPERIENCE
+
+Instead of browsing another static portfolio, experience the codebase through an interactive race:
+
+```ascii
+      ┌────────────────────────────────────────────────────────────┐
+      │  🏎️  PLAY THE BERGUER GP IN YOUR BROWSER                   │
+      │  Drive the kart, hit the apex, and inspect live telemetry. │
+      │                                                            │
+      │  >> [ LAUNCH BERGUER GP: https://mberguer.github.io ] <<   │
+      └────────────────────────────────────────────────────────────┘
+```
+*(Use `W` `A` `S` `D` or arrow keys to steer, drift through sector checkpoints to inspect architecture deep dives, or switch to Pit-Wall Terminal mode).*
+
+---
+
+### 🛠️ CORE ENGINEERING ARSENAL
+
+| Systems & Backend | Motorsport & Graphics | Data & Mathematics | Infrastructure & Cloud |
+| :--- | :--- | :--- | :--- |
+| **Rust** (Async, Tokio, Actors) | **FIA 3504-2019** Track Safety | **Probabilistic ML** & Bayes | **Docker** & **Kubernetes** |
+| **C++20** (Low-level, Memory) | **Real-Time Raytracing** | Spatial-Temporal Modeling | **Terraform** / IaC |
+| **TypeScript / Go / Python** | **2D/3D Game Engines** | Sensor Fusion & Telemetry | **GCP / AWS** Systems |
+| Zero-Cost Abstractions | Frame Pacing & Shaders | High-Throughput ETL | Prometheus & Observability |
+
+---
 
 <div align="center">
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue?style=flat-square&logo=linkedin)](https://linkedin.com/in/mberguer)
-[![Email](https://img.shields.io/badge/Email-martin.berguer%40gmail.com-red?style=flat-square&logo=gmail)](mailto:martin.berguer@gmail.com)
-[![GitHub](https://img.shields.io/badge/GitHub-Follow-181717?style=flat-square&logo=github)](https://github.com/MBerguer)
+```
+ [ PIT STOP: martin.berguer@gmail.com ] • [ MONTEVIDEO, UY ] • [ STATUS: READY TO RACE ]
+```
 
-<sub><i>"Simplicity is prerequisite for reliability." — Edsger W. Dijkstra</i></sub>
+<sub>Built with precision. No cookie-cutter metrics. Just raw engineering, low latency, and clean code.</sub>
 
 </div>
