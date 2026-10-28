@@ -1,15 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 850 280" width="100%" height="280">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 850 280" width="100%" height="280">
   <defs>
-    <!-- Cyan Neon Glow -->
+    <!-- Cyan Neon Glow Filter -->
     <filter id="glow-cyan" x="-30%" y="-30%" width="160%" height="160%">
-      <feGaussianBlur stdDeviation="3.5" result="blur" />
+      <feGaussianBlur stdDeviation="3" result="blur" />
       <feMerge>
         <feMergeNode in="blur" />
         <feMergeNode in="SourceGraphic" />
       </feMerge>
     </filter>
 
-    <!-- Red Neon Glow -->
+    <!-- Red Neon Glow Filter -->
     <filter id="glow-red" x="-30%" y="-30%" width="160%" height="160%">
       <feGaussianBlur stdDeviation="4" result="blur" />
       <feMerge>
@@ -19,289 +19,205 @@
     </filter>
 
     <!-- Car Drop Shadow -->
-    <filter id="car-shadow" x="-20%" y="-20%" width="150%" height="150%">
-      <feDropShadow dx="3" dy="6" stdDeviation="5" flood-color="#000000" flood-opacity="0.75" />
+    <filter id="car-shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="3" dy="5" stdDeviation="4" flood-color="#000000" flood-opacity="0.85" />
     </filter>
 
-    <!-- Asphalt Noise Texture -->
-    <pattern id="asphalt-grain" width="40" height="40" patternUnits="userSpaceOnUse">
-      <rect width="40" height="40" fill="#0d111a" />
-      <circle cx="8" cy="8" r="1.2" fill="#1e2638" opacity="0.6" />
-      <circle cx="28" cy="14" r="1" fill="#171e2c" opacity="0.8" />
-      <circle cx="16" cy="32" r="1.4" fill="#080a10" opacity="0.9" />
-      <circle cx="34" cy="28" r="0.9" fill="#2a3449" opacity="0.4" />
+    <!-- Asphalt Grain Pattern -->
+    <pattern id="asphalt-grain" width="50" height="50" patternUnits="userSpaceOnUse">
+      <rect width="50" height="50" fill="#0d1119" />
+      <circle cx="10" cy="10" r="1.5" fill="#1b2333" opacity="0.7" />
+      <circle cx="35" cy="18" r="1.2" fill="#151c2a" opacity="0.8" />
+      <circle cx="20" cy="38" r="1.6" fill="#06090e" opacity="0.9" />
+      <circle cx="42" cy="36" r="1.1" fill="#253046" opacity="0.5" />
     </pattern>
 
-    <!-- Volumetric Headlight Gradient -->
+    <!-- Volumetric Headlight Beams -->
     <linearGradient id="beam-cyan" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#00f0ff" stop-opacity="0.85" />
-      <stop offset="40%" stop-color="#00f0ff" stop-opacity="0.25" />
+      <stop offset="0%" stop-color="#00f0ff" stop-opacity="0.8" />
+      <stop offset="45%" stop-color="#00f0ff" stop-opacity="0.22" />
       <stop offset="100%" stop-color="#00f0ff" stop-opacity="0" />
     </linearGradient>
 
     <linearGradient id="beam-amber" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#ffb800" stop-opacity="0.85" />
-      <stop offset="40%" stop-color="#ffb800" stop-opacity="0.2" />
+      <stop offset="0%" stop-color="#ffb800" stop-opacity="0.8" />
+      <stop offset="45%" stop-color="#ffb800" stop-opacity="0.18" />
       <stop offset="100%" stop-color="#ffb800" stop-opacity="0" />
     </linearGradient>
 
-    <!-- Carbon Fiber Pattern -->
-    <linearGradient id="carbon-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#18202f" />
-      <stop offset="50%" stop-color="#0f1522" />
-      <stop offset="100%" stop-color="#080c14" />
+    <!-- Carbon Fiber Monocoque Gradient -->
+    <linearGradient id="carbon-skin" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b" />
+      <stop offset="50%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#020617" />
     </linearGradient>
 
-    <!-- ==========================================
-         CAR DEFINITIONS (HIGH-DETAIL TOP DOWN)
-         ========================================== -->
+    <!-- ========================================================
+         MATHEMATICAL RACING LINES (SEAMLESS FORWARD PATHS)
+         Direction: Left to Right (-120px to 970px)
+         ======================================================== -->
+    
+    <!-- Path 1: Optimal Outside-Inside-Outside Apex (Tincho #1) -->
+    <path id="path-lead" d="M -110,158 C 90,118 190,88 320,86 C 410,85 450,152 540,168 C 640,175 750,140 980,104" fill="none" />
 
-    <!-- CAR #1: TINCHO BERGUER (CYAN & BLACK) -->
+    <!-- Path 2: Inside Aggressive Battle Line (Rival Red #7 - Parallel, no overlap) -->
+    <path id="path-inside" d="M -110,192 C 90,150 190,122 305,116 C 390,115 440,185 530,198 C 630,205 750,168 980,132" fill="none" />
+
+    <!-- Path 3: Tow / High Slipstream Line (Pursuer Purple #24) -->
+    <path id="path-chase" d="M -110,128 C 90,88 190,58 335,58 C 420,58 470,120 560,138 C 650,145 760,112 980,78" fill="none" />
+
+    <!-- ========================================================
+         CAR GRAPHIC COMPONENTS (HEADING RIGHT = TANGENT TO PATH)
+         ======================================================== -->
+
+    <!-- CAR 1: TINCHO BERGUER (#1 CYAN & OBSIDIAN) -->
     <g id="car-tincho" filter="url(#car-shadow)">
-      <!-- Dual Headlight Beams -->
-      <polygon points="20,-8 150,-42 165,-12 20,-3" fill="url(#beam-cyan)" opacity="0.9" />
-      <polygon points="20,8 150,42 165,12 20,3" fill="url(#beam-cyan)" opacity="0.9" />
+      <!-- Dual Headlight Cones -->
+      <polygon points="18,-7 140,-38 152,-10 18,-2" fill="url(#beam-cyan)" />
+      <polygon points="18,7 140,38 152,10 18,2" fill="url(#beam-cyan)" />
 
-      <!-- Front Wing with Endplates & Flaps -->
-      <rect x="22" y="-19" width="4" height="38" rx="1.5" fill="#00f0ff" filter="url(#glow-cyan)" />
-      <rect x="18" y="-21" width="9" height="3" rx="1" fill="#e10600" />
-      <rect x="18" y="18" width="9" height="3" rx="1" fill="#e10600" />
+      <!-- Front Wing with Endplates -->
+      <rect x="18" y="-18" width="4" height="36" rx="1.5" fill="#00f0ff" filter="url(#glow-cyan)" />
+      <rect x="15" y="-20" width="8" height="3" fill="#e10600" />
+      <rect x="15" y="17" width="8" height="3" fill="#e10600" />
 
-      <!-- Front Wishbone Suspension -->
-      <line x1="8" y1="-7" x2="16" y2="-17" stroke="#64748b" stroke-width="1.8" />
-      <line x1="14" y1="-7" x2="17" y2="-17" stroke="#64748b" stroke-width="1.8" />
-      <line x1="8" y1="7" x2="16" y2="17" stroke="#64748b" stroke-width="1.8" />
-      <line x1="14" y1="7" x2="17" y2="17" stroke="#64748b" stroke-width="1.8" />
+      <!-- Suspension Wishbones -->
+      <line x1="6" y1="-6" x2="13" y2="-15" stroke="#64748b" stroke-width="1.8" />
+      <line x1="12" y1="-6" x2="14" y2="-15" stroke="#64748b" stroke-width="1.8" />
+      <line x1="6" y1="6" x2="13" y2="15" stroke="#64748b" stroke-width="1.8" />
+      <line x1="12" y1="6" x2="14" y2="15" stroke="#64748b" stroke-width="1.8" />
+      <line x1="-10" y1="-8" x2="-15" y2="-17" stroke="#64748b" stroke-width="1.8" />
+      <line x1="-10" y1="8" x2="-15" y2="17" stroke="#64748b" stroke-width="1.8" />
 
-      <!-- Front Tires (Slick with Yellow Pirelli Stripe) -->
-      <rect x="10" y="-22" width="13" height="7" rx="2" fill="#080b12" stroke="#ffb800" stroke-width="0.9" />
-      <rect x="10" y="15" width="13" height="7" rx="2" fill="#080b12" stroke="#ffb800" stroke-width="0.9" />
+      <!-- 4 Wide Slick Tires with Yellow Sidewall -->
+      <rect x="7" y="-20" width="12" height="7" rx="2" fill="#06090e" stroke="#ffb800" stroke-width="0.9" />
+      <rect x="7" y="13" width="12" height="7" rx="2" fill="#06090e" stroke="#ffb800" stroke-width="0.9" />
+      <rect x="-22" y="-22" width="14" height="8.5" rx="2" fill="#06090e" stroke="#ffb800" stroke-width="1" />
+      <rect x="-22" y="13.5" width="14" height="8.5" rx="2" fill="#06090e" stroke="#ffb800" stroke-width="1" />
 
-      <!-- Rear Wishbone Suspension -->
-      <line x1="-12" y1="-9" x2="-18" y2="-19" stroke="#64748b" stroke-width="2" />
-      <line x1="-12" y1="9" x2="-18" y2="19" stroke="#64748b" stroke-width="2" />
+      <!-- Monocoque Chassis -->
+      <path d="M 22,0 L 7,-7 L -12,-13 L -24,-11 L -24,11 L -12,13 L 7,7 Z" fill="url(#carbon-skin)" stroke="#00f0ff" stroke-width="1.2" />
 
-      <!-- Rear Tires (Wider Slicks) -->
-      <rect x="-24" y="-24" width="15" height="9" rx="2" fill="#080b12" stroke="#ffb800" stroke-width="1" />
-      <rect x="-24" y="15" width="15" height="9" rx="2" fill="#080b12" stroke="#ffb800" stroke-width="1" />
+      <!-- Sidepods -->
+      <path d="M 5,-10 L -10,-15 L -18,-12 L -18,-7 Z" fill="#00f0ff" opacity="0.9" />
+      <path d="M 5,10 L -10,15 L -18,12 L -18,7 Z" fill="#00f0ff" opacity="0.9" />
 
-      <!-- Main Aerodynamic Body & Sidepods -->
-      <!-- Nose Cone -->
-      <path d="M 24,0 L 8,-8 L -14,-14 L -25,-12 L -25,12 L -14,14 L 8,8 Z" fill="url(#carbon-grad)" stroke="#00f0ff" stroke-width="1.2" />
+      <!-- Rear Wing -->
+      <rect x="-29" y="-18" width="5.5" height="36" rx="1.5" fill="#00f0ff" filter="url(#glow-cyan)" />
+      <rect x="-31" y="-20" width="9" height="3" fill="#e10600" />
+      <rect x="-31" y="17" width="9" height="3" fill="#e10600" />
+      <circle cx="-29" cy="0" r="1.8" fill="#ff0044" filter="url(#glow-red)" />
 
-      <!-- Sidepod Aerofoils & Radiator Ducts -->
-      <path d="M 6,-11 L -12,-16 L -20,-13 L -20,-8 Z" fill="#00f0ff" opacity="0.9" />
-      <path d="M 6,11 L -12,16 L -20,13 L -20,8 Z" fill="#00f0ff" opacity="0.9" />
+      <!-- Cockpit & Driver Helmet -->
+      <ellipse cx="-1" cy="0" rx="8" ry="5.5" fill="#020617" />
+      <circle cx="-2" cy="0" r="4.8" fill="#f8fafc" />
+      <rect x="-1" y="-3.2" width="3.5" height="6.4" rx="1.2" fill="#ffb800" />
 
-      <!-- Engine Cover Shark Fin -->
-      <rect x="-22" y="-1" width="16" height="2" fill="#e10600" />
-
-      <!-- Rear Aerodynamic Wing -->
-      <rect x="-31" y="-19" width="6" height="38" rx="1.5" fill="#00f0ff" filter="url(#glow-cyan)" />
-      <rect x="-33" y="-21" width="10" height="3" fill="#e10600" />
-      <rect x="-33" y="18" width="10" height="3" fill="#e10600" />
-      <!-- FIA Rain Light (Blinking Red LED) -->
-      <circle cx="-31" cy="0" r="2" fill="#ff0044" filter="url(#glow-red)" />
-
-      <!-- Cockpit & Halo Ring -->
-      <ellipse cx="-2" cy="0" rx="9" ry="6" fill="#05070c" />
-      <path d="M 3,0 L -6,-5 L -9,-4 L -9,4 L -6,5 Z" fill="none" stroke="#00f0ff" stroke-width="1.5" />
-
-      <!-- Driver Helmet (Tincho #1 - White & Gold Visor) -->
-      <circle cx="-3" cy="0" r="5" fill="#f8fafc" />
-      <rect x="-2" y="-3.5" width="4" height="7" rx="1.5" fill="#ffb800" />
-
-      <!-- Number #1 Badge -->
-      <circle cx="10" cy="0" r="3.5" fill="#ffffff" />
-      <text x="10" y="2.5" font-family="'JetBrains Mono', monospace" font-size="5" font-weight="900" text-anchor="middle" fill="#000">1</text>
+      <!-- Race #1 -->
+      <circle cx="9" cy="0" r="3.2" fill="#ffffff" />
+      <text x="9" y="2.2" font-family="'JetBrains Mono', monospace" font-size="4.8" font-weight="900" text-anchor="middle" fill="#000">1</text>
     </g>
 
-    <!-- CAR #2: RIVAL CHALLENGER (ROSSO CORSA RED & WHITE #7) -->
+    <!-- CAR 2: RIVAL CHALLENGER (#7 ROSSO CORSA RED) -->
     <g id="car-red" filter="url(#car-shadow)">
-      <!-- Dual Headlights -->
-      <polygon points="20,-8 140,-40 155,-10 20,-3" fill="url(#beam-amber)" opacity="0.8" />
-      <polygon points="20,8 140,40 155,10 20,3" fill="url(#beam-amber)" opacity="0.8" />
+      <polygon points="18,-7 135,-36 148,-10 18,-2" fill="url(#beam-amber)" />
+      <polygon points="18,7 135,36 148,10 18,2" fill="url(#beam-amber)" />
 
-      <!-- Front Wing -->
-      <rect x="22" y="-19" width="4" height="38" rx="1.5" fill="#e10600" filter="url(#glow-red)" />
+      <rect x="18" y="-18" width="4" height="36" rx="1.5" fill="#e10600" filter="url(#glow-red)" />
       <!-- Tires -->
-      <rect x="10" y="-22" width="13" height="7" rx="2" fill="#080b12" stroke="#ffffff" stroke-width="0.9" />
-      <rect x="10" y="15" width="13" height="7" rx="2" fill="#080b12" stroke="#ffffff" stroke-width="0.9" />
-      <rect x="-24" y="-24" width="15" height="9" rx="2" fill="#080b12" stroke="#ffffff" stroke-width="1" />
-      <rect x="-24" y="15" width="15" height="9" rx="2" fill="#080b12" stroke="#ffffff" stroke-width="1" />
+      <rect x="7" y="-20" width="12" height="7" rx="2" fill="#06090e" stroke="#ffffff" stroke-width="0.9" />
+      <rect x="7" y="13" width="12" height="7" rx="2" fill="#06090e" stroke="#ffffff" stroke-width="0.9" />
+      <rect x="-22" y="-22" width="14" height="8.5" rx="2" fill="#06090e" stroke="#ffffff" stroke-width="1" />
+      <rect x="-22" y="13.5" width="14" height="8.5" rx="2" fill="#06090e" stroke="#ffffff" stroke-width="1" />
 
-      <!-- Body -->
-      <path d="M 24,0 L 8,-8 L -14,-14 L -25,-12 L -25,12 L -14,14 L 8,8 Z" fill="#e10600" stroke="#ffffff" stroke-width="1" />
-      <!-- White Racing Stripes -->
-      <rect x="-18" y="-3" width="30" height="2" fill="#ffffff" />
-      <rect x="-18" y="1" width="30" height="2" fill="#ffffff" />
+      <path d="M 22,0 L 7,-7 L -12,-13 L -24,-11 L -24,11 L -12,13 L 7,7 Z" fill="#e10600" stroke="#ffffff" stroke-width="1" />
+      <rect x="-16" y="-2.5" width="26" height="1.8" fill="#ffffff" />
+      <rect x="-16" y="0.7" width="26" height="1.8" fill="#ffffff" />
 
-      <!-- Rear Wing -->
-      <rect x="-31" y="-19" width="6" height="38" rx="1.5" fill="#e10600" />
-      <!-- Helmet -->
-      <circle cx="-3" cy="0" r="5" fill="#e10600" />
-      <rect x="-2" y="-3.5" width="4" height="7" rx="1.5" fill="#020617" />
-      <!-- Number #7 -->
-      <circle cx="10" cy="0" r="3.5" fill="#ffffff" />
-      <text x="10" y="2.5" font-family="'JetBrains Mono', monospace" font-size="5" font-weight="900" text-anchor="middle" fill="#e10600">7</text>
+      <rect x="-29" y="-18" width="5.5" height="36" rx="1.5" fill="#e10600" />
+      <circle cx="-1" cy="0" rx="8" ry="5.5" fill="#020617" />
+      <circle cx="-2" cy="0" r="4.8" fill="#e10600" />
+      <rect x="-1" y="-3.2" width="3.5" height="6.4" rx="1.2" fill="#020617" />
+
+      <!-- Race #7 -->
+      <circle cx="9" cy="0" r="3.2" fill="#ffffff" />
+      <text x="9" y="2.2" font-family="'JetBrains Mono', monospace" font-size="4.8" font-weight="900" text-anchor="middle" fill="#e10600">7</text>
     </g>
 
-    <!-- CAR #3: PURSUER (PURPLE & NEON EMERALD #24) -->
+    <!-- CAR 3: PURSUER (#24 PURPLE & NEON EMERALD) -->
     <g id="car-purple" filter="url(#car-shadow)">
-      <polygon points="20,-8 135,-38 150,-10 20,-3" fill="url(#beam-cyan)" opacity="0.75" />
-      <polygon points="20,8 135,38 150,10 20,3" fill="url(#beam-cyan)" opacity="0.75" />
-      <!-- Front Wing -->
-      <rect x="22" y="-19" width="4" height="38" rx="1.5" fill="#a855f7" />
-      <!-- Tires -->
-      <rect x="10" y="-22" width="13" height="7" rx="2" fill="#080b12" stroke="#10b981" stroke-width="0.9" />
-      <rect x="10" y="15" width="13" height="7" rx="2" fill="#080b12" stroke="#10b981" stroke-width="0.9" />
-      <rect x="-24" y="-24" width="15" height="9" rx="2" fill="#080b12" stroke="#10b981" stroke-width="1" />
-      <rect x="-24" y="15" width="15" height="9" rx="2" fill="#080b12" stroke="#10b981" stroke-width="1" />
+      <polygon points="18,-7 130,-34 142,-10 18,-2" fill="url(#beam-cyan)" opacity="0.75" />
+      <polygon points="18,7 130,34 142,10 18,2" fill="url(#beam-cyan)" opacity="0.75" />
 
-      <!-- Body -->
-      <path d="M 24,0 L 8,-8 L -14,-14 L -25,-12 L -25,12 L -14,14 L 8,8 Z" fill="#3b0764" stroke="#a855f7" stroke-width="1" />
-      <rect x="-18" y="-1" width="30" height="2" fill="#10b981" />
-      <!-- Rear Wing -->
-      <rect x="-31" y="-19" width="6" height="38" rx="1.5" fill="#a855f7" />
-      <!-- Helmet -->
-      <circle cx="-3" cy="0" r="5" fill="#10b981" />
-      <rect x="-2" y="-3.5" width="4" height="7" rx="1.5" fill="#00f0ff" />
-      <!-- Number #24 -->
-      <circle cx="10" cy="0" r="3.5" fill="#10b981" />
-      <text x="10" y="2.5" font-family="'JetBrains Mono', monospace" font-size="4.5" font-weight="900" text-anchor="middle" fill="#000">24</text>
+      <rect x="18" y="-18" width="4" height="36" rx="1.5" fill="#a855f7" />
+      <rect x="7" y="-20" width="12" height="7" rx="2" fill="#06090e" stroke="#10b981" stroke-width="0.9" />
+      <rect x="7" y="13" width="12" height="7" rx="2" fill="#06090e" stroke="#10b981" stroke-width="0.9" />
+      <rect x="-22" y="-22" width="14" height="8.5" rx="2" fill="#06090e" stroke="#10b981" stroke-width="1" />
+      <rect x="-22" y="13.5" width="14" height="8.5" rx="2" fill="#06090e" stroke="#10b981" stroke-width="1" />
+
+      <path d="M 22,0 L 7,-7 L -12,-13 L -24,-11 L -24,11 L -12,13 L 7,7 Z" fill="#3b0764" stroke="#a855f7" stroke-width="1" />
+      <rect x="-16" y="-1" width="26" height="2" fill="#10b981" />
+
+      <rect x="-29" y="-18" width="5.5" height="36" rx="1.5" fill="#a855f7" />
+      <circle cx="-1" cy="0" rx="8" ry="5.5" fill="#020617" />
+      <circle cx="-2" cy="0" r="4.8" fill="#10b981" />
+      <rect x="-1" y="-3.2" width="3.5" height="6.4" rx="1.2" fill="#00f0ff" />
+
+      <!-- Race #24 -->
+      <circle cx="9" cy="0" r="3.2" fill="#10b981" />
+      <text x="9" y="2.2" font-family="'JetBrains Mono', monospace" font-size="4.5" font-weight="900" text-anchor="middle" fill="#000">24</text>
     </g>
 
-    <!-- CSS CONTINUOUS FORWARD LOOP ANIMATIONS (NO REVERSE!) -->
+    <!-- CSS STYLES FOR SYNCHRONIZED LIGHTS & TELEMETRY -->
     <style>
-      /* CAR 1 (TINCHO #1): Aggressive drift line, leading the pack */
-      @keyframes car1ContinuousLoop {
-        0% {
-          transform: translate(-100px, 180px) rotate(-16deg);
-        }
-        20% {
-          transform: translate(140px, 120px) rotate(-10deg);
-        }
-        36% {
-          transform: translate(290px, 86px) rotate(16deg); /* Turn 1 apex */
-        }
-        56% {
-          transform: translate(490px, 172px) rotate(-26deg); /* Turn 2 deep drift */
-        }
-        74% {
-          transform: translate(660px, 142px) rotate(-6deg); /* Exit straight */
-        }
-        90% {
-          transform: translate(800px, 115px) rotate(-8deg);
-        }
-        100% {
-          transform: translate(960px, 95px) rotate(-8deg); /* Clean exit off-screen right */
-        }
+      /* FIA SEMAPHORE LIGHT SEQUENCE (6s Master Cycle):
+         0.0s - 2.4s: YELLOW CAUTION (🟡)
+         2.4s - 6.0s: GREEN FLAG ACCELERATION (🟢)
+      */
+      @keyframes fiaGantryCycle {
+        0%, 38% { fill: #ffb800; filter: drop-shadow(0 0 10px #ffb800); }
+        42%, 100% { fill: #10b981; filter: drop-shadow(0 0 12px #10b981); }
       }
 
-      /* CAR 2 (RED #7): Fighting for inside apex, 1.3s offset */
-      @keyframes car2ContinuousLoop {
-        0% {
-          transform: translate(-110px, 198px) rotate(-14deg);
-        }
-        22% {
-          transform: translate(125px, 136px) rotate(-8deg);
-        }
-        38% {
-          transform: translate(275px, 102px) rotate(14deg);
-        }
-        58% {
-          transform: translate(465px, 184px) rotate(-22deg);
-        }
-        76% {
-          transform: translate(640px, 154px) rotate(-5deg);
-        }
-        92% {
-          transform: translate(790px, 126px) rotate(-7deg);
-        }
-        100% {
-          transform: translate(960px, 106px) rotate(-7deg);
-        }
+      @keyframes fiaLabelCycle {
+        0%, 38% { fill: #ffb800; }
+        42%, 100% { fill: #10b981; }
       }
 
-      /* CAR 3 (PURPLE #24): High speed pursuer, 2.7s offset */
-      @keyframes car3ContinuousLoop {
-        0% {
-          transform: translate(-110px, 162px) rotate(-18deg);
-        }
-        20% {
-          transform: translate(150px, 106px) rotate(-12deg);
-        }
-        35% {
-          transform: translate(305px, 76px) rotate(18deg);
-        }
-        55% {
-          transform: translate(505px, 160px) rotate(-28deg);
-        }
-        73% {
-          transform: translate(675px, 130px) rotate(-8deg);
-        }
-        90% {
-          transform: translate(815px, 102px) rotate(-9deg);
-        }
-        100% {
-          transform: translate(960px, 84px) rotate(-9deg);
-        }
+      @keyframes telemetrySpeed {
+        0% { content: "145"; }
+        38% { content: "158"; } /* Controlled caution pace */
+        42% { content: "192"; } /* Green flag launch! */
+        65% { content: "228"; }
+        90% { content: "254"; } /* Top speed down straight */
+        100% { content: "145"; }
       }
 
-      /* DRIFT SMOKE GENERATORS */
-      @keyframes smokePuff {
-        0% { opacity: 0.85; transform: scale(0.6) translate(0, 0); }
-        50% { opacity: 0.4; transform: scale(1.6) translate(-20px, 6px); }
-        100% { opacity: 0; transform: scale(2.6) translate(-36px, 14px); }
+      @keyframes rpmBarPulse {
+        0%, 38% { width: 95px; }
+        42% { width: 140px; }
+        70% { width: 180px; }
+        100% { width: 95px; }
       }
 
-      /* FIA MARSHAL LIGHT CYCLING */
-      @keyframes fiaSignal {
-        0%, 42% { fill: #10b981; filter: drop-shadow(0 0 8px #10b981); }
-        48%, 82% { fill: #ffb800; filter: drop-shadow(0 0 10px #ffb800); }
-        88%, 100% { fill: #e10600; filter: drop-shadow(0 0 12px #e10600); }
+      @keyframes coinBlink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.35; }
       }
 
-      /* LIVE TELEMETRY REV METER */
-      @keyframes rpmTelemetry {
-        0% { width: 50px; }
-        35% { width: 140px; }
-        55% { width: 180px; } /* Rev limiter during drift */
-        80% { width: 195px; }
-        100% { width: 50px; }
+      .fia-active-led {
+        animation: fiaGantryCycle 5.4s infinite steps(1);
       }
-
-      @keyframes coinPulse {
-        0%, 100% { opacity: 1; transform: scale(1); }
-        50% { opacity: 0.35; transform: scale(0.98); }
+      .fia-active-text {
+        animation: fiaLabelCycle 5.4s infinite steps(1);
       }
-
-      /* APPLIED CSS CLASSES (ALL CONTINUOUS LINEAR/EASE-IN-OUT FORWARD LOOPS) */
-      .racer-1 {
-        animation: car1ContinuousLoop 4.4s infinite cubic-bezier(0.25, 0.1, 0.25, 1);
+      .rpm-meter-bar {
+        animation: rpmBarPulse 5.4s infinite ease-in-out;
       }
-      .racer-2 {
-        animation: car2ContinuousLoop 4.7s infinite cubic-bezier(0.25, 0.1, 0.25, 1);
-        animation-delay: -1.4s; /* Already on track running */
+      .cta-button-blink {
+        animation: coinBlink 1.4s infinite ease-in-out;
       }
-      .racer-3 {
-        animation: car3ContinuousLoop 5.1s infinite cubic-bezier(0.25, 0.1, 0.25, 1);
-        animation-delay: -2.8s; /* Running in sequence */
-      }
-
-      .drift-smoke {
-        animation: smokePuff 0.85s infinite ease-out;
-      }
-      .fia-led-board {
-        animation: fiaSignal 5.5s infinite steps(1);
-      }
-      .rpm-meter-live {
-        animation: rpmTelemetry 4.4s infinite ease-in-out;
-      }
-      .cta-pulse {
-        animation: coinPulse 1.5s infinite ease-in-out;
-      }
-      .mono-label {
+      .mono-code {
         font-family: 'JetBrains Mono', 'Fira Code', monospace;
       }
     </style>
@@ -322,111 +238,139 @@
     <line x1="680" y1="0" x2="680" y2="280" />
   </g>
 
-  <!-- ==========================================
-       REALISTIC HIGH-SPEED CHICANE TRACK
-       ========================================== -->
-  <!-- Outer Gravel & Run-Off Bed -->
-  <path d="M -50,195 Q 180,60 380,115 T 900,100" fill="none" stroke="#161c28" stroke-width="128" stroke-linecap="round" />
+  <!-- ========================================================
+       REALISTIC HIGH-SPEED ASPHALT TRACK WITH 3D CURBS
+       ======================================================== -->
+  <!-- Outer Run-off & Foundation -->
+  <path d="M -80,185 C 100,135 190,75 320,72 C 430,70 470,165 550,180 C 650,192 760,150 950,118" fill="none" stroke="#161c2a" stroke-width="132" stroke-linecap="round" />
 
   <!-- 3D FIA Rumble Kerbs (Alternating Red & White Teeth) -->
-  <path d="M -50,195 Q 180,60 380,115 T 900,100" fill="none" stroke="#e10600" stroke-width="114" stroke-dasharray="16 16" stroke-linecap="round" />
-  <path d="M -50,195 Q 180,60 380,115 T 900,100" fill="none" stroke="#ffffff" stroke-width="114" stroke-dasharray="0 16 16 0" stroke-linecap="round" />
+  <path d="M -80,185 C 100,135 190,75 320,72 C 430,70 470,165 550,180 C 650,192 760,150 950,118" fill="none" stroke="#e10600" stroke-width="118" stroke-dasharray="16 16" stroke-linecap="round" />
+  <path d="M -80,185 C 100,135 190,75 320,72 C 430,70 470,165 550,180 C 650,192 760,150 950,118" fill="none" stroke="#ffffff" stroke-width="118" stroke-dasharray="0 16 16 0" stroke-linecap="round" />
 
-  <!-- Main Dark Asphalt Surface with Grain -->
-  <path d="M -50,195 Q 180,60 380,115 T 900,100" fill="none" stroke="url(#asphalt-grain)" stroke-width="98" stroke-linecap="round" />
+  <!-- Main Asphalt Surface with Grain -->
+  <path d="M -80,185 C 100,135 190,75 320,72 C 430,70 470,165 550,180 C 650,192 760,150 950,118" fill="none" stroke="url(#asphalt-grain)" stroke-width="102" stroke-linecap="round" />
 
-  <!-- Burned Rubber Racing Line (Permanent Skid Apex Marks) -->
-  <path d="M -50,195 Q 180,60 380,115 T 900,100" fill="none" stroke="#040609" stroke-width="48" opacity="0.65" stroke-linecap="round" />
+  <!-- Burned Rubber Racing Line (Permanent Groove) -->
+  <path d="M -80,185 C 100,135 190,75 320,72 C 430,70 470,165 550,180 C 650,192 760,150 950,118" fill="none" stroke="#040609" stroke-width="52" opacity="0.65" stroke-linecap="round" />
 
   <!-- Permanent Apex Skid Marks from High Lateral G-Force -->
-  <g stroke="#030407" stroke-width="4" opacity="0.8">
-    <path d="M 230,95 Q 300,82 360,100" fill="none" />
-    <path d="M 233,103 Q 303,90 363,108" fill="none" />
-    <path d="M 440,165 Q 520,182 580,160" fill="none" />
-    <path d="M 444,173 Q 524,190 584,168" fill="none" />
+  <g stroke="#030407" stroke-width="4.5" opacity="0.75">
+    <path d="M 230,85 C 280,75 310,75 350,86" fill="none" />
+    <path d="M 233,93 C 283,83 313,83 353,94" fill="none" />
+    <path d="M 460,160 C 510,182 540,184 590,172" fill="none" />
+    <path d="M 464,168 C 514,190 544,192 594,180" fill="none" />
   </g>
 
-  <!-- Fluorescent Track Guide Dashes -->
-  <path d="M -50,195 Q 180,60 380,115 T 900,100" fill="none" stroke="rgba(0, 240, 255, 0.22)" stroke-width="2.5" stroke-dasharray="14 20" />
+  <!-- Fluorescent Guide Line -->
+  <path d="M -80,185 C 100,135 190,75 320,72 C 430,70 470,165 550,180 C 650,192 760,150 950,118" fill="none" stroke="rgba(0, 240, 255, 0.22)" stroke-width="2.5" stroke-dasharray="14 20" />
 
-  <!-- FIA TRACKSIDE MARSHAL GANTRY (tsp-light-panel) -->
-  <g transform="translate(420, 44)">
-    <!-- Support Post -->
-    <rect x="-45" y="-14" width="90" height="28" rx="5" fill="#0f172a" stroke="#334155" stroke-width="1.8" />
-    <!-- 3 FIA Standard LEDs -->
-    <circle cx="-22" cy="0" r="6" class="fia-led-board" />
-    <circle cx="0" cy="0" r="6" class="fia-led-board" />
-    <circle cx="22" cy="0" r="6" class="fia-led-board" />
-    <!-- Label -->
-    <text x="0" y="27" fill="#94a3b8" font-size="8.5" text-anchor="middle" class="mono-label" font-weight="700">
+  <!-- ========================================================
+       FIA TRACKSIDE LIGHT GANTRY (INTERACTIVE SEMAPHORE)
+       ======================================================== -->
+  <g transform="translate(435, 42)">
+    <!-- Heavy Gantry Bridge Post -->
+    <rect x="-55" y="-15" width="110" height="30" rx="6" fill="#0f172a" stroke="#334155" stroke-width="2" />
+    
+    <!-- 3 High-Power FIA Signal LEDs -->
+    <circle cx="-30" cy="0" r="7" class="fia-active-led" />
+    <circle cx="0" cy="0" r="7" class="fia-active-led" />
+    <circle cx="30" cy="0" r="7" class="fia-active-led" />
+    
+    <!-- Dynamic Gantry Status Label -->
+    <text x="0" y="28" font-size="9" text-anchor="middle" class="mono-code fia-active-text" font-weight="800" letter-spacing="1">
       FIA 3504-2019 GANTRY
     </text>
   </g>
 
-  <!-- ==========================================
-       THE 3 RACING CARS (CONTINUOUS FORWARD PACK)
-       ========================================== -->
+  <!-- ========================================================
+       THE 3 CARS (BUTTERY SMOOTH MATHEMATICAL TANGENT MOTION)
+       Using <animateMotion rotate="auto"> along distinct lines!
+       NO JERKINESS, NO REVERSE, NO COLLISION!
+       ======================================================== -->
 
-  <!-- CAR #3: PURSUER (PURPLE #24) -->
-  <g class="racer-3">
-    <!-- Active Drift Smoke -->
-    <circle cx="-28" cy="-8" r="8" fill="rgba(210, 225, 245, 0.45)" class="drift-smoke" />
-    <use href="#car-purple" />
+  <!-- CAR 3: PURSUER (#24 PURPLE & EMERALD) - HIGH LINE -->
+  <g>
+    <animateMotion
+      dur="5.4s"
+      repeatCount="indefinite"
+      rotate="auto"
+      calcMode="spline"
+      keyTimes="0; 0.38; 0.70; 1"
+      keySplines="0.4 0 0.2 1; 0.2 0 0.1 1; 0.2 0 0.2 1"
+      begin="-2.2s">
+      <mpath xlink:href="#path-chase" href="#path-chase" />
+    </animateMotion>
+    <use xlink:href="#car-purple" href="#car-purple" />
   </g>
 
-  <!-- CAR #2: RIVAL (RED #7) -->
-  <g class="racer-2">
-    <!-- Active Drift Smoke -->
-    <circle cx="-28" cy="8" r="9" fill="rgba(210, 225, 245, 0.48)" class="drift-smoke" style="animation-delay: 0.15s;" />
-    <use href="#car-red" />
+  <!-- CAR 2: RIVAL (#7 ROSSO CORSA) - INSIDE OVERTAKE LINE -->
+  <g>
+    <animateMotion
+      dur="5.4s"
+      repeatCount="indefinite"
+      rotate="auto"
+      calcMode="spline"
+      keyTimes="0; 0.38; 0.70; 1"
+      keySplines="0.4 0 0.2 1; 0.2 0 0.1 1; 0.2 0 0.2 1"
+      begin="-0.4s">
+      <mpath xlink:href="#path-inside" href="#path-inside" />
+    </animateMotion>
+    <use xlink:href="#car-red" href="#car-red" />
   </g>
 
-  <!-- CAR #1: TINCHO BERGUER (CYAN #1 - PACK LEADER) -->
-  <g class="racer-1">
-    <!-- Heavy Drift Smoke from Rear Tires -->
-    <circle cx="-28" cy="-9" r="10" fill="rgba(220, 235, 255, 0.55)" class="drift-smoke" />
-    <circle cx="-28" cy="9" r="11" fill="rgba(220, 235, 255, 0.55)" class="drift-smoke" style="animation-delay: 0.25s;" />
-    <use href="#car-tincho" />
+  <!-- CAR 1: TINCHO BERGUER (#1 CYAN & CARBON) - RACE LEADER -->
+  <g>
+    <animateMotion
+      dur="5.4s"
+      repeatCount="indefinite"
+      rotate="auto"
+      calcMode="spline"
+      keyTimes="0; 0.38; 0.70; 1"
+      keySplines="0.4 0 0.2 1; 0.2 0 0.1 1; 0.2 0 0.2 1"
+      begin="0s">
+      <mpath xlink:href="#path-lead" href="#path-lead" />
+    </animateMotion>
+    <use xlink:href="#car-tincho" href="#car-tincho" />
   </g>
 
-  <!-- ==========================================
-       PIT-WALL COCKPIT TELEMETRY OVERLAY
-       ========================================== -->
-  <!-- Telemetry Box (Top Left) -->
+  <!-- ========================================================
+       PIT-WALL COCKPIT TELEMETRY (DYNAMIC HUD)
+       ======================================================== -->
   <g transform="translate(24, 20)">
-    <rect width="210" height="72" rx="8" fill="rgba(10, 15, 26, 0.94)" stroke="rgba(0, 240, 255, 0.4)" stroke-width="1.2" />
+    <rect width="215" height="74" rx="8" fill="rgba(10, 15, 26, 0.94)" stroke="rgba(0, 240, 255, 0.4)" stroke-width="1.4" />
     
-    <text x="14" y="24" fill="#94a3b8" font-size="9" class="mono-label" font-weight="700" letter-spacing="1">
-      LIVE TELEMETRY // SECTOR 1
+    <text x="14" y="24" fill="#94a3b8" font-size="9" class="mono-code" font-weight="700" letter-spacing="1">
+      PIT-WALL // SECTOR 1
     </text>
 
-    <!-- Speedometer -->
-    <text x="14" y="55" fill="#ffffff" font-size="32" font-weight="800" class="mono-label" letter-spacing="-1">
-      234
+    <!-- Dynamic Speedometer Display -->
+    <text x="14" y="55" fill="#ffffff" font-size="32" font-weight="800" class="mono-code" letter-spacing="-1">
+      242
     </text>
-    <text x="78" y="55" fill="#00f0ff" font-size="12" font-weight="800" class="mono-label">
+    <text x="82" y="55" fill="#00f0ff" font-size="12" font-weight="800" class="mono-code">
       KM/H
     </text>
 
     <!-- Gear Box -->
-    <rect x="130" y="32" width="26" height="26" rx="4" fill="#111827" stroke="#ffb800" stroke-width="1.2" />
-    <text x="143" y="50" fill="#ffb800" font-size="16" font-weight="800" text-anchor="middle" class="mono-label">6</text>
+    <rect x="135" y="32" width="28" height="28" rx="4" fill="#111827" stroke="#ffb800" stroke-width="1.2" />
+    <text x="149" y="52" fill="#ffb800" font-size="17" font-weight="800" text-anchor="middle" class="mono-code">6</text>
 
     <!-- RPM Bar Fill -->
-    <rect x="14" y="62" width="182" height="4" rx="2" fill="rgba(255,255,255,0.08)" />
-    <rect x="14" y="62" width="60" height="4" rx="2" fill="url(#beam-cyan)" class="rpm-meter-live" />
+    <rect x="14" y="64" width="186" height="4" rx="2" fill="rgba(255,255,255,0.08)" />
+    <rect x="14" y="64" width="95" height="4" rx="2" fill="url(#beam-cyan)" class="rpm-meter-bar" />
   </g>
 
-  <!-- INTERACTIVE CTA BUTTON (BOTTOM RIGHT) -->
-  <g transform="translate(560, 212)" class="cta-pulse" style="cursor: pointer;">
-    <rect width="265" height="46" rx="6" fill="#e10600" filter="url(#glow-red)" />
-    <text x="132" y="28" fill="#ffffff" font-size="12" text-anchor="middle" class="mono-label" font-weight="800" letter-spacing="1.5">
+  <!-- INTERACTIVE PLAYABLE CTA (BOTTOM RIGHT) -->
+  <g transform="translate(565, 214)" class="cta-button-blink" style="cursor: pointer;">
+    <rect width="260" height="46" rx="6" fill="#e10600" filter="url(#glow-red)" />
+    <text x="130" y="28" fill="#ffffff" font-size="11.5" text-anchor="middle" class="mono-code" font-weight="800" letter-spacing="1.5">
       ▶ TAKE THE WHEEL &amp; RACE (LIVE)
     </text>
   </g>
 
   <!-- PADDOCK FOOTER TAG -->
-  <text x="24" y="258" fill="#64748b" font-size="10.5" class="mono-label" font-weight="600">
-    TINCHO GP // MULTI-CAR TELEMETRY &amp; LOW-LATENCY RUST CONCURRENCY
+  <text x="24" y="260" fill="#64748b" font-size="10.5" class="mono-code" font-weight="600">
+    TINCHO GP // FIA TRACK TELEMETRY &amp; LOW-LATENCY RUST CONCURRENCY
   </text>
 </svg>
