@@ -53,18 +53,19 @@
     </linearGradient>
 
     <!-- ========================================================
-         MATHEMATICAL RACING LINES (SEAMLESS FORWARD PATHS)
-         Direction: Left to Right (-120px to 970px)
+         MATHEMATICAL RACING LINES (100% C1 CONTINUOUS SMOOTH SPLINES)
+         Built with reflected Bezier 'S' anchors for zero angular kinks
+         Direction: Left to Right (-120px to 980px)
          ======================================================== -->
     
     <!-- Path 1: Optimal Outside-Inside-Outside Apex (Tincho #1) -->
-    <path id="path-lead" d="M -110,158 C 90,118 190,88 320,86 C 410,85 450,152 540,168 C 640,175 750,140 980,104" fill="none" />
+    <path id="path-lead" d="M -120,165 C 60,125 180,85 320,85 S 480,175 560,175 S 760,115 980,105" fill="none" />
 
-    <!-- Path 2: Inside Aggressive Battle Line (Rival Red #7 - Parallel, no overlap) -->
-    <path id="path-inside" d="M -110,192 C 90,150 190,122 305,116 C 390,115 440,185 530,198 C 630,205 750,168 980,132" fill="none" />
+    <!-- Path 2: Inside Aggressive Battle Line (Rival Red #7 - Parallel, zero collision) -->
+    <path id="path-inside" d="M -120,195 C 60,155 180,115 310,115 S 470,205 550,205 S 760,145 980,135" fill="none" />
 
     <!-- Path 3: Tow / High Slipstream Line (Pursuer Purple #24) -->
-    <path id="path-chase" d="M -110,128 C 90,88 190,58 335,58 C 420,58 470,120 560,138 C 650,145 760,112 980,78" fill="none" />
+    <path id="path-chase" d="M -120,135 C 60,95 180,55 330,55 S 490,145 570,145 S 760,85 980,75" fill="none" />
 
     <!-- ========================================================
          CAR GRAPHIC COMPONENTS (HEADING RIGHT = TANGENT TO PATH)
@@ -72,7 +73,6 @@
 
     <!-- CAR 1: TINCHO BERGUER (#1 CYAN & OBSIDIAN) -->
     <g id="car-tincho" filter="url(#car-shadow)">
-      <!-- Dual Headlight Cones -->
       <polygon points="18,-7 140,-38 152,-10 18,-2" fill="url(#beam-cyan)" />
       <polygon points="18,7 140,38 152,10 18,2" fill="url(#beam-cyan)" />
 
@@ -124,7 +124,6 @@
       <polygon points="18,7 135,36 148,10 18,2" fill="url(#beam-amber)" />
 
       <rect x="18" y="-18" width="4" height="36" rx="1.5" fill="#e10600" filter="url(#glow-red)" />
-      <!-- Tires -->
       <rect x="7" y="-20" width="12" height="7" rx="2" fill="#06090e" stroke="#ffffff" stroke-width="0.9" />
       <rect x="7" y="13" width="12" height="7" rx="2" fill="#06090e" stroke="#ffffff" stroke-width="0.9" />
       <rect x="-22" y="-22" width="14" height="8.5" rx="2" fill="#06090e" stroke="#ffffff" stroke-width="1" />
@@ -170,34 +169,25 @@
 
     <!-- CSS STYLES FOR SYNCHRONIZED LIGHTS & TELEMETRY -->
     <style>
-      /* FIA SEMAPHORE LIGHT SEQUENCE (6s Master Cycle):
-         0.0s - 2.4s: YELLOW CAUTION (🟡)
-         2.4s - 6.0s: GREEN FLAG ACCELERATION (🟢)
+      /* 6.2s Master Cycle:
+         0.0s to 2.7s (0% to 44%): Yellow Flag / Controlled Entry / Progressive Braking
+         2.7s to 6.2s (44% to 100%): Green Flag / Acceleration / Full Throttle
       */
       @keyframes fiaGantryCycle {
-        0%, 38% { fill: #ffb800; filter: drop-shadow(0 0 10px #ffb800); }
-        42%, 100% { fill: #10b981; filter: drop-shadow(0 0 12px #10b981); }
+        0%, 43.9% { fill: #ffb800; filter: drop-shadow(0 0 10px #ffb800); }
+        44%, 100% { fill: #10b981; filter: drop-shadow(0 0 12px #10b981); }
       }
 
       @keyframes fiaLabelCycle {
-        0%, 38% { fill: #ffb800; }
-        42%, 100% { fill: #10b981; }
-      }
-
-      @keyframes telemetrySpeed {
-        0% { content: "145"; }
-        38% { content: "158"; } /* Controlled caution pace */
-        42% { content: "192"; } /* Green flag launch! */
-        65% { content: "228"; }
-        90% { content: "254"; } /* Top speed down straight */
-        100% { content: "145"; }
+        0%, 43.9% { fill: #ffb800; }
+        44%, 100% { fill: #10b981; }
       }
 
       @keyframes rpmBarPulse {
-        0%, 38% { width: 95px; }
-        42% { width: 140px; }
-        70% { width: 180px; }
-        100% { width: 95px; }
+        0% { width: 140px; }
+        44% { width: 80px; }
+        85% { width: 186px; }
+        100% { width: 140px; }
       }
 
       @keyframes coinBlink {
@@ -206,13 +196,13 @@
       }
 
       .fia-active-led {
-        animation: fiaGantryCycle 5.4s infinite steps(1);
+        animation: fiaGantryCycle 6.2s infinite steps(1);
       }
       .fia-active-text {
-        animation: fiaLabelCycle 5.4s infinite steps(1);
+        animation: fiaLabelCycle 6.2s infinite steps(1);
       }
       .rpm-meter-bar {
-        animation: rpmBarPulse 5.4s infinite ease-in-out;
+        animation: rpmBarPulse 6.2s infinite ease-in-out;
       }
       .cta-button-blink {
         animation: coinBlink 1.4s infinite ease-in-out;
@@ -242,33 +232,34 @@
        REALISTIC HIGH-SPEED ASPHALT TRACK WITH 3D CURBS
        ======================================================== -->
   <!-- Outer Run-off & Foundation -->
-  <path d="M -80,185 C 100,135 190,75 320,72 C 430,70 470,165 550,180 C 650,192 760,150 950,118" fill="none" stroke="#161c2a" stroke-width="132" stroke-linecap="round" />
+  <path d="M -120,165 C 60,125 180,85 320,85 S 480,175 560,175 S 760,115 980,105" fill="none" stroke="#161c2a" stroke-width="132" stroke-linecap="round" />
 
   <!-- 3D FIA Rumble Kerbs (Alternating Red & White Teeth) -->
-  <path d="M -80,185 C 100,135 190,75 320,72 C 430,70 470,165 550,180 C 650,192 760,150 950,118" fill="none" stroke="#e10600" stroke-width="118" stroke-dasharray="16 16" stroke-linecap="round" />
-  <path d="M -80,185 C 100,135 190,75 320,72 C 430,70 470,165 550,180 C 650,192 760,150 950,118" fill="none" stroke="#ffffff" stroke-width="118" stroke-dasharray="0 16 16 0" stroke-linecap="round" />
+  <path d="M -120,165 C 60,125 180,85 320,85 S 480,175 560,175 S 760,115 980,105" fill="none" stroke="#e10600" stroke-width="118" stroke-dasharray="16 16" stroke-linecap="round" />
+  <path d="M -120,165 C 60,125 180,85 320,85 S 480,175 560,175 S 760,115 980,105" fill="none" stroke="#ffffff" stroke-width="118" stroke-dasharray="0 16 16 0" stroke-linecap="round" />
 
   <!-- Main Asphalt Surface with Grain -->
-  <path d="M -80,185 C 100,135 190,75 320,72 C 430,70 470,165 550,180 C 650,192 760,150 950,118" fill="none" stroke="url(#asphalt-grain)" stroke-width="102" stroke-linecap="round" />
+  <path d="M -120,165 C 60,125 180,85 320,85 S 480,175 560,175 S 760,115 980,105" fill="none" stroke="url(#asphalt-grain)" stroke-width="102" stroke-linecap="round" />
 
   <!-- Burned Rubber Racing Line (Permanent Groove) -->
-  <path d="M -80,185 C 100,135 190,75 320,72 C 430,70 470,165 550,180 C 650,192 760,150 950,118" fill="none" stroke="#040609" stroke-width="52" opacity="0.65" stroke-linecap="round" />
+  <path d="M -120,165 C 60,125 180,85 320,85 S 480,175 560,175 S 760,115 980,105" fill="none" stroke="#040609" stroke-width="50" opacity="0.65" stroke-linecap="round" />
 
   <!-- Permanent Apex Skid Marks from High Lateral G-Force -->
   <g stroke="#030407" stroke-width="4.5" opacity="0.75">
-    <path d="M 230,85 C 280,75 310,75 350,86" fill="none" />
-    <path d="M 233,93 C 283,83 313,83 353,94" fill="none" />
-    <path d="M 460,160 C 510,182 540,184 590,172" fill="none" />
-    <path d="M 464,168 C 514,190 544,192 594,180" fill="none" />
+    <path d="M 240,90 C 280,85 310,85 350,92" fill="none" />
+    <path d="M 243,98 C 283,93 313,93 353,100" fill="none" />
+    <path d="M 480,168 C 520,178 550,178 590,168" fill="none" />
+    <path d="M 484,176 C 524,186 554,186 594,176" fill="none" />
   </g>
 
   <!-- Fluorescent Guide Line -->
-  <path d="M -80,185 C 100,135 190,75 320,72 C 430,70 470,165 550,180 C 650,192 760,150 950,118" fill="none" stroke="rgba(0, 240, 255, 0.22)" stroke-width="2.5" stroke-dasharray="14 20" />
+  <path d="M -120,165 C 60,125 180,85 320,85 S 480,175 560,175 S 760,115 980,105" fill="none" stroke="rgba(0, 240, 255, 0.22)" stroke-width="2.5" stroke-dasharray="14 20" />
 
   <!-- ========================================================
        FIA TRACKSIDE LIGHT GANTRY (INTERACTIVE SEMAPHORE)
+       Positioned at the chicane apex (x: 370)
        ======================================================== -->
-  <g transform="translate(435, 42)">
+  <g transform="translate(370, 42)">
     <!-- Heavy Gantry Bridge Post -->
     <rect x="-55" y="-15" width="110" height="30" rx="6" fill="#0f172a" stroke="#334155" stroke-width="2" />
     
@@ -284,21 +275,22 @@
   </g>
 
   <!-- ========================================================
-       THE 3 CARS (BUTTERY SMOOTH MATHEMATICAL TANGENT MOTION)
-       Using <animateMotion rotate="auto"> along distinct lines!
-       NO JERKINESS, NO REVERSE, NO COLLISION!
+       THE 3 CARS: SYNCHRONIZED RACING PACK WITH C1 VELOCITY CONTINUITY
+       - Zero jumps: C1 continuous cubic Bezier velocity splines
+       - Progressive braking into Turn 1, smooth roll-on throttle out
+       - Real tight pack racing offset (-0.35s and -0.70s)
        ======================================================== -->
 
-  <!-- CAR 3: PURSUER (#24 PURPLE & EMERALD) - HIGH LINE -->
+  <!-- CAR 3: PURSUER (#24 PURPLE & EMERALD) - HIGH LINE (In the tow) -->
   <g>
     <animateMotion
-      dur="5.4s"
+      dur="6.2s"
       repeatCount="indefinite"
       rotate="auto"
       calcMode="spline"
-      keyTimes="0; 0.38; 0.70; 1"
-      keySplines="0.4 0 0.2 1; 0.2 0 0.1 1; 0.2 0 0.2 1"
-      begin="-2.2s">
+      keyTimes="0; 0.44; 1"
+      keySplines="0.33 0.15 0.67 0.85; 0.33 0.15 0.67 0.85"
+      begin="-0.70s">
       <mpath xlink:href="#path-chase" href="#path-chase" />
     </animateMotion>
     <use xlink:href="#car-purple" href="#car-purple" />
@@ -307,13 +299,13 @@
   <!-- CAR 2: RIVAL (#7 ROSSO CORSA) - INSIDE OVERTAKE LINE -->
   <g>
     <animateMotion
-      dur="5.4s"
+      dur="6.2s"
       repeatCount="indefinite"
       rotate="auto"
       calcMode="spline"
-      keyTimes="0; 0.38; 0.70; 1"
-      keySplines="0.4 0 0.2 1; 0.2 0 0.1 1; 0.2 0 0.2 1"
-      begin="-0.4s">
+      keyTimes="0; 0.44; 1"
+      keySplines="0.33 0.15 0.67 0.85; 0.33 0.15 0.67 0.85"
+      begin="-0.35s">
       <mpath xlink:href="#path-inside" href="#path-inside" />
     </animateMotion>
     <use xlink:href="#car-red" href="#car-red" />
@@ -322,12 +314,12 @@
   <!-- CAR 1: TINCHO BERGUER (#1 CYAN & CARBON) - RACE LEADER -->
   <g>
     <animateMotion
-      dur="5.4s"
+      dur="6.2s"
       repeatCount="indefinite"
       rotate="auto"
       calcMode="spline"
-      keyTimes="0; 0.38; 0.70; 1"
-      keySplines="0.4 0 0.2 1; 0.2 0 0.1 1; 0.2 0 0.2 1"
+      keyTimes="0; 0.44; 1"
+      keySplines="0.33 0.15 0.67 0.85; 0.33 0.15 0.67 0.85"
       begin="0s">
       <mpath xlink:href="#path-lead" href="#path-lead" />
     </animateMotion>
@@ -344,7 +336,7 @@
       PIT-WALL // SECTOR 1
     </text>
 
-    <!-- Dynamic Speedometer Display -->
+    <!-- Speedometer -->
     <text x="14" y="55" fill="#ffffff" font-size="32" font-weight="800" class="mono-code" letter-spacing="-1">
       242
     </text>
