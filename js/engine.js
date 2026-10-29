@@ -1,5 +1,5 @@
 /**
- * Tincho GP - Procedural Web Audio Engine
+ * Track Simulator - Procedural Web Audio Engine
  * Pure synthesized sound without any external audio assets.
  */
 class SoundEngine {

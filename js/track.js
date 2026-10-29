@@ -1,5 +1,5 @@
 /**
- * Tincho GP - Circuit Geometry, Sectors & Interactive Checkpoints
+ * Track Simulator - Circuit Geometry, Sectors & Interactive Checkpoints
  */
 class Track {
   constructor() {

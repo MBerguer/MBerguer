@@ -1,5 +1,5 @@
 /**
- * Tincho GP - Master Game Loop & Event Orchestration
+ * Track Simulator - Master Game Loop & Event Orchestration
  */
 (function() {
   const canvas = document.getElementById('circuit-canvas');
@@ -168,7 +168,7 @@
     if (currentMode === 'gp') {
       currentMode = 'console';
       consoleView.classList.add('active');
-      btnToggleMode.innerHTML = '<span>🏎️ Play Tincho GP</span>';
+      btnToggleMode.innerHTML = '<span>🏎️ Play Track Simulator</span>';
       btnToggleMode.classList.add('active');
     } else {
       currentMode = 'gp';

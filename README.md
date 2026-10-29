@@ -1,36 +1,36 @@
 <div align="center">
 
-<!-- HEADER CINEMÁTICO ANIMADO (CAPSULE RENDER DEGRADÉ OSCURO / CIAN) -->
-<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=0,2,25,40,100&height=220&section=header&text=Tincho%20GP%20%7C%20Martín%20Berguer&fontSize=46&fontAlignY=38&animation=fadeIn&fontColor=ffffff&desc=Staff%20Systems%20%7C%20Rust%20Concurrency%20%7C%20Motorsport%20Telemetry&descAlignY=62&descSize=18" width="100%" alt="Tincho GP Header" />
+<!-- 16-BIT RETRO PADDOCK TELEMETRY HEADER -->
+<img src="assets/header-16bit.svg" width="100%" alt="Martín Berguer Header" />
 
 <p align="center">
-  <img src="https://readme-typing-svg.herokuapp.com?font=JetBrains+Mono&weight=700&size=20&duration=2800&pause=1000&color=00F0FF&center=true&vCenter=true&width=680&lines=Low-latency+systems+%26+actor-model+engines+in+Rust;FIA+Standard+3504-2019+F1+trackside+simulation;C%2B%2B20+64-bit+engine+reconstruction+%2B+2D+raytracing;Machine+Learning+trajectory+forecasting+under+uncertainty" alt="Typing SVG" />
+  <img src="https://readme-typing-svg.herokuapp.com?font=JetBrains+Mono&weight=700&size=18&duration=2800&pause=1000&color=00F0FF&center=true&vCenter=true&width=680&lines=Low-latency+systems+%26+actor-model+engines+in+Rust;FIA+Standard+3504-2019+F1+trackside+simulation;C%2B%2B20+64-bit+engine+reconstruction+%2B+2D+raytracing;Machine+Learning+trajectory+forecasting+under+uncertainty" alt="Typing SVG" />
 </p>
 
 <p align="center">
-  <a href="https://linkedin.com/in/mberguer" target="_blank"><img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" /></a>
-  <img src="https://img.shields.io/badge/Primary_Core-Rust_(Nightly_%2F_Tokio)-DEA584?style=for-the-badge&logo=rust&logoColor=black" alt="Rust" />
-  <img src="https://img.shields.io/badge/MSc-ML_%26_Data_Eng_(UdelaR)-00529B?style=for-the-badge" alt="UdelaR MSc" />
-  <img src="https://img.shields.io/badge/Motorsport-FIA_3504--2019_Sim-E10600?style=for-the-badge&logo=f1&logoColor=white" alt="FIA 3504-2019" />
-  <img src="https://img.shields.io/badge/Base-Montevideo_%2F_Remote-10B981?style=for-the-badge" alt="Location" />
+  <a href="https://linkedin.com/in/mberguer" target="_blank"><img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=flat-square&logo=linkedin&logoColor=white" alt="LinkedIn" /></a>
+  <img src="https://img.shields.io/badge/Primary_Core-Rust_(Tokio_%2F_Actors)-DEA584?style=flat-square&logo=rust&logoColor=black" alt="Rust" />
+  <img src="https://img.shields.io/badge/MSc-ML_%26_Data_Eng_(UdelaR)-00529B?style=flat-square" alt="UdelaR MSc" />
+  <img src="https://img.shields.io/badge/FIA_Standard-3504--2019_Simulation-E10600?style=flat-square&logo=f1&logoColor=white" alt="FIA 3504-2019" />
+  <img src="https://img.shields.io/badge/Base-Montevideo_%2F_Remote-10B981?style=flat-square" alt="Location" />
 </p>
 
 </div>
 
 ---
 
-### 🕹️ TINCHO GRAND PRIX // LIVE ON-TRACK ARCADE
+### 🕹️ 16-BIT TRACK TELEMETRY // REAL-TIME ARCADE
 
-<!-- ANIMATED ARCADE EMBEDDED DIRECTLY IN MARKDOWN (CLICK TO PLAY LIVE AT 60 FPS) -->
+<!-- 16-BIT CONTINUOUS FORWARD RACE ARCADE (CLICK TO DRIVE IN BROWSER) -->
 <div align="center">
 
 <a href="https://mberguer.github.io" target="_blank">
-  <img src="assets/tincho-gp-arcade.svg" width="100%" alt="Tincho GP Live Track Arcade" />
+  <img src="assets/tincho-gp-arcade.svg" width="100%" alt="16-Bit Track Telemetry Simulator" />
 </a>
 
 <p align="center">
-  <sub>👆 <b>Haz click en el arcade superior para pilotar el kart en tiempo real (60 FPS + audio de motor sintetizado).</b></sub><br/>
-  <sub>Controles: <code>W</code> <code>A</code> <code>S</code> <code>D</code> / Flechas para acelerar y doblar &bull; <code>ESPACIO</code> / <code>SHIFT</code> para derrapar en las curvas.</sub>
+  <sub>👆 <b>Haz click en el simulador 16-bit para tomar el volante en tiempo real (60 FPS + audio de motor sintetizado).</b></sub><br/>
+  <sub>Controles: <code>W</code> <code>A</code> <code>S</code> <code>D</code> / Flechas para pilotar &bull; <code>ESPACIO</code> / <code>SHIFT</code> para derrapar en las curvas.</sub>
 </p>
 
 </div>

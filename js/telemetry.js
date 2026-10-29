@@ -1,5 +1,5 @@
 /**
- * Tincho GP - Telemetry HUD, Minimap & Project Data Sheets
+ * Track Simulator - Telemetry HUD, Minimap & Project Data Sheets
  */
 const PROJECT_DATA = {
   'tsp-light-panel': {

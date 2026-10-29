@@ -1,5 +1,5 @@
 /**
- * Tincho GP - High-Precision Kart Physics & Detailed Rendering
+ * Track Simulator - High-Precision Kart Physics & Detailed Rendering
  */
 class Kart {
   constructor(x, y, options = {}) {
