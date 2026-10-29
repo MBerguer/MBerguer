@@ -1,7 +1,7 @@
 <div align="center">
 
 <!-- 16-BIT RETRO PADDOCK TELEMETRY HEADER -->
-<img src="https://raw.githubusercontent.com/MBerguer/MBerguer/main/assets/header-16bit.svg" width="100%" alt="Martín Berguer Header" />
+<img src="https://raw.githubusercontent.com/MBerguer/MBerguer/main/assets/header-16bit.svg?v=2" width="100%" alt="Martín Berguer Header" />
 
 <p align="center">
   <img src="https://readme-typing-svg.herokuapp.com?font=JetBrains+Mono&weight=700&size=18&duration=2800&pause=1000&color=00F0FF&center=true&vCenter=true&width=680&lines=Low-latency+systems+%26+actor-model+engines+in+Rust;FIA+Standard+3504-2019+F1+trackside+simulation;C%2B%2B20+64-bit+engine+reconstruction+%2B+2D+raytracing;Machine+Learning+trajectory+forecasting+under+uncertainty" alt="Typing SVG" />
@@ -25,7 +25,7 @@
 <div align="center">
 
 <a href="https://mberguer.github.io" target="_blank">
-  <img src="https://raw.githubusercontent.com/MBerguer/MBerguer/main/assets/tincho-gp-arcade.svg" width="100%" alt="16-Bit Track Telemetry Simulator" />
+  <img src="https://raw.githubusercontent.com/MBerguer/MBerguer/main/assets/tincho-gp-arcade.svg?v=2" width="100%" alt="16-Bit Track Telemetry Simulator" />
 </a>
 
 <p align="center">
