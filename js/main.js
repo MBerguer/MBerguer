@@ -18,38 +18,6 @@
     visorColor: '#ffb800'
   });
 
-  // 2 AI Competitor Racers on Track
-  const aiRacers = [
-    new window.AiRacer(
-      track.centerline[3].x,
-      track.centerline[3].y,
-      track.centerline,
-      {
-        number: '7',
-        primaryColor: '#e10600',
-        secondaryColor: '#ffffff',
-        helmetColor: '#e10600',
-        visorColor: '#000000',
-        startIndex: 4,
-        targetSpeed: 420
-      }
-    ),
-    new window.AiRacer(
-      track.centerline[7].x,
-      track.centerline[7].y,
-      track.centerline,
-      {
-        number: '24',
-        primaryColor: '#a855f7',
-        secondaryColor: '#10b981',
-        helmetColor: '#10b981',
-        visorColor: '#00f0ff',
-        startIndex: 8,
-        targetSpeed: 390
-      }
-    )
-  ];
-
   const camera = {
     x: kart.x,
     y: kart.y,
@@ -202,12 +170,7 @@
       // 1. Update Player Physics
       kart.update(dt, input);
 
-      // 2. Update AI Competitors
-      for (const ai of aiRacers) {
-        ai.updateAi(dt);
-      }
-
-      // 3. Track checkpoints & dynamic elements
+      // 2. Track checkpoints & dynamic elements
       track.update(dt, kart, (cp) => {
         telemetry.openProject(cp.id);
         if (cp.id === 'tesis-futbol') passedSector4 = true;
@@ -217,13 +180,13 @@
         }
       });
 
-      // 4. Smooth Camera Follow on Player
+      // 3. Smooth Camera Follow on Player
       const targetCamX = kart.x;
       const targetCamY = kart.y;
       camera.x += (targetCamX - camera.x) * camera.smooth;
       camera.y += (targetCamY - camera.y) * camera.smooth;
 
-      // 5. Render World
+      // 4. Render World
       const rect = canvas.getBoundingClientRect();
       const viewW = rect.width;
       const viewH = rect.height;
@@ -237,19 +200,14 @@
       // Draw Track & Checkpoints
       track.draw(ctx, kart);
 
-      // Draw AI Racers
-      for (const ai of aiRacers) {
-        ai.draw(ctx);
-      }
-
       // Draw Player Kart & Particles
       kart.draw(ctx);
 
       ctx.restore();
 
-      // 6. Update HUD
+      // 5. Update HUD
       telemetry.updateHUD(kart);
-      telemetry.drawMinimap(track, kart, aiRacers);
+      telemetry.drawMinimap(track, kart);
     }
 
     requestAnimationFrame(loop);
