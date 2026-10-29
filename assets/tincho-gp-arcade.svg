@@ -208,9 +208,9 @@
     </g>
 
     <!-- 16-BIT RETRO TIMING & LED KEYFRAMES -->
-    <style>
+    <style><![CDATA[
       /* 4.2s Master Cycle:
-         0.0s to 1.76s (0% to 42%): Yellow Caution & Progressive Braking
+         0.0s to 1.76s (0% to 42%): Yellow Caution and Progressive Braking
          1.76s to 4.2s (42% to 100%): GREEN FLAG POWER LAUNCH (Explosive exit acceleration)
       */
       @keyframes fiaGantry16Bit {
@@ -251,7 +251,7 @@
       .retro-mono {
         font-family: 'JetBrains Mono', 'Courier New', monospace;
       }
-    </style>
+    ]]></style>
   </defs>
 
   <!-- RETRO CRT CABINET BEZEL -->
