@@ -1,75 +1,64 @@
-# PROTOCOLO DE AUDITORÍA EXTERNA // GRAND PRIX TELEMETRY
+# PROTOCOLO DE AUDITORÍA EXTERNA // GRAND PRIX TELEMETRY (v2.0)
 
-> **Documento de Instrucciones para el Agente Auditor Externo**  
+> **Documento Oficial de Certificación de Arquitectura e Integridad de Ejecución**  
 > **Repositorio:** `MBerguer/MBerguer` (Perfil) y `MBerguer/mberguer.github.io` (Portfolio Web)
-
-Bienvenido, Agente Auditor. Este documento detalla cómo debes evaluar y certificar el plan y la ejecución del sistema *Grand Prix Telemetry*.
 
 ---
 
-## 1. Comandos de Diagnóstico Rápido
+## 1. Principios de la Arquitectura Auditada
 
-Para obtener el estado objetivo del sistema en cualquier momento:
+A diferencia de sistemas estáticos con "teatro de checkboxes", este motor de telemetría implementa:
+
+1. **Git como Única Fuente de la Verdad:**
+   El estado `DONE` no existe en ningún JSON. Se deriva en tiempo de ejecución inspeccionando `git log`. Una tarea está certificada como `DONE` si y solo si:
+   - Existe un commit en `git log` con el identificador formal `TASK-XXX`.
+   - El commit modificó efectivamente los archivos declarados para ese hito.
+   - Todas sus dependencias en el Grafo Acíclico Dirigido (DAG) están previamente certificadas.
+   - Su comando de verificación determinista (`python3 scripts/verify_task.py TASK-XXX`) retorna `exit code 0`.
+2. **Desacoplamiento Total de Estado y Catálogo:**
+   `TASKS.json` es un manifiesto **estático e inmutable** (24 hitos de ingeniería sustantivos). Múltiples agentes o desarrolladores pueden trabajar en ramas o turnos sin generar conflictos de merge en el JSON.
+3. **Validación Semántica Real:**
+   Se eliminaron los falsos positivos basados en simples `grep` o `test -f`. Las verificaciones comprueban árboles XML válidos, sintaxis real con `node --check`, llamadas no vacías y APIs declaradas.
+4. **Consolidación Modular (24 Hitos):**
+   Sin micro-fragmentación burocrática de reglas CSS individuales. Cada hito representa una entrega de software coherente, integrable y auditable.
+
+---
+
+## 2. Comandos para el Agente Auditor
+
+Para auditar el estado del repositorio en cualquier momento:
 
 ```bash
-# 1. Telemetría general y verificación de dependencias del DAG
+# 1. Telemetría general, resolución del DAG y detección de incoherencias
 python3 scripts/progress.py
 
-# 2. Ejecutar la suite completa de pruebas deterministas de tareas completadas
-python3 scripts/progress.py --verify-done
-
-# 3. Exportar métricas en JSON para análisis automatizado
+# 2. Salida estructurada JSON para parsers automatizados
 python3 scripts/progress.py --json
+
+# 3. Probar verificación semántica de una tarea específica
+python3 scripts/verify_task.py TASK-001
 ```
 
 ---
 
-## 2. Puntos Críticos de Control (Checklist del Auditor)
+## 3. Matriz de Control del Auditor
 
-Debes verificar y calificar los siguientes 5 pilares:
-
-### Pilar 1: Coherencia del Grafo de Dependencias (DAG)
-- [ ] Comprobar que en `TASKS.json` no existan ciclos infinitos o referencias a IDs inexistentes.
-- [ ] Verificar que ninguna tarea con estado `READY_FOR_EXECUTION` tenga dependencias sin completar.
-- [ ] Validar que las tareas dependientes se desbloqueen únicamente cuando todos sus prerrequisitos pasen a `DONE`.
-
-### Pilar 2: Trazabilidad y Disciplina Git
-- [ ] Cada tarea completada (`status == "DONE"`) debe corresponder a un commit real en el historial de Git cuyo mensaje comience con el ID de la tarea (`TASK-XXX`).
-- [ ] Ningún commit debe mezclar dos tareas distintas.
-- [ ] No debe haber archivos temporales (`.aux`, `.log`, `.DS_Store`) en el repositorio.
-
-### Pilar 3: Verificación Técnica Determinista
-- [ ] Cada tarea en `TASKS.json` cuenta con un campo `verification_cmd` no vacío y ejecutable desde la raíz del repo.
-- [ ] Todas las pruebas de las tareas completadas deben retornar `exit code 0`. Si una falla, se considera regresión bloqueante.
-
-### Pilar 4: Arquitectura Gráfica y de Rendimiento (Criterios Awwwards)
-- [ ] **Kinetic Scrolling:** Lenis + GSAP ScrollTrigger deben compartir un ticker unificado con `lagSmoothing(0)` para eliminar micro-stuttering.
-- [ ] **Canvas High-DPI:** Renderizado adaptativo al `devicePixelRatio` del dispositivo sin fuga de memoria ni degradación de FPS.
-- [ ] **Dual Mode:** La transición entre el modo de lectura/scrollytelling y el modo de conducción libre (*Take The Wheel*) debe ser continua mediante interpolación de cámara, sin recargar la página.
-- [ ] **Web Audio API:** Síntesis 100% procedural sin depender de archivos de audio pesados en red.
-- [ ] **Accesibilidad:** Soporte estricto de `@media (prefers-reduced-motion)`.
-
-### Pilar 5: Identidad Profesional de Martín Berguer
-- [ ] El enfoque central debe destacar:
-  1. Concurrencia de alto rendimiento y modelo de actores en **Rust** (`tsp-light-panel`, `alloy-zksync`).
-  2. Motor gráfico C++20 y trazado de rayos 2D (`Abuse 2026`).
-  3. Maestría en Machine Learning y predicción probabilística bajo incertidumbre (`tesis-futbol`).
-  4. Suite tipográfica institucional (`UdelaRTeX`).
-- [ ] Estilo visual: 16-bit retro-futurista, sobrio, sin clichés de plantillas genéricas de IA.
+| Pilar | Criterio Requerido | Modo de Verificación |
+| :--- | :--- | :--- |
+| **1. Integridad Git** | Todo hito terminado debe tener commit formal que toque sus archivos. | `python3 scripts/progress.py` valida commit, hash y diff. |
+| **2. Determinismo** | Cero regresiones; los tests no pasan con comentarios ni archivos vacíos. | `scripts/verify_task.py` inspecciona AST/XML y sintaxis. |
+| **3. Coherencia DAG** | Ninguna tarea puede comitearse antes que sus prerrequisitos. | `progress.py` detecta y marca alertas `OUT_OF_ORDER_COMMIT`. |
+| **4. Compatibilidad Web** | El código corre nativamente en browser vanilla sin asumir bundlers Node. | Zero `require` en módulos cliente de producción. |
+| **5. Nivel Awwwards** | 60/120 FPS, CLS = 0, Kinetic scrolling con Lenis y audio Web Audio procedural. | Auditoría técnica de los 24 hitos completados. |
 
 ---
 
-## 3. Salida de Auditoría Esperada
-
-El agente auditor debe emitir su dictamen en el siguiente formato:
+## 4. Salida Esperada del Dictamen
 
 ```markdown
 ### 📋 DICTAMEN DE AUDITORÍA // GRAND PRIX TELEMETRY
 - **Estado General:** [APROBADO PARA EJECUCIÓN / REQUIERE AJUSTES]
-- **Consistencia del DAG:** [Válido (X tareas analizadas)]
+- **Consistencia del DAG:** [Válido (24 hitos analizados)]
 - **Puntuación de Arquitectura:** [X/10]
-- **Observaciones o Hallazgos:**
-  - 1. ...
-  - 2. ...
 - **Veredicto Final:** [AUTORIZADO / NO AUTORIZADO]
 ```

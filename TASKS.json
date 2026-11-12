@@ -1,1449 +1,410 @@
 {
   "meta": {
-    "total_tasks": 79,
-    "version": "1.0.0"
+    "total_tasks": 24,
+    "version": "2.0.0-audited"
   },
   "tasks": [
     {
       "id": "TASK-001",
       "phase": 0,
       "phase_name": "Fase 0: Banner SVG Profile",
-      "title": "Eliminaci\u00f3n completa de conos de faros en los monoplazas",
-      "role": "[GE] Principal Graphics Engineer",
-      "status": "READY_FOR_EXECUTION",
+      "title": "Redise\u00f1o Integral de Grilla F1 y Telemetr\u00eda en SVG",
+      "role": "[GE] Principal Graphics Engineer & [CD] Art Director",
       "dependencies": [],
-      "files": [
-        "assets/tincho-gp-arcade.svg"
-      ],
-      "spec": "Remover pol\u00edgonos de haces de luz y linearGradients de faros de Car 1 (#1 Cyan), Car 2 (#7 Red) y Car 3 (#24 Purple).",
-      "verification_cmd": "python3 -c \"import xml.etree.ElementTree as ET; tree=ET.parse('assets/tincho-gp-arcade.svg'); assert len(tree.findall('.//{http://www.w3.org/2000/svg}polygon')) == 0; print('TASK-001 OK')\"",
-      "commit_msg": "fix(banner-svg): TASK-001 - remove headlight polygons from all race cars",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-002",
-      "phase": 0,
-      "phase_name": "Fase 0: Banner SVG Profile",
-      "title": "Redise\u00f1o de cajones de grilla estilo FIA oficial (abiertos con marcas)",
-      "role": "[CD] Creative & Art Director",
-      "status": "READY_FOR_EXECUTION",
-      "dependencies": [],
-      "files": [
-        "assets/tincho-gp-arcade.svg"
-      ],
-      "spec": "Sustituir rect\u00e1ngulos cerrados por marcas de pista F1 reales: barra frontal blanca de detenci\u00f3n, dos prolongaciones cortas perpendiculares y l\u00ednea discontinua de centrado P1, P2, P3.",
-      "verification_cmd": "python3 -c \"with open('assets/tincho-gp-arcade.svg') as f: c=f.read(); assert 'P1' in c and 'P2' in c and 'P3' in c; print('TASK-002 OK')\"",
-      "commit_msg": "feat(banner-svg): TASK-002 - implement authentic open-ended FIA starting grid slots",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-003",
-      "phase": 0,
-      "phase_name": "Fase 0: Banner SVG Profile",
-      "title": "Veloc\u00edmetro con desaceleraci\u00f3n din\u00e1mica (042 a 000)",
-      "role": "[MC] Motion Choreographer",
-      "status": "READY_FOR_EXECUTION",
-      "dependencies": [],
-      "files": [
-        "assets/tincho-gp-arcade.svg"
-      ],
-      "spec": "Reemplazar el n\u00famero 042 fijo por una secuencia animada escalonada que caiga de 042 a 000 durante la frenada hacia el caj\u00f3n.",
-      "verification_cmd": "python3 -c \"with open('assets/tincho-gp-arcade.svg') as f: c=f.read(); assert 'hud-speed-crawl' in c or '034' in c or 'speed-decel' in c; print('TASK-003 OK')\"",
-      "commit_msg": "feat(banner-svg): TASK-003 - dynamic stepped deceleration ticker from 42 to 000",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-004",
-      "phase": 0,
-      "phase_name": "Fase 0: Banner SVG Profile",
-      "title": "Veloc\u00edmetro con aceleraci\u00f3n progresiva (000 a 318)",
-      "role": "[MC] Motion Choreographer",
-      "status": "BLOCKED",
-      "dependencies": [
-        "TASK-003"
-      ],
-      "files": [
-        "assets/tincho-gp-arcade.svg"
-      ],
-      "spec": "A partir del Lights Out, la velocidad asciende progresivamente pasando por marchas de 1 a 6 hasta alcanzar 318 KM/H al cruzar la l\u00ednea de meta.",
-      "verification_cmd": "python3 -c \"with open('assets/tincho-gp-arcade.svg') as f: c=f.read(); assert '318' in c and '292' in c; print('TASK-004 OK')\"",
-      "commit_msg": "feat(banner-svg): TASK-004 - dynamic progressive launch acceleration counter from 000 to 318",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-005",
-      "phase": 0,
-      "phase_name": "Fase 0: Banner SVG Profile",
-      "title": "Validaci\u00f3n estricta XML y actualizaci\u00f3n de cache-buster en README",
-      "role": "[QA] Performance & Audit Specialist",
-      "status": "BLOCKED",
-      "dependencies": [
-        "TASK-001",
-        "TASK-002",
-        "TASK-004"
-      ],
       "files": [
         "assets/tincho-gp-arcade.svg",
         "README.md"
       ],
-      "spec": "Validar con xml parser, renderizar con rsvg-convert y actualizar tincho-gp-arcade.svg?v=3 a ?v=4 en README.md.",
-      "verification_cmd": "rsvg-convert assets/tincho-gp-arcade.svg -o /tmp/test_banner.png && grep -q 'tincho-gp-arcade.svg?v=4' README.md",
-      "commit_msg": "chore(banner): TASK-005 - bump camo cache-buster to v4 and validate SVG XML",
-      "commit_sha": null
+      "spec": "Eliminar conos de faros de todos los autos; redise\u00f1ar cajones de largada F1 abiertos con marcas P1/P2/P3; implementar od\u00f3metro din\u00e1mico escalonado de 042 a 000 en frenada y de 000 a 318 en aceleraci\u00f3n; validar XML y actualizar cache-buster.",
+      "verification_cmd": "python3 scripts/verify_task.py TASK-001",
+      "commit_msg": "feat(banner): TASK-001 - authentic F1 starting grid slots, no headlights, and dynamic speed ticker"
     },
     {
-      "id": "TASK-006",
-      "phase": 0,
-      "phase_name": "Fase 0: Banner SVG Profile",
-      "title": "Sincronizaci\u00f3n remota y validaci\u00f3n visual en GitHub Profile",
-      "role": "[QA] Performance & Audit Specialist",
-      "status": "BLOCKED",
-      "dependencies": [
-        "TASK-005"
-      ],
-      "files": [
-        "README.md",
-        "assets/tincho-gp-arcade.svg"
-      ],
-      "spec": "Push a origin main y comprobaci\u00f3n de respuesta HTTP 200 en GitHub Raw.",
-      "verification_cmd": "curl -s -I 'https://raw.githubusercontent.com/MBerguer/MBerguer/main/assets/tincho-gp-arcade.svg?v=4' | grep -q '200'",
-      "commit_msg": "chore(release): TASK-006 - deploy phase 0 SVG banner updates to GitHub",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-010",
+      "id": "TASK-002",
       "phase": 1,
-      "phase_name": "Fase 1: Kinetic Scroll Engine",
-      "title": "Integraci\u00f3n y configuraci\u00f3n de Lenis Smooth Scroll",
-      "role": "[MC] Motion Choreographer",
-      "status": "READY_FOR_EXECUTION",
+      "phase_name": "Fase 1: Kinetic Motion & Unified Viewport",
+      "title": "Arquitectura de Viewport \u00danico Unificado y Tokens CSS",
+      "role": "[UI] Systems UI Stylist",
       "dependencies": [],
       "files": [
         "index.html",
-        "js/lenis-manager.js"
-      ],
-      "spec": "Cargar @studio-freight/lenis@1.0.42 y configurar lerp: 0.085, smoothWheel: true con exposici\u00f3n en window.appLenis.",
-      "verification_cmd": "node -e \"const fs=require('fs'); if (!fs.readFileSync('index.html', 'utf8').includes('lenis')) process.exit(1);\"",
-      "commit_msg": "feat(motion): TASK-010 - initialize Lenis smooth scroll engine",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-011",
-      "phase": 1,
-      "phase_name": "Fase 1: Kinetic Scroll Engine",
-      "title": "Integraci\u00f3n de GSAP 3 y ScrollTrigger",
-      "role": "[MC] Motion Choreographer",
-      "status": "READY_FOR_EXECUTION",
-      "dependencies": [],
-      "files": [
-        "index.html",
-        "js/gsap-manager.js"
-      ],
-      "spec": "Cargar gsap.min.js, ScrollTrigger.min.js y ScrollToPlugin.min.js y registrar plugins globalmente.",
-      "verification_cmd": "node -e \"const fs=require('fs'); if (!fs.readFileSync('index.html', 'utf8').includes('ScrollTrigger')) process.exit(1);\"",
-      "commit_msg": "feat(motion): TASK-011 - import and register GSAP 3 with ScrollTrigger",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-012",
-      "phase": 1,
-      "phase_name": "Fase 1: Kinetic Scroll Engine",
-      "title": "Puente de sincronizaci\u00f3n Ticker Lenis <-> ScrollTrigger",
-      "role": "[MC] Motion Choreographer",
-      "status": "BLOCKED",
-      "dependencies": [
-        "TASK-010",
-        "TASK-011"
-      ],
-      "files": [
-        "js/motion-bridge.js"
-      ],
-      "spec": "Sincronizar ticker de Lenis al de GSAP con lagSmoothing(0) y update de ScrollTrigger en scroll.",
-      "verification_cmd": "grep -q 'lagSmoothing(0)' js/motion-bridge.js",
-      "commit_msg": "feat(motion): TASK-012 - establish zero-lag motion bridge between Lenis and GSAP ticker",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-013",
-      "phase": 1,
-      "phase_name": "Fase 1: Kinetic Scroll Engine",
-      "title": "Reestructuraci\u00f3n del DOM en Viewport \u00danico Unificado",
-      "role": "[UI] Systems UI Stylist",
-      "status": "READY_FOR_EXECUTION",
-      "dependencies": [],
-      "files": [
-        "index.html"
-      ],
-      "spec": "Eliminar separaci\u00f3n juego vs consola; crear capas #viewport-fixed-canvas, #scrollytelling-track y #pitwall-hud-overlay.",
-      "verification_cmd": "grep -q 'viewport-fixed-canvas' index.html && grep -q 'scrollytelling-track' index.html",
-      "commit_msg": "refactor(dom): TASK-013 - unify dual container architecture into layered scrollytelling viewport",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-014",
-      "phase": 1,
-      "phase_name": "Fase 1: Kinetic Scroll Engine",
-      "title": "Tokens de dise\u00f1o CSS y glassmorphism ahumado",
-      "role": "[UI] Systems UI Stylist",
-      "status": "BLOCKED",
-      "dependencies": [
-        "TASK-013"
-      ],
-      "files": [
         "css/style.css"
       ],
-      "spec": "Tokens CSS para tarjetas ahumadas: --bg-card-glass, --border-card-subtle, --glow-cyan con backdrop-filter: blur(12px).",
-      "verification_cmd": "grep -q 'backdrop-filter' css/style.css && grep -q -- '--bg-card-glass' css/style.css",
-      "commit_msg": "style(theme): TASK-014 - add smoked glassmorphism and motorsport telemetry design tokens",
-      "commit_sha": null
+      "spec": "Eliminar separaci\u00f3n r\u00edgida juego vs consola; estructurar en tres capas (canvas fijo z-1, pista scrollytelling z-2, HUD glassmorphic z-10); tokens de dise\u00f1o para vidrio ahumado, 100dvh y prefers-reduced-motion.",
+      "verification_cmd": "python3 scripts/verify_task.py TASK-002",
+      "commit_msg": "refactor(viewport): TASK-002 - unified layered viewport architecture with motorsport design tokens"
     },
     {
-      "id": "TASK-015",
+      "id": "TASK-003",
       "phase": 1,
-      "phase_name": "Fase 1: Kinetic Scroll Engine",
-      "title": "Barra de telemetr\u00eda de sector y depurador de vuelta (Lap Scrubber)",
-      "role": "[UI] Systems UI Stylist",
-      "status": "BLOCKED",
+      "phase_name": "Fase 1: Kinetic Motion & Unified Viewport",
+      "title": "Puente de Movimiento Cinem\u00e1tico Lenis 1.1 + GSAP ScrollTrigger",
+      "role": "[MC] Motion Choreographer",
       "dependencies": [
-        "TASK-012",
-        "TASK-014"
+        "TASK-002"
+      ],
+      "files": [
+        "index.html",
+        "js/motion-bridge.js"
+      ],
+      "spec": "Integrar Lenis y GSAP 3 con ScrollTrigger y sincronizar el ticker unificado con lagSmoothing(0) para eliminar micro-stuttering.",
+      "verification_cmd": "python3 scripts/verify_task.py TASK-003",
+      "commit_msg": "feat(motion): TASK-003 - Lenis and GSAP ScrollTrigger zero-lag motion bridge"
+    },
+    {
+      "id": "TASK-004",
+      "phase": 1,
+      "phase_name": "Fase 1: Kinetic Motion & Unified Viewport",
+      "title": "HUD Interactivo de Lap Scrubber y Telemetr\u00eda de Sectores",
+      "role": "[UI] Systems UI Stylist",
+      "dependencies": [
+        "TASK-003"
       ],
       "files": [
         "js/telemetry-scrubber.js",
         "css/style.css"
       ],
-      "spec": "Barra #lap-progress-bar en header que mapea 0% a 100% de scroll con saltos interactivos a sectores S1-S5.",
-      "verification_cmd": "grep -q 'scrollTo' js/telemetry-scrubber.js",
-      "commit_msg": "feat(hud): TASK-015 - build interactive lap progress scrubber with sector jump triggers",
-      "commit_sha": null
+      "spec": "Barra superior que mapea 0-100% de la vuelta con botones interactivos de salto a sectores S1-S5 mediante lenis.scrollTo y tiempo de vuelta en vivo.",
+      "verification_cmd": "python3 scripts/verify_task.py TASK-004",
+      "commit_msg": "feat(hud): TASK-004 - interactive lap progress scrubber and sector navigation HUD"
     },
     {
-      "id": "TASK-016",
-      "phase": 1,
-      "phase_name": "Fase 1: Kinetic Scroll Engine",
-      "title": "Monitor de presupuesto de fotogramas (Frame-budget telemetry)",
-      "role": "[QA] Performance & Audit Specialist",
-      "status": "BLOCKED",
-      "dependencies": [
-        "TASK-015"
-      ],
-      "files": [
-        "js/perf-budget.js"
-      ],
-      "spec": "M\u00f3dulo de medici\u00f3n que monitorea tiempos por frame y emite alertas si el frame budget supera 16.6ms.",
-      "verification_cmd": "test -f js/perf-budget.js",
-      "commit_msg": "test(perf): TASK-016 - integrate frame-budget telemetry monitor",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-020",
+      "id": "TASK-005",
       "phase": 2,
-      "phase_name": "Fase 2: Canvas Track & Physics",
-      "title": "Administrador de Canvas High-DPI y Render Loop",
+      "phase_name": "Fase 2: Canvas Circuit & Parallax Visual Pipeline",
+      "title": "Stage Canvas High-DPI y Ciclo de Vida de Visibilidad",
       "role": "[GE] Principal Graphics Engineer",
-      "status": "BLOCKED",
       "dependencies": [
-        "TASK-013"
+        "TASK-002"
       ],
       "files": [
         "js/canvas-stage.js"
       ],
-      "spec": "Soporte Retina con devicePixelRatio, auto-escalado y resize debounced sin destrucci\u00f3n de memoria.",
-      "verification_cmd": "grep -q 'devicePixelRatio' js/canvas-stage.js",
-      "commit_msg": "feat(graphics): TASK-020 - implement high-DPI retina canvas manager with auto-resize",
-      "commit_sha": null
+      "spec": "Gesti\u00f3n de canvas con escalado devicePixelRatio, redimensionamiento debounced y congelamiento autom\u00e1tico en Page Visibility hidden para 0% GPU en pesta\u00f1as inactivas.",
+      "verification_cmd": "python3 scripts/verify_task.py TASK-005",
+      "commit_msg": "feat(graphics): TASK-005 - high-DPI canvas stage with lifecycle visibility suspension"
     },
     {
-      "id": "TASK-021",
+      "id": "TASK-006",
       "phase": 2,
-      "phase_name": "Fase 2: Canvas Track & Physics",
-      "title": "Generador de Spline C1 Continua del Circuito",
+      "phase_name": "Fase 2: Canvas Circuit & Parallax Visual Pipeline",
+      "title": "Geometr\u00eda Param\u00e9trica de la Pista (Spline C1 Continua)",
       "role": "[GE] Principal Graphics Engineer",
-      "status": "BLOCKED",
       "dependencies": [
-        "TASK-020"
+        "TASK-005"
       ],
       "files": [
         "js/track-geometry.js"
       ],
-      "spec": "Spline param\u00e9trica Catmull-Rom/B\u00e9zier continua con funci\u00f3n getPointAtProgress(t) para 5 sectores y boxes.",
-      "verification_cmd": "node -e \"const { getPointAtProgress } = require('./js/track-geometry.js'); const p = getPointAtProgress(0.5); if (typeof p.x !== 'number') process.exit(1);\"",
-      "commit_msg": "feat(circuit): TASK-021 - construct C1 continuous parametric racing spline geometry",
-      "commit_sha": null
+      "spec": "Construcci\u00f3n de spline Catmull-Rom continua con parametrizaci\u00f3n por longitud de arco y funci\u00f3n getPointAtProgress(t) para todos los sectores.",
+      "verification_cmd": "python3 scripts/verify_task.py TASK-006",
+      "commit_msg": "feat(circuit): TASK-006 - parametric C1 continuous racing spline geometry"
     },
     {
-      "id": "TASK-022",
+      "id": "TASK-007",
       "phase": 2,
-      "phase_name": "Fase 2: Canvas Track & Physics",
-      "title": "Renderizado de Asfalto con Dithering Texturizado",
+      "phase_name": "Fase 2: Canvas Circuit & Parallax Visual Pipeline",
+      "title": "Renderizado Procedural de Asfalto 16-Bit, Pianos FIA y Trazada",
       "role": "[GE] Principal Graphics Engineer",
-      "status": "BLOCKED",
       "dependencies": [
-        "TASK-021"
+        "TASK-006"
       ],
       "files": [
         "js/track-render.js"
       ],
-      "spec": "Banda de rodadura de asfalto texturizada 16-bit dithered de 120px de ancho y surco engomado en radio ideal.",
-      "verification_cmd": "grep -q 'createPattern' js/track-render.js || grep -q 'arc' js/track-render.js",
-      "commit_msg": "feat(graphics): TASK-022 - render 16-bit dithered asphalt and rubbered racing groove",
-      "commit_sha": null
+      "spec": "Dibujado del asfalto dithered de 120px, surco de goma oscuro en la l\u00ednea de carrera ideal y pianos dentados FIA rojo/blanco y azul/blanco.",
+      "verification_cmd": "python3 scripts/verify_task.py TASK-007",
+      "commit_msg": "feat(graphics): TASK-007 - procedural dithered asphalt, FIA kerbs, and rubbered groove"
     },
     {
-      "id": "TASK-023",
+      "id": "TASK-008",
       "phase": 2,
-      "phase_name": "Fase 2: Canvas Track & Physics",
-      "title": "Pianos FIA Alternados (Kerbs) Procedurales",
-      "role": "[GE] Principal Graphics Engineer",
-      "status": "BLOCKED",
-      "dependencies": [
-        "TASK-021"
-      ],
-      "files": [
-        "js/track-render.js"
-      ],
-      "spec": "Bordes exteriores de curvas con segmentos rectangulares alternados rojo/blanco y azul/blanco en chicanes.",
-      "verification_cmd": "grep -q 'e10600' js/track-render.js",
-      "commit_msg": "feat(graphics): TASK-023 - procedural FIA alternating kerbs on curve apexes",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-024",
-      "phase": 2,
-      "phase_name": "Fase 2: Canvas Track & Physics",
-      "title": "Interpolaci\u00f3n del Monoplaza guiado por Scroll",
+      "phase_name": "Fase 2: Canvas Circuit & Parallax Visual Pipeline",
+      "title": "F\u00edsica y Orientaci\u00f3n Vectorial del Monoplaza sobre la Spline",
       "role": "[MC] Motion Choreographer",
-      "status": "BLOCKED",
       "dependencies": [
-        "TASK-012",
-        "TASK-021"
+        "TASK-003",
+        "TASK-006"
       ],
       "files": [
         "js/scrolly-car.js"
       ],
-      "spec": "Vincular ScrollTrigger global al avance del kart sobre la spline param\u00e9trica con interpolaci\u00f3n suave lerp.",
-      "verification_cmd": "grep -q 'getPointAtProgress' js/scrolly-car.js",
-      "commit_msg": "feat(motion): TASK-024 - bind car spline position to ScrollTrigger progress scrub",
-      "commit_sha": null
+      "spec": "Vinculaci\u00f3n del auto con ScrollTrigger scrub, c\u00e1lculo tangencial de heading (atan2) e interpolaci\u00f3n lerp para eliminar sacudidas.",
+      "verification_cmd": "python3 scripts/verify_task.py TASK-008",
+      "commit_msg": "feat(motion): TASK-008 - scroll-driven car physics and smooth tangential orientation"
     },
     {
-      "id": "TASK-025",
+      "id": "TASK-009",
       "phase": 2,
-      "phase_name": "Fase 2: Canvas Track & Physics",
-      "title": "C\u00e1lculo vectorial de orientaci\u00f3n del Monoplaza",
-      "role": "[MC] Motion Choreographer",
-      "status": "BLOCKED",
-      "dependencies": [
-        "TASK-024"
-      ],
-      "files": [
-        "js/scrolly-car.js"
-      ],
-      "spec": "C\u00e1lculo del \u00e1ngulo tangente mediante diferencia finita (atan2) y rotaci\u00f3n din\u00e1mica del sprite del monoplaza.",
-      "verification_cmd": "grep -q 'atan2' js/scrolly-car.js",
-      "commit_msg": "feat(graphics): TASK-025 - calculate smooth tangential car heading vector",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-026",
-      "phase": 2,
-      "phase_name": "Fase 2: Canvas Track & Physics",
-      "title": "Buffer de Marcas de Goma Persistentes (Skidmarks)",
+      "phase_name": "Fase 2: Canvas Circuit & Parallax Visual Pipeline",
+      "title": "Buffer Din\u00e1mico de Skidmarks y Sistema de Micro-part\u00edculas",
       "role": "[GE] Principal Graphics Engineer",
-      "status": "BLOCKED",
       "dependencies": [
-        "TASK-022",
-        "TASK-025"
+        "TASK-007",
+        "TASK-008"
       ],
       "files": [
-        "js/skidmarks-buffer.js"
-      ],
-      "spec": "Canvas offscreen donde se imprimen marcas negras semitransparentes en curvas cerradas o frenadas bruscas.",
-      "verification_cmd": "test -f js/skidmarks-buffer.js",
-      "commit_msg": "feat(graphics): TASK-026 - offscreen accumulation buffer for dynamic tire skidmarks",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-027",
-      "phase": 2,
-      "phase_name": "Fase 2: Canvas Track & Physics",
-      "title": "Emisor de Micro-part\u00edculas (Tire Smoke & Chispas)",
-      "role": "[GE] Principal Graphics Engineer",
-      "status": "BLOCKED",
-      "dependencies": [
-        "TASK-026"
-      ],
-      "files": [
+        "js/skidmarks-buffer.js",
         "js/particles.js"
       ],
-      "spec": "Pool est\u00e1tico de part\u00edculas reutilizables sin recolecci\u00f3n de basura para humo de gomas y chispas doradas.",
-      "verification_cmd": "grep -q 'particles' js/particles.js",
-      "commit_msg": "feat(graphics): TASK-027 - zero-allocation micro-particle system for tire smoke and floor sparks",
-      "commit_sha": null
+      "spec": "Canvas offscreen para acumular marcas de goma en frenadas y pool est\u00e1tico de part\u00edculas reutilizables para humo y chispas sin garbage collection.",
+      "verification_cmd": "python3 scripts/verify_task.py TASK-009",
+      "commit_msg": "feat(graphics): TASK-009 - persistent skidmarks buffer and zero-allocation particle system"
     },
     {
-      "id": "TASK-028",
-      "phase": 2,
-      "phase_name": "Fase 2: Canvas Track & Physics",
-      "title": "Capa de Fondo Parallax (Telemetry Radar Grid)",
-      "role": "[GE] Principal Graphics Engineer",
-      "status": "BLOCKED",
+      "id": "TASK-010",
+      "phase": 3,
+      "phase_name": "Fase 3: The Cinematic Hero Launch",
+      "title": "P\u00f3rtico de 5 Luces FIA, Pinning y Secuencia Lights Out",
+      "role": "[MC] Motion Choreographer & [UI] Stylist",
       "dependencies": [
-        "TASK-020"
+        "TASK-003",
+        "TASK-007"
       ],
       "files": [
-        "js/parallax-bg.js"
-      ],
-      "spec": "Grilla isom\u00e9trica de radar retro en segundo plano con traslaci\u00f3n parallax al 30% de la velocidad de c\u00e1mara.",
-      "verification_cmd": "test -f js/parallax-bg.js",
-      "commit_msg": "feat(graphics): TASK-028 - depth parallax telemetry radar grid background",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-029",
-      "phase": 2,
-      "phase_name": "Fase 2: Canvas Track & Physics",
-      "title": "Post-procesado CRT y Vi\u00f1eta \u00d3ptica",
-      "role": "[CD] Creative & Art Director",
-      "status": "BLOCKED",
-      "dependencies": [
-        "TASK-020"
-      ],
-      "files": [
+        "index.html",
+        "js/hero-launch.js",
         "css/style.css"
       ],
-      "spec": "Scanlines sutiles con opacidad 0.15 y gradiente radial de vi\u00f1eta oscura en bordes de viewport.",
-      "verification_cmd": "grep -q 'scanlines' css/style.css",
-      "commit_msg": "style(crt): TASK-029 - add non-intrusive CRT scanlines overlay and optical vignette",
-      "commit_sha": null
+      "spec": "Pin durante los primeros 500px de scroll encendiendo progresivamente las 5 luces rojas; apagado instant\u00e1neo con impulso de c\u00e1mara shake (+-3px) al lanzarse el monoplaza.",
+      "verification_cmd": "python3 scripts/verify_task.py TASK-010",
+      "commit_msg": "feat(hero): TASK-010 - FIA 5-light start gantry, scroll pinning, and lights out launch impulse"
     },
     {
-      "id": "TASK-030",
-      "phase": 2,
-      "phase_name": "Fase 2: Canvas Track & Physics",
-      "title": "Supresi\u00f3n y reactivaci\u00f3n por visibilidad (Page Visibility API)",
-      "role": "[QA] Performance & Audit Specialist",
-      "status": "BLOCKED",
-      "dependencies": [
-        "TASK-020"
-      ],
-      "files": [
-        "js/canvas-stage.js"
-      ],
-      "spec": "Pausar render loop cuando document.hidden sea true para cero consumo de GPU en pesta\u00f1as en segundo plano.",
-      "verification_cmd": "grep -q 'visibilitychange' js/canvas-stage.js",
-      "commit_msg": "perf(lifecycle): TASK-030 - pause animation loop on tab hidden state via Page Visibility API",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-031",
+      "id": "TASK-011",
       "phase": 3,
-      "phase_name": "Fase 3: Hero Launch Sequence",
-      "title": "Geometr\u00eda de Grilla de Partida en Recta Principal",
-      "role": "[GE] Principal Graphics Engineer",
-      "status": "BLOCKED",
-      "dependencies": [
-        "TASK-022"
-      ],
-      "files": [
-        "js/track-render.js"
-      ],
-      "spec": "Renderizar en canvas cajones escalonados P1, P2, P3 y l\u00ednea de meta a cuadros en recta principal.",
-      "verification_cmd": "grep -q 'drawStartingGrid' js/track-render.js",
-      "commit_msg": "feat(hero): TASK-031 - render starting grid boxes and checkered finish line on main straight",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-032",
-      "phase": 3,
-      "phase_name": "Fase 3: Hero Launch Sequence",
-      "title": "Componente DOM del P\u00f3rtico de Salida FIA (5 Luces)",
+      "phase_name": "Fase 3: The Cinematic Hero Launch",
+      "title": "Veloc\u00edmetro Digital Scrubbed y Tac\u00f3metro LED (0 a 318 KM/H)",
       "role": "[UI] Systems UI Stylist",
-      "status": "BLOCKED",
+      "dependencies": [
+        "TASK-010"
+      ],
+      "files": [
+        "js/hud-telemetry.js"
+      ],
+      "spec": "Display digital en tiempo real que escala de 0 a 318 KM/H y tac\u00f3metro de 16 segmentos LED hasta 13,500 RPM en la aceleraci\u00f3n de salida.",
+      "verification_cmd": "python3 scripts/verify_task.py TASK-011",
+      "commit_msg": "feat(hud): TASK-011 - real-time smooth digital speedometer and LED tachometer HUD"
+    },
+    {
+      "id": "TASK-012",
+      "phase": 4,
+      "phase_name": "Fase 4: Flagship Sectors (1-5)",
+      "title": "Sector 01: tsp-light-panel - Simulador FIA 3504-2019 y Monitor Tokio",
+      "role": "[GE] Graphics Engineer & [UI] Stylist",
+      "dependencies": [
+        "TASK-008"
+      ],
+      "files": [
+        "index.html",
+        "js/widgets/fia-panel-widget.js",
+        "css/widgets.css"
+      ],
+      "spec": "Pinning en Curva 1 a 92 KM/H; mini-simulador interactivo de matriz LED FIA (Yellow, Double Yellow, Green, Red, SC) y log terminal de eventos Tokio con microsegundos de latencia.",
+      "verification_cmd": "python3 scripts/verify_task.py TASK-012",
+      "commit_msg": "feat(sector1): TASK-012 - interactive FIA light panel simulator and Tokio actor monitor"
+    },
+    {
+      "id": "TASK-013",
+      "phase": 4,
+      "phase_name": "Fase 4: Flagship Sectors (1-5)",
+      "title": "Sector 02: Abuse 2026 - Raytracing 2D Din\u00e1mico y Toggle de Iluminaci\u00f3n",
+      "role": "[GE] Graphics Engineer & [UI] Stylist",
+      "dependencies": [
+        "TASK-012"
+      ],
+      "files": [
+        "index.html",
+        "js/widgets/raytracing-widget.js"
+      ],
+      "spec": "Chicane industrial oscura; mini-canvas interactivo donde el cursor emite luz y proyecta sombras poligonales a 60 FPS con toggle DOS 1996 vs C++20 2026.",
+      "verification_cmd": "python3 scripts/verify_task.py TASK-013",
+      "commit_msg": "feat(sector2): TASK-013 - interactive 2D dynamic raytracing canvas and lighting toggle"
+    },
+    {
+      "id": "TASK-014",
+      "phase": 4,
+      "phase_name": "Fase 4: Flagship Sectors (1-5)",
+      "title": "Sector 03: alloy-zksync - Visualizador Zero-Copy y Latencia en Nanosegundos",
+      "role": "[GE] Graphics Engineer & [UI] Stylist",
       "dependencies": [
         "TASK-013"
       ],
       "files": [
         "index.html",
-        "css/style.css"
+        "js/widgets/zerocopy-widget.js"
       ],
-      "spec": "Estructura #fia-start-gantry con 5 m\u00f3dulos LED dobles y clases CSS para encendido volum\u00e9trico.",
-      "verification_cmd": "grep -q 'fia-start-gantry' index.html",
-      "commit_msg": "feat(hero): TASK-032 - build FIA 5-light start gantry DOM component with glow shaders",
-      "commit_sha": null
+      "spec": "Recta DRS de alta velocidad (>300 KM/H); comparador interactivo de buffers de memoria (heap malloc vs in-place zero-copy) con ticker comparativo de nanosegundos.",
+      "verification_cmd": "python3 scripts/verify_task.py TASK-014",
+      "commit_msg": "feat(sector3): TASK-014 - interactive zero-copy memory visualizer and nanosecond latency ticker"
     },
     {
-      "id": "TASK-033",
-      "phase": 3,
-      "phase_name": "Fase 3: Hero Launch Sequence",
-      "title": "Secuencia Pinneada de Largada con ScrollTrigger",
-      "role": "[MC] Motion Choreographer",
-      "status": "BLOCKED",
+      "id": "TASK-015",
+      "phase": 4,
+      "phase_name": "Fase 4: Flagship Sectors (1-5)",
+      "title": "Sector 04: tesis-futbol - Predicci\u00f3n de Trayectoria y Cono Gaussiano",
+      "role": "[GE] Graphics Engineer & [UI] Stylist",
       "dependencies": [
-        "TASK-012",
-        "TASK-032"
-      ],
-      "files": [
-        "js/hero-launch.js"
-      ],
-      "spec": "Pin durante los primeros 500px de scroll encendiendo progresivamente las 5 luces rojas (20% a 95%).",
-      "verification_cmd": "grep -q 'pin:' js/hero-launch.js",
-      "commit_msg": "feat(hero): TASK-033 - pin hero section and choreograph progressive 5-red-light starting sequence",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-034",
-      "phase": 3,
-      "phase_name": "Fase 3: Hero Launch Sequence",
-      "title": "Evento LIGHTS OUT! y Sacudida Cinem\u00e1tica de C\u00e1mara",
-      "role": "[MC] Motion Choreographer",
-      "status": "BLOCKED",
-      "dependencies": [
-        "TASK-033"
-      ],
-      "files": [
-        "js/hero-launch.js",
-        "css/style.css"
-      ],
-      "spec": "Apagado s\u00fabito de luces rojas al 100%, impulso de c\u00e1mara shake (+-3px) y catapulta del auto por la recta.",
-      "verification_cmd": "grep -q 'camera-shake' css/style.css",
-      "commit_msg": "feat(hero): TASK-034 - trigger lights out blackout and physical camera launch impulse",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-035",
-      "phase": 3,
-      "phase_name": "Fase 3: Hero Launch Sequence",
-      "title": "Od\u00f3metro y Tac\u00f3metro Scrubbed (0 a 318 KM/H)",
-      "role": "[UI] Systems UI Stylist",
-      "status": "BLOCKED",
-      "dependencies": [
-        "TASK-034"
-      ],
-      "files": [
-        "js/hud-telemetry.js"
-      ],
-      "spec": "Actualizaci\u00f3n a 60 FPS de display #speed-num subiendo suavemente de 0 a 318 KM/H con tac\u00f3metro a 13,500 RPM.",
-      "verification_cmd": "grep -q 'speed-num' js/hud-telemetry.js",
-      "commit_msg": "feat(hud): TASK-035 - real-time smooth digital speedometer counter from 0 to 318 kmh",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-036",
-      "phase": 3,
-      "phase_name": "Fase 3: Hero Launch Sequence",
-      "title": "Audio Procedural de Launch Control y Turbo Spool",
-      "role": "[AE] Web Audio DSP Engineer",
-      "status": "BLOCKED",
-      "dependencies": [
-        "TASK-034"
-      ],
-      "files": [
-        "js/audio-dsp.js"
-      ],
-      "spec": "Ralent\u00ed grave (120 Hz) en grilla, silbido ascendente de turbo en 5a luz y escape sordo en Lights Out.",
-      "verification_cmd": "grep -q 'launchControl' js/audio-dsp.js",
-      "commit_msg": "feat(audio): TASK-036 - synthesized launch control turbo spool and backfire audio event",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-037",
-      "phase": 3,
-      "phase_name": "Fase 3: Hero Launch Sequence",
-      "title": "Identidad Mart\u00edn Berguer con Transici\u00f3n FLIP al Top-Bar",
-      "role": "[CD] Creative & Art Director",
-      "status": "BLOCKED",
-      "dependencies": [
-        "TASK-034"
-      ],
-      "files": [
-        "js/hero-launch.js",
-        "css/style.css"
-      ],
-      "spec": "Nombre principal de gran formato se contrae elegantemente al top-bar con GSAP FLIP al iniciar la marcha.",
-      "verification_cmd": "grep -q 'brand-title' js/hero-launch.js",
-      "commit_msg": "feat(hero): TASK-037 - typographic FLIP transition of identity header into persistent top-bar",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-038",
-      "phase": 3,
-      "phase_name": "Fase 3: Hero Launch Sequence",
-      "title": "Bot\u00f3n y atajo para saltar la intro de largada (Skip Intro)",
-      "role": "[UI] Systems UI Stylist",
-      "status": "BLOCKED",
-      "dependencies": [
-        "TASK-033"
+        "TASK-014"
       ],
       "files": [
         "index.html",
-        "js/hero-launch.js"
-      ],
-      "spec": "Bot\u00f3n [ Presiona ESPACIO para saltar largada ] que hace scroll instant\u00e1neo al Sector 01.",
-      "verification_cmd": "grep -q 'skip-intro' index.html",
-      "commit_msg": "feat(ux): TASK-038 - add accessible skip-intro keyboard shortcut and button",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-041",
-      "phase": 4,
-      "phase_name": "Fase 4: Flagship Sectors (1-5)",
-      "title": "Frenada en Curva 1 y Pinning del Sector 01 (tsp-light-panel)",
-      "role": "[MC] Motion Choreographer",
-      "status": "BLOCKED",
-      "dependencies": [
-        "TASK-024"
-      ],
-      "files": [
-        "js/sectors-scrolly.js"
-      ],
-      "spec": "Velocidad cae a 92 KM/H y se fija secci\u00f3n #sector-01 mientras el kart recorre la curva lenta.",
-      "verification_cmd": "grep -q 'sector-01' js/sectors-scrolly.js",
-      "commit_msg": "feat(sector1): TASK-041 - choreograph curve 1 deceleration and sector 01 pin",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-042",
-      "phase": 4,
-      "phase_name": "Fase 4: Flagship Sectors (1-5)",
-      "title": "Tarjeta Bento de Vidrio Ahumado tsp-light-panel",
-      "role": "[UI] Systems UI Stylist",
-      "status": "BLOCKED",
-      "dependencies": [
-        "TASK-014"
-      ],
-      "files": [
-        "index.html"
-      ],
-      "spec": "Tarjeta bento con foco en Rust, Tokio actors, Axum websockets y FIA 3504-2019.",
-      "verification_cmd": "grep -q 'tsp-light-panel' index.html",
-      "commit_msg": "feat(sector1): TASK-042 - bento card architecture layout for tsp-light-panel",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-043",
-      "phase": 4,
-      "phase_name": "Fase 4: Flagship Sectors (1-5)",
-      "title": "Mini-Simulador Interactivo de Panel FIA 3504-2019",
-      "role": "[GE] Principal Graphics Engineer",
-      "status": "BLOCKED",
-      "dependencies": [
-        "TASK-042"
-      ],
-      "files": [
-        "js/widgets/fia-panel-widget.js",
-        "css/widgets.css"
-      ],
-      "spec": "Panel interactivo empotrado con matriz LED virtual: YELLOW (4Hz), DOUBLE YELLOW, GREEN, RED, SC, VSC.",
-      "verification_cmd": "test -f js/widgets/fia-panel-widget.js",
-      "commit_msg": "feat(sector1): TASK-043 - interactive FIA 3504-2019 light matrix simulator widget",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-044",
-      "phase": 4,
-      "phase_name": "Fase 4: Flagship Sectors (1-5)",
-      "title": "Monitor de Telemetr\u00eda Rust en Vivo con Latencias",
-      "role": "[UI] Systems UI Stylist",
-      "status": "BLOCKED",
-      "dependencies": [
-        "TASK-043"
-      ],
-      "files": [
-        "js/widgets/fia-panel-widget.js"
-      ],
-      "spec": "Log terminal que muestra el stream tipado de eventos Tokio en tiempo real con latencias simuladas < 0.2ms.",
-      "verification_cmd": "grep -q 'latency' js/widgets/fia-panel-widget.js",
-      "commit_msg": "feat(sector1): TASK-044 - simulated real-time Tokio actor event stream with microsecond latency",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-045",
-      "phase": 4,
-      "phase_name": "Fase 4: Flagship Sectors (1-5)",
-      "title": "Enlace verificado y badge de repositorio tsp-light-panel",
-      "role": "[QA] Performance & Audit Specialist",
-      "status": "BLOCKED",
-      "dependencies": [
-        "TASK-042"
-      ],
-      "files": [
-        "index.html"
-      ],
-      "spec": "Enlace oficial a MBerguer/tsp-light-panel con badge y microinteracci\u00f3n hover.",
-      "verification_cmd": "grep -q 'github.com/MBerguer/tsp-light-panel' index.html",
-      "commit_msg": "feat(sector1): TASK-045 - add verified repository inspect button for tsp-light-panel",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-046",
-      "phase": 4,
-      "phase_name": "Fase 4: Flagship Sectors (1-5)",
-      "title": "Transici\u00f3n a Chicane Industrial (Sector 02 - Abuse 2026)",
-      "role": "[MC] Motion Choreographer",
-      "status": "BLOCKED",
-      "dependencies": [
-        "TASK-041"
-      ],
-      "files": [
-        "js/sectors-scrolly.js"
-      ],
-      "spec": "C\u00e1mara y pista atraviesan t\u00fanel met\u00e1lico con iluminaci\u00f3n oscura industrial.",
-      "verification_cmd": "grep -q 'sector-02' js/sectors-scrolly.js",
-      "commit_msg": "feat(sector2): TASK-046 - transition camera through industrial tunnel chicane for sector 02",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-047",
-      "phase": 4,
-      "phase_name": "Fase 4: Flagship Sectors (1-5)",
-      "title": "Tarjeta Bento de Modernizaci\u00f3n C++20 Abuse 2026",
-      "role": "[UI] Systems UI Stylist",
-      "status": "BLOCKED",
-      "dependencies": [
-        "TASK-014"
-      ],
-      "files": [
-        "index.html"
-      ],
-      "spec": "Ficha de port a 64 bits de Abuse con C++20 y pipeline de trazado de rayos 2D din\u00e1mico.",
-      "verification_cmd": "grep -q 'Abuse 2026' index.html",
-      "commit_msg": "feat(sector2): TASK-047 - bento card architecture layout for Abuse 2026",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-048",
-      "phase": 4,
-      "phase_name": "Fase 4: Flagship Sectors (1-5)",
-      "title": "Lienzo Interactivo de Raytracing 2D con Sombras Volum\u00e9tricas",
-      "role": "[GE] Principal Graphics Engineer",
-      "status": "BLOCKED",
-      "dependencies": [
-        "TASK-047"
-      ],
-      "files": [
-        "js/widgets/raytracing-widget.js"
-      ],
-      "spec": "Mini-canvas 2D interactivo: el cursor proyecta rayos contra pol\u00edgonos generando sombras a 60 FPS.",
-      "verification_cmd": "test -f js/widgets/raytracing-widget.js",
-      "commit_msg": "feat(sector2): TASK-048 - interactive 2D dynamic raytracing and shadow casting widget",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-049",
-      "phase": 4,
-      "phase_name": "Fase 4: Flagship Sectors (1-5)",
-      "title": "Toggle Comparativo: DOS Cl\u00e1sico 1996 vs Modern C++20",
-      "role": "[CD] Creative & Art Director",
-      "status": "BLOCKED",
-      "dependencies": [
-        "TASK-048"
-      ],
-      "files": [
-        "js/widgets/raytracing-widget.js"
-      ],
-      "spec": "Interruptor comparativo entre modo original sin luces y render moderno con oclusi\u00f3n volum\u00e9trica.",
-      "verification_cmd": "grep -q 'toggleLightingMode' js/widgets/raytracing-widget.js",
-      "commit_msg": "feat(sector2): TASK-049 - comparative lighting toggle between 1996 flat DOS and 2026 raytracing",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-050",
-      "phase": 4,
-      "phase_name": "Fase 4: Flagship Sectors (1-5)",
-      "title": "Enlace verificado a repositorio Abuse_2026",
-      "role": "[QA] Performance & Audit Specialist",
-      "status": "BLOCKED",
-      "dependencies": [
-        "TASK-047"
-      ],
-      "files": [
-        "index.html"
-      ],
-      "spec": "Enlace oficial a MBerguer/Abuse_2026.",
-      "verification_cmd": "grep -q 'github.com/MBerguer/Abuse_2026' index.html",
-      "commit_msg": "feat(sector2): TASK-050 - add verified repository button for Abuse_2026",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-051",
-      "phase": 4,
-      "phase_name": "Fase 4: Flagship Sectors (1-5)",
-      "title": "Recta de DRS y Aceleraci\u00f3n Sostenida (Sector 03 - alloy-zksync)",
-      "role": "[MC] Motion Choreographer",
-      "status": "BLOCKED",
-      "dependencies": [
-        "TASK-046"
-      ],
-      "files": [
-        "js/sectors-scrolly.js"
-      ],
-      "spec": "Recta de DRS; aceleraci\u00f3n sostenida a m\u00e1s de 300 KM/H.",
-      "verification_cmd": "grep -q 'sector-03' js/sectors-scrolly.js",
-      "commit_msg": "feat(sector3): TASK-051 - animate DRS straightaway high-speed run for sector 03",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-052",
-      "phase": 4,
-      "phase_name": "Fase 4: Flagship Sectors (1-5)",
-      "title": "Tarjeta Bento de Serializaci\u00f3n Criptogr\u00e1fica Zero-Copy alloy-zksync",
-      "role": "[UI] Systems UI Stylist",
-      "status": "BLOCKED",
-      "dependencies": [
-        "TASK-014"
-      ],
-      "files": [
-        "index.html"
-      ],
-      "spec": "Ficha t\u00e9cnica de Alloy, ZKsync Era y serializaci\u00f3n sin asignaciones en el heap en Rust.",
-      "verification_cmd": "grep -q 'alloy-zksync' index.html",
-      "commit_msg": "feat(sector3): TASK-052 - bento card architecture layout for alloy-zksync",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-053",
-      "phase": 4,
-      "phase_name": "Fase 4: Flagship Sectors (1-5)",
-      "title": "Visualizador Interactivo de Buffer Zero-Copy vs Heap Alloc",
-      "role": "[GE] Principal Graphics Engineer",
-      "status": "BLOCKED",
-      "dependencies": [
-        "TASK-052"
-      ],
-      "files": [
-        "js/widgets/zerocopy-widget.js"
-      ],
-      "spec": "Animaci\u00f3n comparativa de flujo de bytes: pausas de garbage collection arriba vs lectura in-place abajo.",
-      "verification_cmd": "test -f js/widgets/zerocopy-widget.js",
-      "commit_msg": "feat(sector3): TASK-053 - interactive memory buffer visualizer comparing heap alloc vs zero-copy",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-054",
-      "phase": 4,
-      "phase_name": "Fase 4: Flagship Sectors (1-5)",
-      "title": "Contador Comparativo de Nanosegundos",
-      "role": "[UI] Systems UI Stylist",
-      "status": "BLOCKED",
-      "dependencies": [
-        "TASK-053"
-      ],
-      "files": [
-        "js/widgets/zerocopy-widget.js"
-      ],
-      "spec": "Ticker en tiempo real: 1,420 ns est\u00e1ndar vs 84 ns zero-copy.",
-      "verification_cmd": "grep -q 'nanoseconds' js/widgets/zerocopy-widget.js",
-      "commit_msg": "feat(sector3): TASK-054 - live comparative nanosecond latency benchmark ticker",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-055",
-      "phase": 4,
-      "phase_name": "Fase 4: Flagship Sectors (1-5)",
-      "title": "Enlace verificado a repositorio alloy-zksync",
-      "role": "[QA] Performance & Audit Specialist",
-      "status": "BLOCKED",
-      "dependencies": [
-        "TASK-052"
-      ],
-      "files": [
-        "index.html"
-      ],
-      "spec": "Enlace oficial a MBerguer/alloy-zksync.",
-      "verification_cmd": "grep -q 'github.com/MBerguer/alloy-zksync' index.html",
-      "commit_msg": "feat(sector3): TASK-055 - add verified repository button for alloy-zksync",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-056",
-      "phase": 4,
-      "phase_name": "Fase 4: Flagship Sectors (1-5)",
-      "title": "Frenada en Horquilla Cerrada (Sector 04 - tesis-futbol)",
-      "role": "[MC] Motion Choreographer",
-      "status": "BLOCKED",
-      "dependencies": [
-        "TASK-051"
-      ],
-      "files": [
-        "js/sectors-scrolly.js"
-      ],
-      "spec": "Horquilla de radio variable con desaceleraci\u00f3n y trazado de alta entrop\u00eda.",
-      "verification_cmd": "grep -q 'sector-04' js/sectors-scrolly.js",
-      "commit_msg": "feat(sector4): TASK-056 - hairpin deceleration and trajectory uncertainty zone for sector 04",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-057",
-      "phase": 4,
-      "phase_name": "Fase 4: Flagship Sectors (1-5)",
-      "title": "Tarjeta Bento de Maestr\u00eda en Machine Learning tesis-futbol",
-      "role": "[UI] Systems UI Stylist",
-      "status": "BLOCKED",
-      "dependencies": [
-        "TASK-014"
-      ],
-      "files": [
-        "index.html"
-      ],
-      "spec": "Ficha de maestr\u00eda UdelaR: modelos gr\u00e1ficos probabil\u00edsticos, filtros de part\u00edculas y predicci\u00f3n.",
-      "verification_cmd": "grep -q 'tesis-futbol' index.html",
-      "commit_msg": "feat(sector4): TASK-057 - bento card academic layout for tesis-futbol MSc thesis",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-058",
-      "phase": 4,
-      "phase_name": "Fase 4: Flagship Sectors (1-5)",
-      "title": "Mini-Cancha Vectorial Interactiva con Cono Gaussiano de Incertidumbre",
-      "role": "[GE] Principal Graphics Engineer",
-      "status": "BLOCKED",
-      "dependencies": [
-        "TASK-057"
-      ],
-      "files": [
         "js/widgets/trajectory-widget.js"
       ],
-      "spec": "Cancha interactiva: arrastrar un jugador dibuja en tiempo real el elipsoide de covarianza de predicci\u00f3n.",
-      "verification_cmd": "test -f js/widgets/trajectory-widget.js",
-      "commit_msg": "feat(sector4): TASK-058 - interactive pitch canvas with real-time Gaussian uncertainty cone",
-      "commit_sha": null
+      "spec": "Horquilla de alta entrop\u00eda; mini-cancha interactiva con jugador arrastrable, cono gaussiano de incertidumbre y slider de varianza sigma.",
+      "verification_cmd": "python3 scripts/verify_task.py TASK-015",
+      "commit_msg": "feat(sector4): TASK-015 - interactive pitch canvas with Gaussian uncertainty trajectory cone"
     },
     {
-      "id": "TASK-059",
+      "id": "TASK-016",
       "phase": 4,
       "phase_name": "Fase 4: Flagship Sectors (1-5)",
-      "title": "Slider de Par\u00e1metro de Ruido e Incertidumbre (sigma)",
-      "role": "[UI] Systems UI Stylist",
-      "status": "BLOCKED",
-      "dependencies": [
-        "TASK-058"
-      ],
-      "files": [
-        "js/widgets/trajectory-widget.js"
-      ],
-      "spec": "Slider de varianza sigma que ensancha o estrecha el cono probabil\u00edstico en tiempo real.",
-      "verification_cmd": "grep -q 'sigmaSlider' js/widgets/trajectory-widget.js",
-      "commit_msg": "feat(sector4): TASK-059 - interactive noise variance slider dynamically scaling dispersion cone",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-060",
-      "phase": 4,
-      "phase_name": "Fase 4: Flagship Sectors (1-5)",
-      "title": "Enlace verificado a repositorio tesis-futbol",
-      "role": "[QA] Performance & Audit Specialist",
-      "status": "BLOCKED",
-      "dependencies": [
-        "TASK-057"
-      ],
-      "files": [
-        "index.html"
-      ],
-      "spec": "Enlace oficial a MBerguer/tesis-futbol.",
-      "verification_cmd": "grep -q 'github.com/MBerguer/tesis-futbol' index.html",
-      "commit_msg": "feat(sector4): TASK-060 - add verified repository button for tesis-futbol",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-061",
-      "phase": 4,
-      "phase_name": "Fase 4: Flagship Sectors (1-5)",
-      "title": "Curva Final de Entrada a Boxes / Paddock (Sector 05 - UdelaRTeX)",
-      "role": "[MC] Motion Choreographer",
-      "status": "BLOCKED",
-      "dependencies": [
-        "TASK-056"
-      ],
-      "files": [
-        "js/sectors-scrolly.js"
-      ],
-      "spec": "Curva final y estabilizaci\u00f3n hacia la recta de meta y boxes.",
-      "verification_cmd": "grep -q 'sector-05' js/sectors-scrolly.js",
-      "commit_msg": "feat(sector5): TASK-061 - final corner and pit entrance approach for sector 05",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-062",
-      "phase": 4,
-      "phase_name": "Fase 4: Flagship Sectors (1-5)",
-      "title": "Tarjeta Bento de Est\u00e1ndares Tipogr\u00e1ficos UdelaRTeX",
-      "role": "[UI] Systems UI Stylist",
-      "status": "BLOCKED",
-      "dependencies": [
-        "TASK-014"
-      ],
-      "files": [
-        "index.html"
-      ],
-      "spec": "Ficha de UdelaRTeX: suite tipogr\u00e1fica est\u00e1ndar en Universidad de la Rep\u00fablica con CI/CD.",
-      "verification_cmd": "grep -q 'UdelaRTeX' index.html",
-      "commit_msg": "feat(sector5): TASK-062 - bento card layout for UdelaRTeX typography standard",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-063",
-      "phase": 4,
-      "phase_name": "Fase 4: Flagship Sectors (1-5)",
-      "title": "Visor de C\u00f3digo LaTeX & Compilador Matem\u00e1tico en Vivo",
-      "role": "[GE] Principal Graphics Engineer",
-      "status": "BLOCKED",
-      "dependencies": [
-        "TASK-062"
-      ],
-      "files": [
-        "js/widgets/latex-widget.js"
-      ],
-      "spec": "Micro-editor interactivo donde editar una ecuaci\u00f3n renderiza inmediatamente con KaTeX al costado.",
-      "verification_cmd": "test -f js/widgets/latex-widget.js",
-      "commit_msg": "feat(sector5): TASK-063 - live interactive LaTeX editor with instant KaTeX math preview",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-064",
-      "phase": 4,
-      "phase_name": "Fase 4: Flagship Sectors (1-5)",
-      "title": "Contador Animado de Adopci\u00f3n e Impacto",
-      "role": "[UI] Systems UI Stylist",
-      "status": "BLOCKED",
-      "dependencies": [
-        "TASK-063"
-      ],
-      "files": [
-        "js/widgets/latex-widget.js"
-      ],
-      "spec": "Contadores animados GSAP que suben hasta +1,500 tesis defendidas y 14 facultades.",
-      "verification_cmd": "grep -q 'counter' js/widgets/latex-widget.js",
-      "commit_msg": "feat(sector5): TASK-064 - animated counters for academic adoption and university reach",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-065",
-      "phase": 4,
-      "phase_name": "Fase 4: Flagship Sectors (1-5)",
-      "title": "Enlace verificado a repositorio UdelaRTeX",
-      "role": "[QA] Performance & Audit Specialist",
-      "status": "BLOCKED",
-      "dependencies": [
-        "TASK-062"
-      ],
-      "files": [
-        "index.html"
-      ],
-      "spec": "Enlace oficial a MBerguer/UdelaRTeX.",
-      "verification_cmd": "grep -q 'github.com/MBerguer/UdelaRTeX' index.html",
-      "commit_msg": "feat(sector5): TASK-065 - add verified repository button for UdelaRTeX",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-070",
-      "phase": 5,
-      "phase_name": "Fase 5: Free-Drive Mode",
-      "title": "Bot\u00f3n Flotante Persistente Take The Wheel y Atajo T",
-      "role": "[UI] Systems UI Stylist",
-      "status": "BLOCKED",
+      "title": "Sector 05: UdelaRTeX - Compilador LaTeX en Vivo y M\u00e9tricas de Adopci\u00f3n",
+      "role": "[GE] Graphics Engineer & [UI] Stylist",
       "dependencies": [
         "TASK-015"
       ],
       "files": [
         "index.html",
-        "js/free-drive.js"
+        "js/widgets/latex-widget.js"
       ],
-      "spec": "Pill interactiva #btn-take-wheel con atajo de teclado [ T ] y microinteracci\u00f3n.",
-      "verification_cmd": "grep -q 'btn-take-wheel' index.html",
-      "commit_msg": "feat(freedrive): TASK-070 - add persistent Take The Wheel HUD button and keyboard hotkey",
-      "commit_sha": null
+      "spec": "Curva final previa a boxes; micro-editor LaTeX interactivo con vista previa KaTeX en vivo y contadores animados de adopci\u00f3n universitaria.",
+      "verification_cmd": "python3 scripts/verify_task.py TASK-016",
+      "commit_msg": "feat(sector5): TASK-016 - live interactive LaTeX editor with instant KaTeX preview"
     },
     {
-      "id": "TASK-071",
+      "id": "TASK-017",
       "phase": 5,
-      "phase_name": "Fase 5: Free-Drive Mode",
-      "title": "Transici\u00f3n Cinem\u00e1tica de C\u00e1mara (Scrolly <-> Free-Drive)",
+      "phase_name": "Fase 5: Seamless Free-Drive Mode",
+      "title": "Transferencia Cinem\u00e1tica de C\u00e1mara (Scrollytelling a Free-Drive)",
       "role": "[MC] Motion Choreographer",
-      "status": "BLOCKED",
       "dependencies": [
-        "TASK-024",
-        "TASK-070"
+        "TASK-008"
       ],
       "files": [
+        "index.html",
         "js/free-drive.js"
       ],
-      "spec": "Pausar Lenis temporalmente, zoom suave de c\u00e1mara hacia el kart y activaci\u00f3n de f\u00edsicas manuales en ese punto.",
-      "verification_cmd": "grep -q 'enableFreeDrive' js/free-drive.js",
-      "commit_msg": "feat(freedrive): TASK-071 - seamless camera and physics transfer between scrollytelling and free-drive",
-      "commit_sha": null
+      "spec": "Pausar Lenis suavemente, zoom de c\u00e1mara hacia el kart y activaci\u00f3n de f\u00edsicas manuales en esa coordenada exacta mediante hotkey T o bot\u00f3n HUD.",
+      "verification_cmd": "python3 scripts/verify_task.py TASK-017",
+      "commit_msg": "feat(freedrive): TASK-017 - seamless camera and physics transfer to free-drive mode"
     },
     {
-      "id": "TASK-072",
+      "id": "TASK-018",
       "phase": 5,
-      "phase_name": "Fase 5: Free-Drive Mode",
-      "title": "Modelo de F\u00edsicas de Karting 2D Mejorado",
+      "phase_name": "Fase 5: Seamless Free-Drive Mode",
+      "title": "Modelo de F\u00edsicas de Karting 2D Mejorado con Derrape y Contravolante",
       "role": "[GE] Principal Graphics Engineer",
-      "status": "BLOCKED",
       "dependencies": [
-        "TASK-071"
+        "TASK-017"
       ],
       "files": [
         "js/kart.js"
       ],
-      "spec": "Fricci\u00f3n lateral desacoplada, derrape con contravolante y transferencia de peso longitudinal.",
-      "verification_cmd": "grep -q 'counterSteer' js/kart.js || grep -q 'drift' js/kart.js",
-      "commit_msg": "feat(physics): TASK-072 - non-linear tire friction and weight-transfer physics for karting",
-      "commit_sha": null
+      "spec": "Fricci\u00f3n lateral desacoplada con p\u00e9rdida de agarre en curvas pronunciadas, transferencia de peso longitudinal y asistencia de contravolante.",
+      "verification_cmd": "python3 scripts/verify_task.py TASK-018",
+      "commit_msg": "feat(physics): TASK-018 - non-linear tire friction, drift mechanics, and weight transfer"
     },
     {
-      "id": "TASK-073",
+      "id": "TASK-019",
       "phase": 5,
-      "phase_name": "Fase 5: Free-Drive Mode",
-      "title": "HUD Activo de Competici\u00f3n en Modo Libre",
+      "phase_name": "Fase 5: Seamless Free-Drive Mode",
+      "title": "Checkpoints Hologr\u00e1ficos en Pista y Caj\u00f3n de Telemetr\u00eda Lateral",
       "role": "[UI] Systems UI Stylist",
-      "status": "BLOCKED",
       "dependencies": [
-        "TASK-072"
-      ],
-      "files": [
-        "js/hud-telemetry.js"
-      ],
-      "spec": "Cron\u00f3metro en milisegundos (00:00.000), mejor vuelta en localStorage e indicador de marchas.",
-      "verification_cmd": "grep -q 'lapTime' js/hud-telemetry.js",
-      "commit_msg": "feat(hud): TASK-073 - active motorsport racing HUD with lap timer and minimap",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-074",
-      "phase": 5,
-      "phase_name": "Fase 5: Free-Drive Mode",
-      "title": "Checkpoint Hologramas en Pista Durante Conducci\u00f3n Libre",
-      "role": "[UI] Systems UI Stylist",
-      "status": "BLOCKED",
-      "dependencies": [
-        "TASK-072",
-        "TASK-042",
-        "TASK-047",
-        "TASK-052",
-        "TASK-057",
-        "TASK-062"
+        "TASK-017"
       ],
       "files": [
         "js/free-drive.js"
       ],
-      "spec": "Al atravesar conduciendo un sector hologr\u00e1fico se despliega un caj\u00f3n lateral con la ficha del proyecto.",
-      "verification_cmd": "grep -q 'checkpoints' js/free-drive.js",
-      "commit_msg": "feat(freedrive): TASK-074 - trigger project telemetry slide-over drawer via track checkpoints",
-      "commit_sha": null
+      "spec": "Al atravesar manejando los sectores de la pista, se abre el caj\u00f3n lateral transl\u00facido con los datos del proyecto sin detener el karting.",
+      "verification_cmd": "python3 scripts/verify_task.py TASK-019",
+      "commit_msg": "feat(freedrive): TASK-019 - track holographic checkpoints and non-blocking telemetry drawer"
     },
     {
-      "id": "TASK-075",
+      "id": "TASK-020",
       "phase": 5,
-      "phase_name": "Fase 5: Free-Drive Mode",
-      "title": "Bot\u00f3n Volver al Modo Inspecci\u00f3n con Retorno Fluido",
-      "role": "[MC] Motion Choreographer",
-      "status": "BLOCKED",
-      "dependencies": [
-        "TASK-071"
-      ],
-      "files": [
-        "js/free-drive.js"
-      ],
-      "spec": "Bot\u00f3n que anima la c\u00e1mara alej\u00e1ndose y reactiva Lenis en el sector correspondiente a donde qued\u00f3 el kart.",
-      "verification_cmd": "grep -q 'disableFreeDrive' js/free-drive.js",
-      "commit_msg": "feat(freedrive): TASK-075 - smooth exit transition returning camera to scrollytelling mode",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-076",
-      "phase": 5,
-      "phase_name": "Fase 5: Free-Drive Mode",
-      "title": "Controles T\u00e1ctiles en Pantalla con Auto-Detecci\u00f3n M\u00f3vil",
+      "phase_name": "Fase 5: Seamless Free-Drive Mode",
+      "title": "Controles T\u00e1ctiles en Pantalla para Dispositivos M\u00f3viles",
       "role": "[UI] Systems UI Stylist",
-      "status": "BLOCKED",
       "dependencies": [
-        "TASK-072"
+        "TASK-018"
       ],
       "files": [
         "js/touch-controls.js",
         "css/style.css"
       ],
-      "spec": "D-pad y pedales t\u00e1ctiles que se activan \u00fanicamente si se detecta dispositivo t\u00e1ctil.",
-      "verification_cmd": "test -f js/touch-controls.js",
-      "commit_msg": "feat(mobile): TASK-076 - auto-detected on-screen touch pedals and steering D-pad",
-      "commit_sha": null
+      "spec": "D-pad y pedales t\u00e1ctiles que se activan autom\u00e1ticamente solo al detectar touchstart.",
+      "verification_cmd": "python3 scripts/verify_task.py TASK-020",
+      "commit_msg": "feat(mobile): TASK-020 - auto-detected on-screen touch pedals and steering D-pad"
     },
     {
-      "id": "TASK-080",
+      "id": "TASK-021",
       "phase": 6,
-      "phase_name": "Fase 6: Web Audio Procedural",
-      "title": "Ciclo de Vida de AudioContext y Desbloqueo por Gesto",
+      "phase_name": "Fase 6: Web Audio Procedural Engine",
+      "title": "Ciclo de Vida de AudioContext y S\u00edntesis Sustractiva de Motor F1",
       "role": "[AE] Web Audio DSP Engineer",
-      "status": "BLOCKED",
       "dependencies": [
-        "TASK-013"
+        "TASK-002"
       ],
       "files": [
         "js/audio-dsp.js"
       ],
-      "spec": "AudioContext en suspended reanudado en primer click o scroll de usuario.",
-      "verification_cmd": "grep -q 'AudioContext' js/audio-dsp.js",
-      "commit_msg": "feat(audio): TASK-080 - initialize Web Audio context lifecycle with user-gesture unlock",
-      "commit_sha": null
+      "spec": "AudioContext desbloqueado por interacci\u00f3n del usuario; sintetizador con dos osciladores sawtooth ligeramente desafinados y filtro pasabajos de 24dB.",
+      "verification_cmd": "python3 scripts/verify_task.py TASK-021",
+      "commit_msg": "feat(audio): TASK-021 - Web Audio context lifecycle and subtractive F1 V6 engine synthesizer"
     },
     {
-      "id": "TASK-081",
+      "id": "TASK-022",
       "phase": 6,
-      "phase_name": "Fase 6: Web Audio Procedural",
-      "title": "Sintetizador Sustractivo de Motor V6 Turbo",
+      "phase_name": "Fase 6: Web Audio Procedural Engine",
+      "title": "Modulaci\u00f3n de RPM, Rev-Limiter AM, Chirrido de Gomas y Mute Global",
       "role": "[AE] Web Audio DSP Engineer",
-      "status": "BLOCKED",
       "dependencies": [
-        "TASK-080"
+        "TASK-021",
+        "TASK-008"
       ],
       "files": [
         "js/audio-dsp.js"
       ],
-      "spec": "Dos osciladores sawtooth desafinados (+7 cents) con filtro pasabajos de 24dB/octava.",
-      "verification_cmd": "grep -q 'sawtooth' js/audio-dsp.js",
-      "commit_msg": "feat(audio): TASK-081 - subtractive dual-oscillator F1 engine synthesis engine",
-      "commit_sha": null
+      "spec": "Frecuencia base y filtro modulados por velocidad (80 Hz a 680 Hz); modulaci\u00f3n AM a 25 Hz para el limitador de revoluciones; buffer de ruido blanco para derrapes y toggle de mute en localStorage.",
+      "verification_cmd": "python3 scripts/verify_task.py TASK-022",
+      "commit_msg": "feat(audio): TASK-022 - RPM modulation, rev-limiter AM stutter, and tire squeal DSP"
     },
     {
-      "id": "TASK-082",
-      "phase": 6,
-      "phase_name": "Fase 6: Web Audio Procedural",
-      "title": "Modulaci\u00f3n Continua de RPM y Tono por Velocidad",
-      "role": "[AE] Web Audio DSP Engineer",
-      "status": "BLOCKED",
+      "id": "TASK-023",
+      "phase": 7,
+      "phase_name": "Fase 7: Optimization & Awwwards Polish",
+      "title": "Optimizaci\u00f3n Extrema de Rendimiento y Estabilidad Visual (CLS = 0)",
+      "role": "[QA] Performance & Audit Specialist",
       "dependencies": [
-        "TASK-081",
-        "TASK-024"
-      ],
-      "files": [
-        "js/audio-dsp.js"
-      ],
-      "spec": "Mapeo de velocidad (0 a 318 KM/H) a frecuencia base (80 Hz a 680 Hz) y apertura de filtro.",
-      "verification_cmd": "grep -q 'setTargetAtTime' js/audio-dsp.js",
-      "commit_msg": "feat(audio): TASK-082 - modulate engine frequency and filter cutoff via real-time velocity",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-083",
-      "phase": 6,
-      "phase_name": "Fase 6: Web Audio Procedural",
-      "title": "Pulso de Corte de Inyecci\u00f3n (Rev-Limiter Stutter)",
-      "role": "[AE] Web Audio DSP Engineer",
-      "status": "BLOCKED",
-      "dependencies": [
-        "TASK-082"
-      ],
-      "files": [
-        "js/audio-dsp.js"
-      ],
-      "spec": "Modulaci\u00f3n AM a 25 Hz en corte de inyecci\u00f3n para emular limitador de revoluciones.",
-      "verification_cmd": "grep -q 'revLimiter' js/audio-dsp.js",
-      "commit_msg": "feat(audio): TASK-083 - AM stutter modulation for high-RPM rev-limiter",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-084",
-      "phase": 6,
-      "phase_name": "Fase 6: Web Audio Procedural",
-      "title": "Generador de Ruido Blanco para Derrape de Neum\u00e1ticos",
-      "role": "[AE] Web Audio DSP Engineer",
-      "status": "BLOCKED",
-      "dependencies": [
-        "TASK-080",
-        "TASK-026"
-      ],
-      "files": [
-        "js/audio-dsp.js"
-      ],
-      "spec": "Buffer de ruido blanco con filtro pasabanda en 1800 Hz modulado por fuerzas G laterales.",
-      "verification_cmd": "grep -q 'createBuffer' js/audio-dsp.js",
-      "commit_msg": "feat(audio): TASK-084 - bandpass-filtered procedural white noise for tire skid squeal",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-085",
-      "phase": 6,
-      "phase_name": "Fase 6: Web Audio Procedural",
-      "title": "Clicks H\u00e1pticos de Instrumentaci\u00f3n en Botones",
-      "role": "[AE] Web Audio DSP Engineer",
-      "status": "BLOCKED",
-      "dependencies": [
-        "TASK-080"
-      ],
-      "files": [
-        "js/audio-dsp.js"
-      ],
-      "spec": "Impulso senoidal de 8ms en 2200 Hz para sensaci\u00f3n t\u00e1ctil en clicks de HUD.",
-      "verification_cmd": "grep -q 'playClick' js/audio-dsp.js",
-      "commit_msg": "feat(audio): TASK-085 - procedural haptic avionics micro-click sound generator",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-086",
-      "phase": 6,
-      "phase_name": "Fase 6: Web Audio Procedural",
-      "title": "Bot\u00f3n Mute Global con Persistencia LocalStorage",
-      "role": "[UI] Systems UI Stylist",
-      "status": "BLOCKED",
-      "dependencies": [
-        "TASK-080"
+        "TASK-016",
+        "TASK-020",
+        "TASK-022"
       ],
       "files": [
         "index.html",
-        "js/audio-dsp.js"
-      ],
-      "spec": "Toggle en header con persistencia en localStorage.getItem(\"sound_enabled\").",
-      "verification_cmd": "grep -q 'sound_enabled' js/audio-dsp.js",
-      "commit_msg": "feat(audio): TASK-086 - persistent global audio mute toggle with localStorage sync",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-090",
-      "phase": 7,
-      "phase_name": "Fase 7: Awwwards Polish & CI",
-      "title": "Inyecci\u00f3n de CSS Cr\u00edtico y Carga As\u00edncrona de Fuentes",
-      "role": "[QA] Performance & Audit Specialist",
-      "status": "BLOCKED",
-      "dependencies": [
-        "TASK-014"
-      ],
-      "files": [
-        "index.html"
-      ],
-      "spec": "font-display: swap en Google Fonts y preconnect para eliminar bloqueo de render.",
-      "verification_cmd": "grep -q 'display=swap' index.html",
-      "commit_msg": "perf(css): TASK-090 - inline critical layout CSS and asynchronous font loading",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-091",
-      "phase": 7,
-      "phase_name": "Fase 7: Awwwards Polish & CI",
-      "title": "Eliminaci\u00f3n Total de Desplazamientos de Dise\u00f1o (CLS = 0)",
-      "role": "[QA] Performance & Audit Specialist",
-      "status": "BLOCKED",
-      "dependencies": [
-        "TASK-090"
-      ],
-      "files": [
         "css/style.css"
       ],
-      "spec": "Dimensionamiento estricto de contenedores y canvas para Cumulative Layout Shift = 0.",
-      "verification_cmd": "grep -q 'aspect-ratio' css/style.css",
-      "commit_msg": "perf(layout): TASK-091 - enforce fixed aspect ratios and eliminate cumulative layout shifts",
-      "commit_sha": null
+      "spec": "Inlining de CSS cr\u00edtico, fuentes swap, aspect-ratio fijo en todos los contenedores para CLS=0 y compatibilidad WebKit para Safari iOS/macOS.",
+      "verification_cmd": "python3 scripts/verify_task.py TASK-023",
+      "commit_msg": "perf(layout): TASK-023 - critical CSS inlining, zero CLS enforcement, and Safari WebKit polish"
     },
     {
-      "id": "TASK-092",
+      "id": "TASK-024",
       "phase": 7,
-      "phase_name": "Fase 7: Awwwards Polish & CI",
-      "title": "Cumplimiento de Accesibilidad prefers-reduced-motion",
+      "phase_name": "Fase 7: Optimization & Awwwards Polish",
+      "title": "Lanzamiento de Producci\u00f3n, Sincronizaci\u00f3n Git Dual y Live Health Check",
       "role": "[QA] Performance & Audit Specialist",
-      "status": "BLOCKED",
       "dependencies": [
-        "TASK-012"
+        "TASK-023"
       ],
       "files": [
-        "css/style.css",
-        "js/lenis-manager.js"
+        "scripts/progress.py"
       ],
-      "spec": "Deshabilitar lerp en prefers-reduced-motion y presentar tarjetas en flujo est\u00e1ndar.",
-      "verification_cmd": "grep -q 'prefers-reduced-motion' css/style.css",
-      "commit_msg": "feat(a11y): TASK-092 - graceful degradation for prefers-reduced-motion media query",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-093",
-      "phase": 7,
-      "phase_name": "Fase 7: Awwwards Polish & CI",
-      "title": "Verificaci\u00f3n de Compatibilidad Cross-Browser",
-      "role": "[QA] Performance & Audit Specialist",
-      "status": "BLOCKED",
-      "dependencies": [
-        "TASK-091"
-      ],
-      "files": [
-        "css/style.css"
-      ],
-      "spec": "Asegurar prefijos -webkit-backdrop-filter para compatibilidad total con Safari.",
-      "verification_cmd": "grep -q -- '-webkit-backdrop-filter' css/style.css",
-      "commit_msg": "fix(compat): TASK-093 - add WebKit fallbacks for backdrop blur on Safari",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-094",
-      "phase": 7,
-      "phase_name": "Fase 7: Awwwards Polish & CI",
-      "title": "Prevenci\u00f3n de Saltos de Altura en Viewports M\u00f3viles (100dvh)",
-      "role": "[QA] Performance & Audit Specialist",
-      "status": "BLOCKED",
-      "dependencies": [
-        "TASK-091"
-      ],
-      "files": [
-        "css/style.css"
-      ],
-      "spec": "Uso de 100dvh para evitar saltos con la barra de navegaci\u00f3n din\u00e1mica de Safari y Chrome.",
-      "verification_cmd": "grep -q '100dvh' css/style.css",
-      "commit_msg": "fix(mobile): TASK-094 - use dynamic viewport units 100dvh to prevent mobile scroll jumps",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-095",
-      "phase": 7,
-      "phase_name": "Fase 7: Awwwards Polish & CI",
-      "title": "Auditor\u00eda Automatizada de Performance y Cero Errores",
-      "role": "[QA] Performance & Audit Specialist",
-      "status": "BLOCKED",
-      "dependencies": [
-        "TASK-090",
-        "TASK-091",
-        "TASK-094"
-      ],
-      "files": [
-        "js/*.js"
-      ],
-      "spec": "Verificaci\u00f3n sint\u00e1ctica de todos los m\u00f3dulos JS con node --check.",
-      "verification_cmd": "node --check js/*.js",
-      "commit_msg": "test(audit): TASK-095 - automated syntax validation and zero-error audit pass",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-096",
-      "phase": 7,
-      "phase_name": "Fase 7: Awwwards Polish & CI",
-      "title": "Sincronizaci\u00f3n Git Dual a Producci\u00f3n",
-      "role": "[QA] Performance & Audit Specialist",
-      "status": "BLOCKED",
-      "dependencies": [
-        "TASK-095"
-      ],
-      "files": [
-        "."
-      ],
-      "spec": "git push origin main y git push pages main con \u00e1rbol de trabajo limpio.",
-      "verification_cmd": "git status | grep -q 'working tree clean'",
-      "commit_msg": "chore(release): TASK-096 - dual push production release to origin and pages remotes",
-      "commit_sha": null
-    },
-    {
-      "id": "TASK-097",
-      "phase": 7,
-      "phase_name": "Fase 7: Awwwards Polish & CI",
-      "title": "Verificaci\u00f3n en Vivo de Despliegue en GitHub Pages",
-      "role": "[QA] Performance & Audit Specialist",
-      "status": "BLOCKED",
-      "dependencies": [
-        "TASK-096"
-      ],
-      "files": [
-        "."
-      ],
-      "spec": "Comprobaci\u00f3n de respuesta HTTP 200 en https://mberguer.github.io/.",
-      "verification_cmd": "curl -s -I 'https://mberguer.github.io/' | grep -q 'HTTP/2 200'",
-      "commit_msg": "chore(audit): TASK-097 - live production URL verification on mberguer.github.io",
-      "commit_sha": null
+      "spec": "Push dual limpio a origin main y pages main con \u00e1rbol de trabajo inmaculado y verificaci\u00f3n de despliegue en mberguer.github.io.",
+      "verification_cmd": "python3 scripts/verify_task.py TASK-024",
+      "commit_msg": "chore(release): TASK-024 - dual remote production deployment and health check pass"
     }
   ]
 }
