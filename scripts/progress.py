@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-GRAND PRIX TELEMETRY // STRICT AUDIT PROGRESS ENGINE (v2.0)
+GRAND PRIX TELEMETRY // STRICT AUDIT PROGRESS ENGINE (v3.0)
 Cryptographically verifiable, Git-backed task progress measurement.
 
-A task is evaluated as DONE if and only if:
+A milestone is certified DONE if and only if:
   1. A matching commit exists in Git history: commit message includes 'TASK-XXX'.
   2. The commit diff touched the declared files for that task.
   3. All predecessor dependencies are certified DONE.
@@ -39,22 +39,21 @@ def get_git_commit_map():
 
             # Check for TASK-XXX in message
             for token in msg.split():
-                if token.startswith("TASK-") or (":" in token and "TASK-" in token):
-                    clean_id = token.replace(":", "").replace("(", "").replace(")", "").strip()
-                    if clean_id.startswith("TASK-") and clean_id not in task_commits:
-                        # Get files modified in this commit
-                        diff_res = subprocess.run(
-                            ["git", "show", "--name-only", "--format=", sha],
-                            cwd=ROOT_DIR,
-                            capture_output=True,
-                            text=True
-                        )
-                        files_touched = [f.strip() for f in diff_res.stdout.split("\n") if f.strip()]
-                        task_commits[clean_id] = {
-                            "sha": sha,
-                            "msg": msg,
-                            "files": files_touched
-                        }
+                clean_id = token.replace(":", "").replace("(", "").replace(")", "").replace("[", "").replace("]", "").strip()
+                if clean_id.startswith("TASK-") and clean_id not in task_commits:
+                    # Get files modified in this commit
+                    diff_res = subprocess.run(
+                        ["git", "show", "--name-only", "--format=", sha],
+                        cwd=ROOT_DIR,
+                        capture_output=True,
+                        text=True
+                    )
+                    files_touched = [f.strip() for f in diff_res.stdout.split("\n") if f.strip()]
+                    task_commits[clean_id] = {
+                        "sha": sha,
+                        "msg": msg,
+                        "files": files_touched
+                    }
         return task_commits
     except Exception as e:
         return {}
@@ -67,11 +66,11 @@ def run_cmd(cmd):
             cwd=ROOT_DIR,
             capture_output=True,
             text=True,
-            timeout=15
+            timeout=20
         )
         return res.returncode == 0, res.stdout.strip(), res.stderr.strip()
     except subprocess.TimeoutExpired:
-        return False, "", "Timeout expired (15s)"
+        return False, "", "Timeout expired (20s)"
     except Exception as e:
         return False, "", str(e)
 
@@ -93,12 +92,9 @@ def main():
 
     git_commits = get_git_commit_map()
 
-    # Dynamic State Evaluation (Topological resolution)
-    # We resolve status: DONE, READY_FOR_EXECUTION, BLOCKED
+    # Dynamic State Evaluation (Topological iterative resolution)
     certified_done = {}
-    inconsistencies = []
 
-    # Iterate to resolve dependencies strictly
     resolved_any = True
     while resolved_any:
         resolved_any = False
@@ -109,39 +105,85 @@ def main():
 
             deps = t.get("dependencies", [])
             deps_met = all(d in certified_done for d in deps)
+            if not deps_met:
+                continue
 
-            # Check if Git has a commit for this task
             commit_info = git_commits.get(tid)
-            if commit_info:
-                if not deps_met:
-                    inconsistencies.append({
-                        "task_id": tid,
-                        "type": "OUT_OF_ORDER_COMMIT",
-                        "details": f"Commit {commit_info['sha']} exists but dependencies {deps} are not certified DONE."
-                    })
+            if not commit_info:
+                continue
+
+            # Verify that the commit touched the declared files
+            declared_files = t.get("files", [])
+            touched = commit_info.get("files", [])
+            file_match = False
+            for df in declared_files:
+                df_clean = df.rstrip("/")
+                if any(cf == df_clean or cf.startswith(df_clean + "/") or df_clean.startswith(cf) for cf in touched):
+                    file_match = True
+                    break
+
+            if not file_match:
+                # Commit did not touch the declared files
+                continue
+
+            # Run deterministic verification
+            cmd = t.get("verification_cmd")
+            if cmd:
+                ok, out, err = run_cmd(cmd)
+                if not ok:
                     continue
 
-                # Run verification test
-                cmd = t.get("verification_cmd")
-                passed = True
-                verr = ""
-                if cmd:
-                    ok, out, err = run_cmd(cmd)
-                    if not ok:
-                        passed = False
-                        verr = err or out
+            # Fully certified!
+            certified_done[tid] = commit_info
+            resolved_any = True
 
-                if not passed:
+    # Check for inconsistencies AFTER topological resolution completes
+    inconsistencies = []
+    for t in tasks:
+        tid = t["id"]
+        if tid in certified_done:
+            continue
+
+        commit_info = git_commits.get(tid)
+        if commit_info:
+            deps = t.get("dependencies", [])
+            deps_met = all(d in certified_done for d in deps)
+            if not deps_met:
+                unmet = [d for d in deps if d not in certified_done]
+                inconsistencies.append({
+                    "task_id": tid,
+                    "type": "OUT_OF_ORDER_COMMIT",
+                    "details": f"Commit {commit_info['sha']} exists but dependencies {unmet} are not certified DONE."
+                })
+                continue
+
+            declared_files = t.get("files", [])
+            touched = commit_info.get("files", [])
+            file_match = False
+            for df in declared_files:
+                df_clean = df.rstrip("/")
+                if any(cf == df_clean or cf.startswith(df_clean + "/") or df_clean.startswith(cf) for cf in touched):
+                    file_match = True
+                    break
+
+            if not file_match:
+                inconsistencies.append({
+                    "task_id": tid,
+                    "type": "FILE_MISMATCH",
+                    "details": f"Commit {commit_info['sha']} touched {touched}, but declared files are {declared_files}."
+                })
+                continue
+
+            cmd = t.get("verification_cmd")
+            if cmd:
+                ok, out, err = run_cmd(cmd)
+                if not ok:
                     inconsistencies.append({
                         "task_id": tid,
                         "type": "VERIFICATION_FAILURE",
-                        "details": f"Commit {commit_info['sha']} exists but test failed: {verr}"
+                        "details": f"Commit {commit_info['sha']} exists but test failed: {err or out}"
                     })
                     continue
-
-                # Certified DONE!
-                certified_done[tid] = commit_info
-                resolved_any = True
 
     # Categorize all tasks
     phases = {}
@@ -198,7 +240,7 @@ def main():
     bar = "█" * filled + "░" * (bar_width - filled)
 
     print("=" * 92)
-    print("🏁 GRAND PRIX TELEMETRY // STRICT AUDIT PROGRESS DASHBOARD (v2.0)")
+    print("🏁 GRAND PRIX TELEMETRY // STRICT AUDIT PROGRESS DASHBOARD (v3.0)")
     print("=" * 92)
     print(f"LAP PROGRESS: [{bar}] {percent_overall:.1f}% ({done_count}/{total_count} Milestones Certified)")
     print(f"REMAINING: {total_count - done_count} Milestones | READY TO EXECUTE: {len(ready_tasks)} | BLOCKED: {len(blocked_tasks)}")
