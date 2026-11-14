@@ -6,6 +6,7 @@
   <title>Martín Berguer | Systems & Motorsport Telemetry</title>
   <meta name="description" content="Interactive 2D Racing & Pit-Wall Telemetry Portfolio of Martín Berguer - Staff Systems Engineer specializing in Rust, F1 Simulation, and Low-Latency Computing.">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/widgets.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
@@ -85,6 +86,30 @@
               <a href="https://github.com/MBerguer/tsp-light-panel" target="_blank" class="btn-action-primary" style="flex: initial; padding: 8px 18px;">
                 View tsp-light-panel ↗
               </a>
+            </div>
+          </div>
+
+          <!-- INTERACTIVE FIA LIGHT PANEL SIMULATOR WIDGET -->
+          <div class="bento-card bento-span-12 fia-widget-container" id="fia-panel-interactive-card">
+            <div class="widget-header">
+              <span class="widget-badge">LIVE SIMULATOR</span>
+              <span class="widget-title">FIA Standard 3504-2019 LED Matrix &amp; Tokio Actor Stream</span>
+            </div>
+            <div class="fia-widget-body">
+              <div class="fia-matrix-viewport">
+                <canvas id="fia-matrix-canvas" width="280" height="200"></canvas>
+                <div class="fia-flag-controls">
+                  <button class="fia-flag-btn" data-flag="GREEN">GREEN</button>
+                  <button class="fia-flag-btn active" data-flag="YELLOW">YELLOW</button>
+                  <button class="fia-flag-btn" data-flag="DOUBLE_YELLOW">DBL YEL</button>
+                  <button class="fia-flag-btn" data-flag="RED">RED</button>
+                  <button class="fia-flag-btn" data-flag="SC">SAFETY CAR</button>
+                </div>
+              </div>
+              <div class="fia-tokio-terminal">
+                <div class="terminal-bar">tokio::actor::race_control --channel=ws://localhost:8080</div>
+                <div class="terminal-logs" id="fia-tokio-logs"></div>
+              </div>
             </div>
           </div>
         </div>
@@ -371,6 +396,7 @@
   <script src="js/particles.js"></script>
   <script src="js/hero-launch.js"></script>
   <script src="js/hud-telemetry.js"></script>
+  <script src="js/widgets/fia-panel-widget.js"></script>
 
   <!-- SCRIPTS -->
   <script src="js/engine.js"></script>

@@ -1,0 +1,155 @@
+/**
+ * GRAND PRIX TELEMETRY // FLAGSHIP SECTOR INTERACTIVE WIDGETS CSS
+ * Glassmorphic HUD styling for interactive engineering sector panels.
+ */
+
+/* WIDGET CARD CONTAINER */
+.fia-widget-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: var(--bg-card-glass);
+  border: 1px solid var(--border-card-subtle);
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 14px;
+}
+
+.widget-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 10px;
+}
+
+.widget-badge {
+  background: var(--accent-f1-red);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 3px;
+  letter-spacing: 1px;
+}
+
+.widget-title {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-bright);
+}
+
+.fia-widget-body {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+/* FIA MATRIX VIEWPORT */
+.fia-matrix-viewport {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+#fia-matrix-canvas {
+  border-radius: 6px;
+  background: #0a0d14;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+  border: 1px solid #1e293b;
+}
+
+.fia-flag-controls {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.fia-flag-btn {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 4px 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  color: var(--text-dim);
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.fia-flag-btn:hover {
+  border-color: var(--accent-amber);
+  color: #fff;
+}
+
+.fia-flag-btn.active {
+  background: rgba(255, 170, 0, 0.2);
+  border-color: var(--accent-amber);
+  color: var(--accent-amber);
+  box-shadow: 0 0 10px rgba(255, 170, 0, 0.4);
+}
+
+.fia-flag-btn[data-flag="GREEN"].active {
+  background: rgba(0, 255, 102, 0.2);
+  border-color: #00ff66;
+  color: #00ff66;
+  box-shadow: 0 0 10px rgba(0, 255, 102, 0.4);
+}
+
+.fia-flag-btn[data-flag="RED"].active {
+  background: rgba(255, 0, 51, 0.2);
+  border-color: #ff0033;
+  color: #ff0033;
+  box-shadow: 0 0 10px rgba(255, 0, 51, 0.4);
+}
+
+/* TOKIO ACTOR TERMINAL */
+.fia-tokio-terminal {
+  flex: 1;
+  min-width: 280px;
+  background: rgba(5, 7, 12, 0.95);
+  border: 1px solid #1e293b;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.8);
+}
+
+.terminal-bar {
+  background: #0f172a;
+  border-bottom: 1px solid #1e293b;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent-cyan);
+  padding: 6px 12px;
+}
+
+.terminal-logs {
+  flex: 1;
+  padding: 10px 12px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.6;
+  overflow-y: auto;
+  max-height: 220px;
+}
+
+.terminal-log-line {
+  color: #94a3b8;
+}
+
+.terminal-log-line .log-time {
+  color: #64748b;
+  margin-right: 6px;
+}
+
+.terminal-log-line .log-tag {
+  color: var(--accent-amber);
+  margin-right: 6px;
+}
