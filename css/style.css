@@ -1028,3 +1028,24 @@ body {
   0% { opacity: 0.3; }
   100% { opacity: 1; }
 }
+
+/* ==============================================================================
+   TASK-023: ZERO CLS & WEBKIT ENGINE HARDENING
+   ============================================================================== */
+img, canvas, svg {
+  content-visibility: auto;
+}
+
+.console-hero-banner img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 920 / 180;
+  display: block;
+}
+
+#circuit-canvas {
+  touch-action: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
