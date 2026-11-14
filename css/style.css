@@ -3,6 +3,10 @@
   --bg-surface: rgba(13, 17, 26, 0.88);
   --bg-panel: #0d121d;
   --bg-card: rgba(16, 22, 34, 0.75);
+  --bg-card-glass: rgba(8, 12, 20, 0.75);
+  --border-card-subtle: rgba(255, 255, 255, 0.08);
+  --glow-cyan: 0 0 20px rgba(0, 240, 255, 0.25);
+  --glow-f1-red: 0 0 20px rgba(225, 6, 0, 0.3);
   --border-color: rgba(255, 255, 255, 0.1);
   --border-glow-cyan: rgba(0, 240, 255, 0.4);
   --border-glow-purple: rgba(168, 85, 247, 0.4);
@@ -34,8 +38,10 @@ body {
   background-color: var(--bg-primary);
   color: var(--text-main);
   font-family: var(--font-sans);
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
   height: 100vh;
+  height: 100dvh;
   width: 100vw;
 }
 
@@ -738,5 +744,99 @@ body {
   }
   .speed-value {
     font-size: 34px;
+  }
+}
+
+/* ==============================================================================
+   UNIFIED LAYERED VIEWPORT ARCHITECTURE
+   ============================================================================== */
+/* LAYER 1: FIXED BACKGROUND CANVAS */
+#viewport-fixed-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+  background: #080b11;
+}
+
+#viewport-fixed-canvas #circuit-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* LAYER 2: SCROLLYTELLING TRACK & BENTO SECTORS */
+#scrollytelling-track {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding-top: 60px;
+  pointer-events: none;
+}
+
+.scrolly-section {
+  min-height: 85vh;
+  padding: 40px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.hero-viewport {
+  min-height: calc(100vh - 60px);
+  min-height: calc(100dvh - 60px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.scrolly-section .console-container,
+.scrolly-section .bento-card {
+  pointer-events: auto;
+}
+
+/* LAYER 3: FIXED PIT-WALL HUD & OVERLAY */
+#pitwall-hud-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  z-index: 10;
+  pointer-events: none;
+}
+
+#pitwall-hud-overlay #top-bar,
+#pitwall-hud-overlay .hud-cluster,
+#pitwall-hud-overlay #mobile-controls {
+  pointer-events: auto;
+}
+
+/* Upgraded Bento Glass styling */
+.bento-card {
+  background: var(--bg-card-glass);
+  backdrop-filter: blur(14px) saturate(180%);
+  -webkit-backdrop-filter: blur(14px) saturate(180%);
+  border: 1px solid var(--border-card-subtle);
+}
+
+/* Accessibility: prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
