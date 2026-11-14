@@ -258,7 +258,8 @@
       ],
       "files": [
         "index.html",
-        "js/widgets/trajectory-widget.js"
+        "js/widgets/trajectory-widget.js",
+        "css/widgets.css"
       ],
       "spec": "Horquilla de alta entrop\u00eda; mini-cancha interactiva con jugador arrastrable, cono gaussiano de incertidumbre y slider de varianza sigma.",
       "verification_cmd": "python3 scripts/verify_task.py TASK-015",

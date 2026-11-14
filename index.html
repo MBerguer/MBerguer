@@ -268,6 +268,33 @@
               </a>
             </div>
           </div>
+
+          <!-- INTERACTIVE TRAJECTORY & KALMAN CONE WIDGET -->
+          <div class="bento-card bento-span-12 trajectory-widget-container" id="trajectory-interactive-card">
+            <div class="widget-header">
+              <span class="widget-badge" style="background: var(--accent-amber); color: #000;">PROBABILISTIC ML</span>
+              <span class="widget-title">Gaussian Trajectory Uncertainty Cone &amp; State Estimation (Drag #10)</span>
+            </div>
+            <div class="trajectory-body">
+              <div class="trajectory-canvas-wrap">
+                <canvas id="trajectory-canvas" width="480" height="220"></canvas>
+              </div>
+              <div class="trajectory-controls">
+                <div class="sigma-control-group">
+                  <div class="sigma-label">
+                    <span>UNCERTAINTY VARIANCE (σ):</span>
+                    <b id="val-sigma-num">1.4σ</b>
+                  </div>
+                  <input type="range" id="slider-sigma" class="slider-sigma" min="0.5" max="3.0" step="0.1" value="1.4" />
+                </div>
+                <div class="trajectory-stats">
+                  <div class="stat-item"><span>MODEL:</span> <b>Extended Kalman Filter</b></div>
+                  <div class="stat-item"><span>SUCCESS PROB:</span> <b id="val-pass-prob" style="color:var(--accent-amber);">84.6%</b></div>
+                  <div class="stat-item"><span>LATENCY:</span> <b>1.8 ms / inference</b></div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -472,6 +499,7 @@
   <script src="js/widgets/fia-panel-widget.js"></script>
   <script src="js/widgets/raytracing-widget.js"></script>
   <script src="js/widgets/zerocopy-widget.js"></script>
+  <script src="js/widgets/trajectory-widget.js"></script>
 
   <!-- SCRIPTS -->
   <script src="js/engine.js"></script>
