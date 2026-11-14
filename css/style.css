@@ -721,9 +721,16 @@ body {
   touch-action: none;
 }
 
-.touch-btn:active {
-  background: rgba(0, 240, 255, 0.35);
+.touch-btn:active,
+.touch-btn.pressed {
+  background: rgba(0, 240, 255, 0.45);
   border-color: var(--accent-cyan);
+  box-shadow: 0 0 16px rgba(0, 240, 255, 0.6);
+  transform: scale(0.94);
+}
+
+#mobile-controls.touch-active {
+  display: flex;
 }
 
 @media (max-width: 768px) {

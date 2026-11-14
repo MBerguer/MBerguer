@@ -343,6 +343,7 @@
         "TASK-018"
       ],
       "files": [
+        "index.html",
         "js/touch-controls.js",
         "css/style.css"
       ],
