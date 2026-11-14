@@ -131,6 +131,7 @@
         "TASK-006"
       ],
       "files": [
+        "index.html",
         "js/scrolly-car.js"
       ],
       "spec": "Vinculaci\u00f3n del auto con ScrollTrigger scrub, c\u00e1lculo tangencial de heading (atan2) e interpolaci\u00f3n lerp para eliminar sacudidas.",
