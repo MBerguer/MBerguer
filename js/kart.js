@@ -41,6 +41,10 @@ class Kart {
     this.gear = 1;
     this.gForce = 0;
     this.prevSpeed = 0;
+
+    // Advanced Vehicle Dynamics (TASK-018)
+    this.weightTransfer = 0; // Negative = braking (front-loaded), Positive = accel (rear-loaded)
+    this.counterSteer = 1.0;  // Counter-steer angular stability factor
   }
 
   update(dt, input) {
@@ -72,21 +76,45 @@ class Kart {
 
     this.speed -= Math.sign(this.speed) * (this.speed * this.speed) * this.drag * dt;
 
-    // 3. Turning rate
+    // Longitudinal Weight Transfer calculation
+    const accel = (this.speed - this.prevSpeed) / Math.max(dt, 0.001);
+    this.weightTransfer = Math.max(-0.4, Math.min(0.4, accel / 600));
+
+    // 3. Turning rate & Counter-Steer Mechanics
     const speedRatio = Math.abs(this.speed) / this.maxSpeed;
     const turnSensitivity = 2.8 * (0.35 + 0.65 * (1 - speedRatio * 0.45));
-    if (Math.abs(this.speed) > 1) {
-      const turnDir = this.speed >= 0 ? 1 : -1;
-      this.angle += this.steerAngle * turnSensitivity * dt * turnDir;
+
+    // Dynamic Counter-Steer assistance during high-yaw drifts
+    if (this.driftFactor > 0.25) {
+      // Heading vs vehicle orientation
+      const currentHeading = Math.atan2(this.vy, this.vx);
+      let slip = this.angle - currentHeading;
+      while (slip > Math.PI) slip -= Math.PI * 2;
+      while (slip < -Math.PI) slip += Math.PI * 2;
+
+      // If driver steers into the slide (counter-steering)
+      const isCounterSteering = (this.steerAngle * slip) < 0;
+      this.counterSteer = isCounterSteering ? 1.35 : 0.9;
+    } else {
+      this.counterSteer = 1.0;
     }
 
-    // 4. Lateral Drift
+    if (Math.abs(this.speed) > 1) {
+      const turnDir = this.speed >= 0 ? 1 : -1;
+      this.angle += this.steerAngle * turnSensitivity * dt * turnDir * this.counterSteer;
+    }
+
+    // 4. Lateral Drift & Non-Linear Tire Friction
     const targetVx = Math.cos(this.angle) * this.speed;
     const targetVy = Math.sin(this.angle) * this.speed;
 
     let currentGrip = this.tireGrip;
+    // Heavy braking transfers weight forward, loosening the rear axle
+    if (this.weightTransfer < -0.15) {
+      currentGrip *= (1.0 + this.weightTransfer * 0.6);
+    }
     if (input.handbrake || (Math.abs(this.steerAngle) > 0.5 && this.speed > 250)) {
-      currentGrip = 0.56;
+      currentGrip = 0.52;
     }
 
     const gripLerp = Math.min(1, currentGrip * 9 * dt);
@@ -138,16 +166,27 @@ class Kart {
     const cos = Math.cos(this.angle);
     const sin = Math.sin(this.angle);
 
+    const leftPt = { x: this.x + cos * rearOffset - sin * trackWidth, y: this.y + sin * rearOffset + cos * trackWidth };
+    const rightPt = { x: this.x + cos * rearOffset + sin * trackWidth, y: this.y + sin * rearOffset - cos * trackWidth };
+
+    if (window.SkidmarksBuffer && typeof window.SkidmarksBuffer.addMark === 'function') {
+      window.SkidmarksBuffer.addMark(leftPt, rightPt, this.driftFactor);
+    }
+
     this.skidMarks.push({
-      lX: this.x + cos * rearOffset - sin * trackWidth,
-      lY: this.y + sin * rearOffset + cos * trackWidth,
-      rX: this.x + cos * rearOffset + sin * trackWidth,
-      rY: this.y + sin * rearOffset - cos * trackWidth,
+      lX: leftPt.x,
+      lY: leftPt.y,
+      rX: rightPt.x,
+      rY: rightPt.y,
       alpha: Math.min(0.65, this.driftFactor * 0.8)
     });
   }
 
   emitSmoke() {
+    if (window.ParticleSystem && typeof window.ParticleSystem.emitSmoke === 'function') {
+      window.ParticleSystem.emitSmoke(this.x, this.y, 2, this.vx * 0.2, this.vy * 0.2);
+    }
+
     const rearOffset = -this.length * 0.4;
     this.particles.push({
       x: this.x + Math.cos(this.angle) * rearOffset + (Math.random() - 0.5) * 12,
