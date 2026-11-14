@@ -188,6 +188,58 @@
               </a>
             </div>
           </div>
+
+          <!-- INTERACTIVE ZERO-COPY MEMORY VISUALIZER WIDGET -->
+          <div class="bento-card bento-span-12 zerocopy-widget-container" id="zerocopy-widget-container">
+            <div class="widget-header">
+              <span class="widget-badge" style="background: var(--accent-cyan); color:#000;">RUST SYSTEMS MEMORY</span>
+              <span class="widget-title">Zero-Copy Buffer Slicing vs Heap Malloc/Memcpy (Alloy ZKsync)</span>
+            </div>
+            <div class="zerocopy-body">
+              <div class="mem-lanes-comparison">
+                <!-- HEAP LANE -->
+                <div class="mem-lane lane-heap">
+                  <div class="mem-lane-title">
+                    <span>🔴 STANDARD HEAP ALLOCATION</span>
+                    <span style="font-size:10px;">malloc(1024) + memcpy</span>
+                  </div>
+                  <div class="mem-buffer-track">
+                    <div class="mem-slot heap">CHUNK 0</div>
+                    <div class="mem-slot heap">CHUNK 1</div>
+                    <div class="mem-slot heap">CHUNK 2</div>
+                    <div class="mem-slot heap">CHUNK 3</div>
+                  </div>
+                  <div class="mem-lane-metric">
+                    <span>TX LATENCY:</span>
+                    <b id="val-heap-latency">412.0 ns</b>
+                  </div>
+                </div>
+
+                <!-- ZERO-COPY LANE -->
+                <div class="mem-lane lane-zero">
+                  <div class="mem-lane-title">
+                    <span>⚡ ALLOY ZERO-COPY SLICING</span>
+                    <span style="font-size:10px;">&amp;[u8] In-Place Pointer</span>
+                  </div>
+                  <div class="mem-buffer-track">
+                    <div class="mem-slot zero">PTR SLICE</div>
+                    <div class="mem-slot zero">PTR SLICE</div>
+                    <div class="mem-slot zero">PTR SLICE</div>
+                    <div class="mem-slot zero">PTR SLICE</div>
+                  </div>
+                  <div class="mem-lane-metric">
+                    <span>TX LATENCY:</span>
+                    <b id="val-zero-latency" style="color:var(--accent-cyan);">13.8 ns</b>
+                  </div>
+                </div>
+              </div>
+
+              <div class="zerocopy-footer">
+                <button id="btn-bench-zerocopy" class="btn-bench-zerocopy">🚀 RUN 10,000 ZK-TX BENCHMARK</button>
+                <div class="speedup-badge" id="val-speedup-badge">29.8x FASTER (0 ALLOCS)</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -419,6 +471,7 @@
   <script src="js/hud-telemetry.js"></script>
   <script src="js/widgets/fia-panel-widget.js"></script>
   <script src="js/widgets/raytracing-widget.js"></script>
+  <script src="js/widgets/zerocopy-widget.js"></script>
 
   <!-- SCRIPTS -->
   <script src="js/engine.js"></script>

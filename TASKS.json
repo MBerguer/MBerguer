@@ -240,7 +240,8 @@
       ],
       "files": [
         "index.html",
-        "js/widgets/zerocopy-widget.js"
+        "js/widgets/zerocopy-widget.js",
+        "css/widgets.css"
       ],
       "spec": "Recta DRS de alta velocidad (>300 KM/H); comparador interactivo de buffers de memoria (heap malloc vs in-place zero-copy) con ticker comparativo de nanosegundos.",
       "verification_cmd": "python3 scripts/verify_task.py TASK-014",
