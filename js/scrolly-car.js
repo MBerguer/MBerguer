@@ -236,6 +236,10 @@
   // Register with CanvasStage loop
   if (window.CanvasStage && typeof window.CanvasStage.addRender === 'function') {
     window.CanvasStage.addRender((ctx, width, height, dt) => {
+      // In Free-Drive mode, manual kart physics and rendering take over
+      if (window.FreeDriveManager && window.FreeDriveManager.isActive) {
+        return;
+      }
       carInstance.update(dt || 0.016);
       carInstance.draw(ctx);
     });

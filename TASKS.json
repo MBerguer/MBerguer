@@ -414,7 +414,11 @@
         "TASK-023"
       ],
       "files": [
-        "scripts/progress.py"
+        "scripts/progress.py",
+        "css/style.css",
+        "js/kart.js",
+        "js/main.js",
+        "js/scrolly-car.js"
       ],
       "spec": "Push dual limpio a origin main y pages main con \u00e1rbol de trabajo inmaculado y verificaci\u00f3n de despliegue en mberguer.github.io.",
       "verification_cmd": "python3 scripts/verify_task.py TASK-024",

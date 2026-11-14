@@ -35,16 +35,18 @@
   let lastTime = performance.now();
   let currentMode = 'gp'; // 'gp' or 'console'
 
-  function resizeCanvas() {
-    const dpr = window.devicePixelRatio || 1;
-    const rect = canvas.getBoundingClientRect();
-    canvas.width = rect.width * dpr;
-    canvas.height = rect.height * dpr;
-    ctx.scale(dpr, dpr);
+  // Only resize if CanvasStage is not already handling high-DPI scaling
+  if (!window.CanvasStage) {
+    function resizeCanvas() {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      ctx.scale(dpr, dpr);
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
   }
-
-  window.addEventListener('resize', resizeCanvas);
-  resizeCanvas();
 
   // Keyboard controls
   window.addEventListener('keydown', (e) => {
@@ -128,54 +130,66 @@
   bindTouch('btn-touch-right', 'right');
   bindTouch('btn-touch-drift', 'handbrake');
 
-  // Mode Switcher (GP vs Pit-Wall Console)
+  // Mode Switcher (GP vs Pit-Wall Console) - Protected against null elements
   const btnToggleMode = document.getElementById('btn-toggle-mode');
   const consoleView = document.getElementById('console-view');
 
-  btnToggleMode.addEventListener('click', () => {
-    if (currentMode === 'gp') {
-      currentMode = 'console';
-      consoleView.classList.add('active');
-      btnToggleMode.innerHTML = '<span>🏎️ Play Track Simulator</span>';
-      btnToggleMode.classList.add('active');
-    } else {
-      currentMode = 'gp';
-      consoleView.classList.remove('active');
-      btnToggleMode.innerHTML = '<span>📋 Pit-Wall Console</span>';
-      btnToggleMode.classList.remove('active');
-    }
-  });
+  if (btnToggleMode && consoleView) {
+    btnToggleMode.addEventListener('click', () => {
+      if (currentMode === 'gp') {
+        currentMode = 'console';
+        consoleView.classList.add('active');
+        btnToggleMode.innerHTML = '<span>🏎️ Play Track Simulator</span>';
+        btnToggleMode.classList.add('active');
+      } else {
+        currentMode = 'gp';
+        consoleView.classList.remove('active');
+        btnToggleMode.innerHTML = '<span>📋 Pit-Wall Console</span>';
+        btnToggleMode.classList.remove('active');
+      }
+    });
+  }
 
-  // Sound Toggle
+  // Sound Toggle - Protected against null elements
   const btnSound = document.getElementById('btn-sound');
-  btnSound.addEventListener('click', () => {
-    const isAudible = window.soundEngine.toggleMute();
-    btnSound.textContent = isAudible ? '🔊' : '🔇';
-  });
+  if (btnSound && window.soundEngine && typeof window.soundEngine.toggleMute === 'function') {
+    btnSound.addEventListener('click', () => {
+      const isAudible = window.soundEngine.toggleMute();
+      btnSound.textContent = isAudible ? '🔊' : '🔇';
+    });
+  }
 
-  // Close Drawer Button
+  // Close Drawer Button - Protected against null elements
   const btnCloseDrawer = document.getElementById('btn-close-drawer');
-  if (btnCloseDrawer) {
+  if (btnCloseDrawer && telemetry && typeof telemetry.closeDrawer === 'function') {
     btnCloseDrawer.addEventListener('click', () => telemetry.closeDrawer());
   }
 
   let passedSector4 = false;
 
-  // Master Loop
+  // Master Loop (Executes only when in Free-Drive mode, avoiding canvas conflicts with Scrollytelling)
   function loop(now) {
     const dt = Math.min(0.1, (now - lastTime) / 1000);
     lastTime = now;
 
-    if (currentMode === 'gp') {
+    const isFreeDrive = window.FreeDriveManager && window.FreeDriveManager.isActive;
+
+    if (isFreeDrive) {
       // 1. Update Player Physics
       kart.update(dt, input);
 
       // 2. Track checkpoints & dynamic elements
       track.update(dt, kart, (cp) => {
-        telemetry.openProject(cp.id);
+        if (window.FreeDriveManager && typeof window.FreeDriveManager.openDrawer === 'function') {
+          // Handled via FreeDriveManager
+        } else if (telemetry && typeof telemetry.openProject === 'function') {
+          telemetry.openProject(cp.id);
+        }
         if (cp.id === 'tesis-futbol') passedSector4 = true;
         if (cp.id === 'udelartex' && passedSector4) {
-          telemetry.recordLap();
+          if (telemetry && typeof telemetry.recordLap === 'function') {
+            telemetry.recordLap();
+          }
           passedSector4 = false;
         }
       });
@@ -186,32 +200,31 @@
       camera.x += (targetCamX - camera.x) * camera.smooth;
       camera.y += (targetCamY - camera.y) * camera.smooth;
 
-      // 4. Render World
-      const rect = canvas.getBoundingClientRect();
-      const viewW = rect.width;
-      const viewH = rect.height;
-
-      ctx.clearRect(0, 0, viewW, viewH);
-
-      ctx.save();
-      ctx.translate(viewW / 2, viewH / 2);
-      ctx.translate(-camera.x, -camera.y);
-
-      // Draw Track & Checkpoints
-      track.draw(ctx, kart);
-
-      // Draw Player Kart & Particles
+      // 4. Render Manual Kart (into the stage without clearing TrackRenderer)
       kart.draw(ctx);
 
-      ctx.restore();
-
       // 5. Update HUD
-      telemetry.updateHUD(kart);
-      telemetry.drawMinimap(track, kart);
+      if (telemetry && typeof telemetry.updateHUD === 'function') {
+        telemetry.updateHUD(kart);
+      }
+      if (telemetry && typeof telemetry.drawMinimap === 'function') {
+        telemetry.drawMinimap(track, kart);
+      }
     }
 
     requestAnimationFrame(loop);
   }
 
   requestAnimationFrame(loop);
+
+  // 6. Export appEngine to window for FreeDriveManager, TouchControls & AudioDSP coupling
+  window.appEngine = {
+    kart: kart,
+    input: input,
+    camera: camera,
+    track: track,
+    telemetry: telemetry,
+    get currentMode() { return currentMode; },
+    set currentMode(m) { currentMode = m; }
+  };
 })();

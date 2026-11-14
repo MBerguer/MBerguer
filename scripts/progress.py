@@ -18,6 +18,7 @@ import argparse
 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TASKS_FILE = os.path.join(ROOT_DIR, "TASKS.json")
+RELEASE_VERSION = "v3.0.0-gold"
 
 def get_git_commit_map():
     """Inspects git log and returns a mapping: task_id -> {sha, msg, files_changed}"""

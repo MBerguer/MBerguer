@@ -270,25 +270,11 @@ class Kart {
       ctx.restore();
     }
 
-    // 3. Volumetric Headlights
+    // 3. Kart Body (High-Detail F1 Style - Zero Headlights)
     ctx.save();
     ctx.translate(this.x, this.y);
     ctx.rotate(this.angle);
 
-    const lightGradient = ctx.createRadialGradient(25, 0, 10, 180, 0, 190);
-    const beamColor = this.primaryColor === '#00f0ff' ? 'rgba(0, 240, 255,' : 'rgba(255, 184, 0,';
-    lightGradient.addColorStop(0, `${beamColor} 0.5)`);
-    lightGradient.addColorStop(0.35, `${beamColor} 0.15)`);
-    lightGradient.addColorStop(1, `${beamColor} 0)`);
-
-    ctx.fillStyle = lightGradient;
-    ctx.beginPath();
-    ctx.moveTo(15, 0);
-    ctx.arc(15, 0, 210, -Math.PI * 0.22, Math.PI * 0.22);
-    ctx.closePath();
-    ctx.fill();
-
-    // 4. Kart Body (High-Detail F1 Style)
     // Drop Shadow
     ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
     ctx.fillRect(-this.length * 0.45 + 3, -this.width * 0.5 + 4, this.length * 0.9, this.width);
