@@ -910,3 +910,69 @@ body {
     display: none;
   }
 }
+
+/* FIA 5-LIGHT START GANTRY & LAUNCH CAMERA SHAKE */
+.fia-gantry {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 16px 0 24px 0;
+}
+
+.gantry-frame {
+  display: flex;
+  gap: 16px;
+  background: rgba(10, 14, 22, 0.95);
+  border: 2px solid #222d3d;
+  padding: 10px 20px;
+  border-radius: 8px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.7);
+}
+
+.gantry-light {
+  width: 32px;
+  height: 32px;
+  background: #111827;
+  border-radius: 50%;
+  border: 2px solid #374151;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.gantry-light .bulb {
+  width: 20px;
+  height: 20px;
+  background: #2b1114;
+  border-radius: 50%;
+  transition: all 0.08s ease;
+}
+
+.gantry-light.lit .bulb {
+  background: #ff0033;
+  box-shadow: 0 0 16px #ff0033, 0 0 32px #ff0033, inset 0 0 6px #fff;
+}
+
+.gantry-status {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--accent-amber);
+  margin-top: 8px;
+  text-shadow: 0 0 8px rgba(255, 170, 0, 0.4);
+}
+
+@keyframes camera-shake {
+  0% { transform: translate(0, 0); }
+  20% { transform: translate(-3px, 2px); }
+  40% { transform: translate(3px, -2px); }
+  60% { transform: translate(-2px, -3px); }
+  80% { transform: translate(2px, 3px); }
+  100% { transform: translate(0, 0); }
+}
+
+.camera-shake {
+  animation: camera-shake 0.45s ease-out forwards;
+}
