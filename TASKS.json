@@ -276,7 +276,8 @@
       ],
       "files": [
         "index.html",
-        "js/widgets/latex-widget.js"
+        "js/widgets/latex-widget.js",
+        "css/widgets.css"
       ],
       "spec": "Curva final previa a boxes; micro-editor LaTeX interactivo con vista previa KaTeX en vivo y contadores animados de adopci\u00f3n universitaria.",
       "verification_cmd": "python3 scripts/verify_task.py TASK-016",

@@ -7,6 +7,7 @@
   <meta name="description" content="Interactive 2D Racing & Pit-Wall Telemetry Portfolio of Martín Berguer - Staff Systems Engineer specializing in Rust, F1 Simulation, and Low-Latency Computing.">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/widgets.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&family=JetBrains+Mono:wght@400;700;800&display=swap" rel="stylesheet">
@@ -323,6 +324,45 @@
               </a>
             </div>
           </div>
+
+          <!-- INTERACTIVE LATEX COMPILER WIDGET -->
+          <div class="bento-card bento-span-12 latex-widget-container" id="latex-interactive-card">
+            <div class="widget-header">
+              <span class="widget-badge" style="background: var(--accent-emerald);">ACADEMIC ENGINE</span>
+              <span class="widget-title">Live Scientific LaTeX Compiler &amp; University Adoption Telemetry</span>
+            </div>
+            <div class="latex-body">
+              <div class="latex-presets-row">
+                <button class="latex-preset-btn active" data-preset="aero">F1 AERODYNAMICS</button>
+                <button class="latex-preset-btn" data-preset="ml">TELEMETRY LOSS FUNCTION</button>
+                <button class="latex-preset-btn" data-preset="navier">NAVIER-STOKES FLUIDS</button>
+              </div>
+              <div class="latex-editor-grid">
+                <div class="latex-editor-pane">
+                  <div class="pane-header">LATEX SOURCE (EDIT IN REAL-TIME)</div>
+                  <textarea id="latex-editor-input" class="latex-textarea" spellcheck="false">\mathcal{F}_{downforce} = \frac{1}{2} \rho v^2 C_L A \cdot \left( 1 + \eta_{DRS} \right)</textarea>
+                </div>
+                <div class="latex-preview-pane">
+                  <div class="pane-header">KATEX LIVE RENDERED OUTPUT</div>
+                  <div id="latex-preview-output" class="latex-preview-display"></div>
+                </div>
+              </div>
+              <div class="latex-counters-row">
+                <div class="counter-card">
+                  <span class="counter-val" id="count-theses">2,480+</span>
+                  <span class="counter-label">ACADEMIC THESES COMPILED</span>
+                </div>
+                <div class="counter-card">
+                  <span class="counter-val" id="count-faculties">14 Facs</span>
+                  <span class="counter-label">UDELAR FACULTIES ADOPTED</span>
+                </div>
+                <div class="counter-card">
+                  <span class="counter-val" id="count-uptime">99.9%</span>
+                  <span class="counter-label">AUTOMATION CI/CD PASS RATE</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -500,6 +540,8 @@
   <script src="js/widgets/raytracing-widget.js"></script>
   <script src="js/widgets/zerocopy-widget.js"></script>
   <script src="js/widgets/trajectory-widget.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="js/widgets/latex-widget.js"></script>
 
   <!-- SCRIPTS -->
   <script src="js/engine.js"></script>
