@@ -96,6 +96,7 @@
         "TASK-005"
       ],
       "files": [
+        "index.html",
         "js/track-geometry.js"
       ],
       "spec": "Construcci\u00f3n de spline Catmull-Rom continua con parametrizaci\u00f3n por longitud de arco y funci\u00f3n getPointAtProgress(t) para todos los sectores.",
