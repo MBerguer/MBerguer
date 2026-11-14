@@ -238,13 +238,18 @@
   const audioInstance = new F1EngineAudio();
   window.EngineAudio = audioInstance;
 
-  // Synchronize audio RPM with car velocity in animation loop
+  // Synchronize audio RPM with car velocity in animation loop (TASK-022)
   if (window.CanvasStage && typeof window.CanvasStage.addRender === 'function') {
     window.CanvasStage.addRender(() => {
       if (window.ScrollyCar) {
         audioInstance.setRpm(window.ScrollyCar.rpm);
       } else if (window.HudTelemetry) {
         audioInstance.setRpm(window.HudTelemetry.rpm);
+      }
+
+      // Dynamic tire squeal coupling during kart drifts
+      if (window.appEngine && window.appEngine.kart) {
+        audioInstance.setDriftIntensity(window.appEngine.kart.driftFactor);
       }
     });
   }
