@@ -79,6 +79,7 @@
         "TASK-002"
       ],
       "files": [
+        "index.html",
         "js/canvas-stage.js"
       ],
       "spec": "Gesti\u00f3n de canvas con escalado devicePixelRatio, redimensionamiento debounced y congelamiento autom\u00e1tico en Page Visibility hidden para 0% GPU en pesta\u00f1as inactivas.",
