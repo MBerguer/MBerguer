@@ -37,10 +37,12 @@ def get_git_commit_map():
             sha = parts[0]
             msg = parts[1] if len(parts) > 1 else ""
 
-            # Check for TASK-XXX in message
-            for token in msg.split():
-                clean_id = token.replace(":", "").replace("(", "").replace(")", "").replace("[", "").replace("]", "").strip()
-                if clean_id.startswith("TASK-") and clean_id not in task_commits:
+            # Check for formal TASK-XXX pattern in commit header
+            import re
+            m = re.search(r"(?:^|:\s*|\)\s*:\s*)(TASK-\d{3})(?:\s*[:-]|\s+)", msg)
+            if m:
+                task_id = m.group(1)
+                if task_id not in task_commits:
                     # Get files modified in this commit
                     diff_res = subprocess.run(
                         ["git", "show", "--name-only", "--format=", sha],
@@ -49,7 +51,7 @@ def get_git_commit_map():
                         text=True
                     )
                     files_touched = [f.strip() for f in diff_res.stdout.split("\n") if f.strip()]
-                    task_commits[clean_id] = {
+                    task_commits[task_id] = {
                         "sha": sha,
                         "msg": msg,
                         "files": files_touched
