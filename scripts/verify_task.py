@@ -268,8 +268,8 @@ def v_task_018():
         return False, err
     js = read_file("js/kart.js")
     # Must have the upgraded handling mechanics
-    if "counterSteer" not in js and "driftFactor" not in js and "weightTransfer" not in js:
-        return False, "js/kart.js missing enhanced drift/counterSteer/weightTransfer mechanics"
+    if "counterSteer" not in js or "weightTransfer" not in js:
+        return False, "js/kart.js missing enhanced counterSteer and weightTransfer mechanics"
     return True, "TASK-018: Kart physics model verified"
 
 def v_task_019():
@@ -334,10 +334,15 @@ def v_task_024():
     status = subprocess.run(["git", "status", "--porcelain"], cwd=ROOT_DIR, capture_output=True, text=True)
     if status.stdout.strip():
         return False, f"Working tree is not clean: {status.stdout.strip()}"
-    # 2. Check both remotes exist
+    # 2. Check both remotes exist and are synchronized with HEAD
     remotes = subprocess.run(["git", "remote"], cwd=ROOT_DIR, capture_output=True, text=True)
     if "origin" not in remotes.stdout or "pages" not in remotes.stdout:
         return False, "Missing origin or pages remote in git configuration"
+    head_rev = subprocess.run(["git", "rev-parse", "HEAD"], cwd=ROOT_DIR, capture_output=True, text=True).stdout.strip()
+    origin_rev = subprocess.run(["git", "rev-parse", "origin/main"], cwd=ROOT_DIR, capture_output=True, text=True).stdout.strip()
+    pages_rev = subprocess.run(["git", "rev-parse", "pages/main"], cwd=ROOT_DIR, capture_output=True, text=True).stdout.strip()
+    if head_rev != origin_rev or head_rev != pages_rev:
+        return False, f"Local HEAD ({head_rev[:7]}) not synchronized with origin/main ({origin_rev[:7]}) or pages/main ({pages_rev[:7]})"
     return True, "TASK-024: Production git state verified"
 
 ROUTINE_MAP = {
