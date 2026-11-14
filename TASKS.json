@@ -113,6 +113,7 @@
         "TASK-006"
       ],
       "files": [
+        "index.html",
         "js/track-render.js"
       ],
       "spec": "Dibujado del asfalto dithered de 120px, surco de goma oscuro en la l\u00ednea de carrera ideal y pianos dentados FIA rojo/blanco y azul/blanco.",
