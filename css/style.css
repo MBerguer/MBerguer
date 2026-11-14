@@ -840,3 +840,73 @@ body {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* LAP PROGRESS SCRUBBER & SECTOR NAVIGATION HUD */
+.lap-scrubber-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.lap-progress-track {
+  width: 220px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 2px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+.lap-progress-track:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.lap-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--accent-cyan), var(--accent-f1-red));
+  border-radius: 2px;
+  transition: width 0.05s linear;
+  box-shadow: 0 0 8px rgba(0, 240, 255, 0.6);
+}
+
+.sector-nav-pills {
+  display: flex;
+  gap: 4px;
+}
+
+.sector-pill {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-color);
+  color: var(--text-dim);
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  line-height: 1.2;
+}
+
+.sector-pill:hover {
+  border-color: var(--accent-cyan);
+  color: #fff;
+  background: rgba(0, 240, 255, 0.12);
+}
+
+.sector-pill.active {
+  background: rgba(0, 240, 255, 0.2);
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+  box-shadow: 0 0 8px rgba(0, 240, 255, 0.4);
+}
+
+@media (max-width: 900px) {
+  .lap-scrubber-container {
+    display: none;
+  }
+}

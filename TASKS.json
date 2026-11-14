@@ -61,6 +61,7 @@
         "TASK-003"
       ],
       "files": [
+        "index.html",
         "js/telemetry-scrubber.js",
         "css/style.css"
       ],

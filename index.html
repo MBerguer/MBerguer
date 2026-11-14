@@ -232,6 +232,21 @@
         </div>
       </div>
 
+      <!-- LAP PROGRESS SCRUBBER & SECTOR SHORTCUTS -->
+      <div id="lap-scrubber-container" class="lap-scrubber-container">
+        <div class="lap-progress-track" id="lap-progress-track" title="Click to scrub lap progress">
+          <div id="lap-progress-bar" class="lap-progress-bar"></div>
+        </div>
+        <div class="sector-nav-pills" id="sector-nav-pills">
+          <button class="sector-pill active" data-target="#hero-section" data-sector="0">GRID</button>
+          <button class="sector-pill" data-target="#sector-01" data-sector="1">S1</button>
+          <button class="sector-pill" data-target="#sector-02" data-sector="2">S2</button>
+          <button class="sector-pill" data-target="#sector-03" data-sector="3">S3</button>
+          <button class="sector-pill" data-target="#sector-04" data-sector="4">S4</button>
+          <button class="sector-pill" data-target="#sector-05" data-sector="5">S5</button>
+        </div>
+      </div>
+
       <!-- TOP ACTIONS -->
       <div class="top-actions">
         <button id="btn-sound" class="btn-sound" title="Toggle Engine Audio">🔇</button>
@@ -335,6 +350,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollToPlugin.min.js"></script>
   <script src="js/motion-bridge.js"></script>
+  <script src="js/telemetry-scrubber.js"></script>
 
   <!-- SCRIPTS -->
   <script src="js/engine.js"></script>
