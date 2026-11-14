@@ -149,6 +149,7 @@
         "TASK-008"
       ],
       "files": [
+        "index.html",
         "js/skidmarks-buffer.js",
         "js/particles.js"
       ],
