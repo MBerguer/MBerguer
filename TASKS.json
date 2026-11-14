@@ -361,6 +361,7 @@
         "TASK-002"
       ],
       "files": [
+        "index.html",
         "js/audio-dsp.js"
       ],
       "spec": "AudioContext desbloqueado por interacci\u00f3n del usuario; sintetizador con dos osciladores sawtooth ligeramente desafinados y filtro pasabajos de 24dB.",
