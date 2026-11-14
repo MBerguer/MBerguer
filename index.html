@@ -139,6 +139,27 @@
               </a>
             </div>
           </div>
+
+          <!-- INTERACTIVE RAYTRACING & LIGHTING WIDGET -->
+          <div class="bento-card bento-span-12 raytracing-widget-container" id="raytrace-interactive-card">
+            <div class="widget-header">
+              <span class="widget-badge" style="background: var(--accent-purple);">GRAPHICS PIPELINE</span>
+              <span class="widget-title">Dynamic 2D Raytracing &amp; Volumetric Occlusion (Move Cursor to Cast Light)</span>
+            </div>
+            <div class="raytracing-widget-body">
+              <div class="raytrace-canvas-wrap">
+                <canvas id="raytracing-canvas" width="480" height="220"></canvas>
+              </div>
+              <div class="raytrace-controls">
+                <button id="btn-raytrace-mode" class="btn-raytrace-mode">⚡ MODE: C++20 RAYTRACING (2026)</button>
+                <div class="raytrace-stats">
+                  <div class="stat-item"><span>LIGHT CASTER:</span> <b>Omni Point Emitter</b></div>
+                  <div class="stat-item"><span>OCCLUDERS:</span> <b>4 Convex Polygons</b></div>
+                  <div class="stat-item"><span>LATENCY:</span> <b>0.32 ms / frame</b></div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -397,6 +418,7 @@
   <script src="js/hero-launch.js"></script>
   <script src="js/hud-telemetry.js"></script>
   <script src="js/widgets/fia-panel-widget.js"></script>
+  <script src="js/widgets/raytracing-widget.js"></script>
 
   <!-- SCRIPTS -->
   <script src="js/engine.js"></script>

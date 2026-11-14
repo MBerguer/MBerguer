@@ -153,3 +153,94 @@
   color: var(--accent-amber);
   margin-right: 6px;
 }
+
+/* RAYTRACING WIDGET (SECTOR 02) */
+.raytracing-widget-container {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: var(--bg-card-glass);
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 14px;
+}
+
+.raytracing-widget-body {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.raytrace-canvas-wrap {
+  flex: 1;
+  min-width: 300px;
+  display: flex;
+  justify-content: center;
+}
+
+#raytracing-canvas {
+  width: 100%;
+  max-width: 480px;
+  height: auto;
+  border-radius: 6px;
+  background: #0a0d14;
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  box-shadow: 0 4px 20px rgba(168, 85, 247, 0.2);
+  cursor: crosshair;
+}
+
+.raytrace-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 220px;
+}
+
+.btn-raytrace-mode {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 10px 16px;
+  background: rgba(168, 85, 247, 0.2);
+  border: 1px solid var(--accent-purple);
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 0 12px rgba(168, 85, 247, 0.3);
+}
+
+.btn-raytrace-mode:hover {
+  background: rgba(168, 85, 247, 0.35);
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
+}
+
+.btn-raytrace-mode.dos-mode {
+  background: rgba(79, 70, 229, 0.2);
+  border-color: #6366f1;
+  box-shadow: 0 0 12px rgba(79, 70, 229, 0.3);
+}
+
+.raytrace-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  background: rgba(10, 14, 22, 0.8);
+  padding: 10px 14px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.raytrace-stats .stat-item {
+  display: flex;
+  justify-content: space-between;
+  color: #94a3b8;
+}
+
+.raytrace-stats .stat-item b {
+  color: var(--accent-purple);
+}
