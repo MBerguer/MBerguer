@@ -294,7 +294,8 @@
       ],
       "files": [
         "index.html",
-        "js/free-drive.js"
+        "js/free-drive.js",
+        "css/style.css"
       ],
       "spec": "Pausar Lenis suavemente, zoom de c\u00e1mara hacia el kart y activaci\u00f3n de f\u00edsicas manuales en esa coordenada exacta mediante hotkey T o bot\u00f3n HUD.",
       "verification_cmd": "python3 scripts/verify_task.py TASK-017",

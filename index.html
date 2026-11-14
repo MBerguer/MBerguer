@@ -426,6 +426,9 @@
 
       <!-- TOP ACTIONS -->
       <div class="top-actions">
+        <button id="btn-toggle-freedrive" class="btn-telemetry" style="background: rgba(0, 240, 255, 0.15); border-color: var(--accent-cyan); color: var(--accent-cyan);">
+          <span>FREE-DRIVE (T)</span> 🕹️
+        </button>
         <button id="btn-sound" class="btn-sound" title="Toggle Engine Audio">🔇</button>
         <a href="https://github.com/MBerguer" target="_blank" class="btn-telemetry" style="text-decoration:none;">
           <span>GitHub ↗</span>
@@ -435,6 +438,11 @@
         </a>
       </div>
     </header>
+
+    <!-- FREEDRIVE ACTIVE BANNER -->
+    <div id="freedrive-banner" class="freedrive-banner">
+      <span class="pulse-indicator">●</span> FREE-DRIVE MODE ACTIVE // USE [W, A, S, D] OR ARROWS TO DRIVE | PRESS [T] OR [ESC] TO EXIT
+    </div>
 
     <!-- COCKPIT TELEMETRY (BOTTOM LEFT) -->
     <div id="cockpit-hud" class="hud-cluster">
@@ -542,6 +550,7 @@
   <script src="js/widgets/trajectory-widget.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
   <script src="js/widgets/latex-widget.js"></script>
+  <script src="js/free-drive.js"></script>
 
   <!-- SCRIPTS -->
   <script src="js/engine.js"></script>

@@ -976,3 +976,48 @@ body {
 .camera-shake {
   animation: camera-shake 0.45s ease-out forwards;
 }
+
+/* FREE-DRIVE MODE STYLES */
+#scrollytelling-track.freedrive-hidden {
+  opacity: 0.12;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.freedrive-banner {
+  position: fixed;
+  top: 70px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-20px);
+  background: rgba(5, 7, 12, 0.95);
+  border: 1px solid var(--accent-cyan);
+  color: var(--accent-cyan);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 8px 20px;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 240, 255, 0.4);
+  pointer-events: none;
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.freedrive-banner.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.freedrive-banner .pulse-indicator {
+  color: #ff0033;
+  animation: pulse-red 0.8s infinite alternate;
+}
+
+@keyframes pulse-red {
+  0% { opacity: 0.3; }
+  100% { opacity: 1; }
+}
