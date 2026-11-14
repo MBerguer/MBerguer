@@ -186,6 +186,7 @@
         "TASK-010"
       ],
       "files": [
+        "index.html",
         "js/hud-telemetry.js"
       ],
       "spec": "Display digital en tiempo real que escala de 0 a 318 KM/H y tac\u00f3metro de 16 segmentos LED hasta 13,500 RPM en la aceleraci\u00f3n de salida.",
