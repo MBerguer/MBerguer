@@ -2,6 +2,7 @@
  * GRAND PRIX TELEMETRY // FIA 5-LIGHT START GANTRY & LAUNCH IMPULSE
  * Controls progressive arming of 5 FIA red starting lights during hero scroll,
  * followed by instantaneous Lights Out with tactile camera shake impulse and tire burnout.
+ * Hardened with state hysteresis to eliminate 60Hz flickering and competing listeners.
  */
 
 (function () {
@@ -17,6 +18,8 @@
 
     let hasLaunched = false;
     let shakeTimer = null;
+    let lastLitCount = -1;
+    let lastStatusKey = '';
 
     function triggerLaunchImpulse() {
       if (hasLaunched) return;
@@ -25,12 +28,13 @@
       // 1. Camera Shake Impulse (+-3px)
       if (canvasViewport) {
         canvasViewport.classList.remove('camera-shake');
-        void canvasViewport.offsetWidth; // Force reflow
-        canvasViewport.classList.add('camera-shake');
-        if (shakeTimer) clearTimeout(shakeTimer);
-        shakeTimer = setTimeout(() => {
-          canvasViewport.classList.remove('camera-shake');
-        }, 500);
+        requestAnimationFrame(() => {
+          canvasViewport.classList.add('camera-shake');
+          if (shakeTimer) clearTimeout(shakeTimer);
+          shakeTimer = setTimeout(() => {
+            canvasViewport.classList.remove('camera-shake');
+          }, 500);
+        });
       }
 
       // 2. Burnout Smoke & Sparks at launch grid
@@ -55,80 +59,99 @@
       console.log('[HeroLaunch] LIGHTS OUT! Monoplaza launched with camera shake impulse.');
     }
 
-    function updateGantry(progress) {
-      // Pinning hero sequence occurs in the first 0.08 of total scroll (approx first 500px)
-      const p = Math.min(progress / 0.07, 1.0);
+    function updateGantry(p) {
+      // p is normalized progression [0, 1] through the hero start sequence
+      const clampedP = Math.min(Math.max(p, 0), 1.0);
 
-      if (p < 0.85) {
+      // Re-arm launch only when scrolled significantly back up (hysteresis)
+      if (clampedP < 0.35) {
         hasLaunched = false;
       }
 
-      // Light thresholds
-      const litCount = p >= 0.85 ? 0 : (
-        p > 0.65 ? 5 :
-        p > 0.50 ? 4 :
-        p > 0.35 ? 3 :
-        p > 0.20 ? 2 :
-        p > 0.05 ? 1 : 0
-      );
+      // Light thresholds: 0 lights at launch, 1-5 red lights during arming
+      let litCount = 0;
+      let statusKey = '0';
+      let label = 'SCROLL TO ARM STARTING LIGHTS';
+      let color = 'var(--accent-amber)';
 
-      lights.forEach((light, idx) => {
-        if (idx < litCount) {
-          light.classList.add('lit');
-        } else {
-          light.classList.remove('lit');
-        }
-      });
+      if (clampedP >= 0.88) {
+        litCount = 0; // LIGHTS OUT
+        statusKey = 'launch';
+        label = '🟢 LIGHTS OUT // TELEMETRY LAUNCH!';
+        color = 'var(--accent-emerald)';
+      } else if (clampedP > 0.72) {
+        litCount = 5;
+        statusKey = '5';
+        label = '🔴 HOLD FOR LIGHTS OUT...';
+        color = 'var(--accent-f1-red)';
+      } else if (clampedP > 0.56) {
+        litCount = 4;
+        statusKey = '4';
+        label = 'RPM PEAK 12,500 // CLUTCH ARMED';
+        color = 'var(--accent-amber)';
+      } else if (clampedP > 0.40) {
+        litCount = 3;
+        statusKey = '3';
+        label = 'SYSTEM TELEMETRY SYNCHRONIZED';
+        color = 'var(--accent-cyan)';
+      } else if (clampedP > 0.24) {
+        litCount = 2;
+        statusKey = '2';
+        label = 'START SEQUENCE ARMED';
+        color = 'var(--text-dim)';
+      } else if (clampedP > 0.08) {
+        litCount = 1;
+        statusKey = '1';
+        label = 'START PROCEDURE COMMENCED';
+        color = 'var(--text-dim)';
+      }
 
-      if (!statusText) return;
+      // Only mutate DOM lights if count changed
+      if (litCount !== lastLitCount) {
+        lastLitCount = litCount;
+        lights.forEach((light, idx) => {
+          if (idx < litCount) {
+            light.classList.add('lit');
+          } else {
+            light.classList.remove('lit');
+          }
+        });
+      }
 
-      if (p >= 0.85) {
-        statusText.textContent = '🟢 LIGHTS OUT // TELEMETRY LAUNCH!';
-        statusText.style.color = 'var(--accent-emerald)';
+      // Only mutate status text if state changed
+      if (statusText && statusKey !== lastStatusKey) {
+        lastStatusKey = statusKey;
+        statusText.textContent = label;
+        statusText.style.color = color;
+      }
+
+      // Trigger impulse when reaching Lights Out
+      if (clampedP >= 0.88 && !hasLaunched) {
         triggerLaunchImpulse();
-      } else if (litCount === 5) {
-        statusText.textContent = '🔴 HOLD FOR LIGHTS OUT...';
-        statusText.style.color = 'var(--accent-f1-red)';
-      } else if (litCount === 4) {
-        statusText.textContent = 'RPM PEAK 12,500 // CLUTCH ARMED';
-        statusText.style.color = 'var(--accent-amber)';
-      } else if (litCount === 3) {
-        statusText.textContent = 'SYSTEM TELEMETRY SYNCHRONIZED';
-        statusText.style.color = 'var(--accent-cyan)';
-      } else if (litCount === 2) {
-        statusText.textContent = 'START SEQUENCE ARMED';
-        statusText.style.color = 'var(--text-dim)';
-      } else if (litCount === 1) {
-        statusText.textContent = 'START PROCEDURE COMMENCED';
-        statusText.style.color = 'var(--text-dim)';
-      } else {
-        statusText.textContent = 'SCROLL TO ARM STARTING LIGHTS';
-        statusText.style.color = 'var(--accent-amber)';
       }
     }
 
-    // Scroll listener
-    function onScroll() {
-      const scrollY = window.scrollY || document.documentElement.scrollTop || 0;
-      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = maxScroll > 0 ? scrollY / maxScroll : 0;
-      updateGantry(progress);
-    }
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
-
-    // GSAP ScrollTrigger Pinning for cinematic launch if GSAP available
+    // Unified single driver: GSAP ScrollTrigger if available, else native scroll listener
     if (window.ScrollTrigger && window.gsap) {
       window.ScrollTrigger.create({
         trigger: '#hero-section',
         start: 'top top',
         end: '+=500',
-        pin: false, // Smooth scrub without harsh abrupt pinning on mobile
+        pin: false,
         onUpdate: (self) => {
-          updateGantry(self.progress * 0.08);
+          updateGantry(self.progress);
         }
       });
+      // Initial state
+      updateGantry(0);
+    } else {
+      function onScrollFallback() {
+        const scrollY = window.scrollY || document.documentElement.scrollTop || 0;
+        const p = Math.min(1.0, scrollY / 500);
+        updateGantry(p);
+      }
+      window.addEventListener('scroll', onScrollFallback, { passive: true });
+      onScrollFallback();
     }
 
     window.HeroLaunch = {

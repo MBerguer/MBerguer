@@ -80,6 +80,20 @@
       const dt = Math.min((now - lastTime) / 1000, 0.1); // Clamp delta time to avoid large jumps
       lastTime = now;
 
+      // 1. Clear full canvas viewport in device coordinates
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.scale(dpr, dpr);
+
+      // 2. Responsive World Transform: auto-scales and centers the 1280x960 Grand Prix circuit
+      const scale = Math.min(width / 1280, height / 960, 1.0);
+      const offsetX = (width - 1280 * scale) / 2;
+      const offsetY = (height - 960 * scale) / 2;
+
+      ctx.save();
+      ctx.translate(offsetX, offsetY);
+      ctx.scale(scale, scale);
+
       renderCallbacks.forEach((cb) => {
         try {
           cb(ctx, width, height, dt, now);
@@ -87,6 +101,8 @@
           console.error('[CanvasStage] Error in render callback:', e);
         }
       });
+
+      ctx.restore();
 
       rafId = requestAnimationFrame(tick);
     }
@@ -129,6 +145,21 @@
       get height() { return height; },
       get dpr() { return dpr; },
       get isSuspended() { return isSuspended; },
+      get worldScale() { return Math.min(width / 1280, height / 960, 1.0); },
+      get worldOffsetX() { return (width - 1280 * Math.min(width / 1280, height / 960, 1.0)) / 2; },
+      get worldOffsetY() { return (height - 960 * Math.min(width / 1280, height / 960, 1.0)) / 2; },
+      screenToWorld(sx, sy) {
+        const s = Math.min(width / 1280, height / 960, 1.0);
+        const ox = (width - 1280 * s) / 2;
+        const oy = (height - 960 * s) / 2;
+        return { x: (sx - ox) / s, y: (sy - oy) / s };
+      },
+      worldToScreen(wx, wy) {
+        const s = Math.min(width / 1280, height / 960, 1.0);
+        const ox = (width - 1280 * s) / 2;
+        const oy = (height - 960 * s) / 2;
+        return { x: wx * s + ox, y: wy * s + oy };
+      },
 
       resize,
 

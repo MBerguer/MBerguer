@@ -217,6 +217,11 @@
       }
 
       this.closeDrawer();
+
+      // Immediately refresh minimap to track ScrollyCar position
+      if (window.appEngine && window.appEngine.telemetry && window.ScrollyCar) {
+        window.appEngine.telemetry.drawMinimap(window.appEngine.track, window.ScrollyCar);
+      }
     }
 
     /**

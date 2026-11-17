@@ -93,16 +93,18 @@
       const angleDiff = this.diffAngle(this.targetAngle, this.angle);
       this.angle += angleDiff * Math.min(1, 15 * dt);
 
-      // Instantaneous speed estimation based on scroll velocity
-      const dProgress = Math.abs(this.currentProgress - prevProgress);
-      const worldDistPerSec = (dProgress * (this.geometry.totalLength || 3000)) / Math.max(dt, 0.001);
+      // Instantaneous speed estimation based on scroll velocity & Lenis motion
+      if (window.appLenis && Math.abs(window.appLenis.velocity || 0) > 0.05) {
+        this.targetSpeed = Math.min(335, Math.abs(window.appLenis.velocity) * 0.38);
+      } else {
+        const dProgress = Math.abs(this.currentProgress - prevProgress);
+        const worldDistPerSec = (dProgress * (this.geometry.totalLength || 3000)) / Math.max(dt, 0.001);
+        const rawSpeed = worldDistPerSec * 0.45;
+        this.targetSpeed = Math.min(340, rawSpeed);
+      }
 
-      // Map world velocity to realistic F1 telemetry speed (0 - 340 km/h)
-      const rawSpeed = worldDistPerSec * 0.45;
-      this.targetSpeed = Math.min(340, rawSpeed);
-
-      // If barely scrolling at hero section, simulate launch/idle; otherwise lerp speed
-      this.speed += (this.targetSpeed - this.speed) * Math.min(1, 8 * dt);
+      // Smoothly lerp speed towards target
+      this.speed += (this.targetSpeed - this.speed) * Math.min(1, 10 * dt);
 
       // Gear and RPM calculation for HUD
       if (this.speed < 15) {

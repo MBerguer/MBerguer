@@ -167,55 +167,77 @@
 
   let passedSector4 = false;
 
-  // Master Loop (Executes only when in Free-Drive mode, avoiding canvas conflicts with Scrollytelling)
-  function loop(now) {
-    const dt = Math.min(0.1, (now - lastTime) / 1000);
-    lastTime = now;
-
-    const isFreeDrive = window.FreeDriveManager && window.FreeDriveManager.isActive;
-
-    if (isFreeDrive) {
-      // 1. Update Player Physics
-      kart.update(dt, input);
-
-      // 2. Track checkpoints & dynamic elements
-      track.update(dt, kart, (cp) => {
-        if (window.FreeDriveManager && typeof window.FreeDriveManager.openDrawer === 'function') {
-          // Handled via FreeDriveManager
-        } else if (telemetry && typeof telemetry.openProject === 'function') {
-          telemetry.openProject(cp.id);
-        }
-        if (cp.id === 'tesis-futbol') passedSector4 = true;
-        if (cp.id === 'udelartex' && passedSector4) {
-          if (telemetry && typeof telemetry.recordLap === 'function') {
-            telemetry.recordLap();
-          }
-          passedSector4 = false;
-        }
-      });
-
-      // 3. Smooth Camera Follow on Player
-      const targetCamX = kart.x;
-      const targetCamY = kart.y;
-      camera.x += (targetCamX - camera.x) * camera.smooth;
-      camera.y += (targetCamY - camera.y) * camera.smooth;
-
-      // 4. Render Manual Kart (into the stage without clearing TrackRenderer)
-      kart.draw(ctx);
-
-      // 5. Update HUD
-      if (telemetry && typeof telemetry.updateHUD === 'function') {
-        telemetry.updateHUD(kart);
-      }
-      if (telemetry && typeof telemetry.drawMinimap === 'function') {
-        telemetry.drawMinimap(track, kart);
-      }
-    }
-
-    requestAnimationFrame(loop);
+  // Initial draw of Minimap so it never starts black
+  if (telemetry && typeof telemetry.drawMinimap === 'function') {
+    telemetry.drawMinimap(track, window.ScrollyCar || kart);
   }
 
-  requestAnimationFrame(loop);
+  // Unified Frame Callback in CanvasStage (Synchronized with single-source stage clearing)
+  if (window.CanvasStage && typeof window.CanvasStage.addRender === 'function') {
+    window.CanvasStage.addRender((ctx, width, height, dt) => {
+      const isFreeDrive = window.FreeDriveManager && window.FreeDriveManager.isActive;
+
+      if (isFreeDrive) {
+        // 1. Update Player Physics
+        kart.update(dt || 0.016, input);
+
+        // 2. Track checkpoints & dynamic elements
+        track.update(dt || 0.016, kart, (cp) => {
+          if (window.FreeDriveManager && typeof window.FreeDriveManager.openDrawer === 'function') {
+            // Handled via FreeDriveManager
+          } else if (telemetry && typeof telemetry.openProject === 'function') {
+            telemetry.openProject(cp.id);
+          }
+          if (cp.id === 'tesis-futbol') passedSector4 = true;
+          if (cp.id === 'udelartex' && passedSector4) {
+            if (telemetry && typeof telemetry.recordLap === 'function') {
+              telemetry.recordLap();
+            }
+            passedSector4 = false;
+          }
+        });
+
+        // 3. Smooth Camera Follow on Player
+        const targetCamX = kart.x;
+        const targetCamY = kart.y;
+        camera.x += (targetCamX - camera.x) * camera.smooth;
+        camera.y += (targetCamY - camera.y) * camera.smooth;
+
+        // 4. Render Manual Kart (into the stage in synchronized order)
+        kart.draw(ctx);
+
+        // 5. Update HUD
+        if (telemetry && typeof telemetry.updateHUD === 'function') {
+          telemetry.updateHUD(kart);
+        }
+
+        // 6. Update Minimap with player kart
+        if (telemetry && typeof telemetry.drawMinimap === 'function') {
+          telemetry.drawMinimap(track, kart);
+        }
+      } else {
+        // Scrollytelling mode: update minimap following ScrollyCar
+        if (telemetry && typeof telemetry.drawMinimap === 'function' && window.ScrollyCar) {
+          telemetry.drawMinimap(track, window.ScrollyCar);
+        }
+      }
+    });
+  } else {
+    // Fallback loop if CanvasStage not present
+    function fallbackLoop(now) {
+      const dt = Math.min(0.1, (now - lastTime) / 1000);
+      lastTime = now;
+      const isFreeDrive = window.FreeDriveManager && window.FreeDriveManager.isActive;
+      if (isFreeDrive) {
+        kart.update(dt, input);
+        kart.draw(ctx);
+        if (telemetry && typeof telemetry.updateHUD === 'function') telemetry.updateHUD(kart);
+        if (telemetry && typeof telemetry.drawMinimap === 'function') telemetry.drawMinimap(track, kart);
+      }
+      requestAnimationFrame(fallbackLoop);
+    }
+    requestAnimationFrame(fallbackLoop);
+  }
 
   // 6. Export appEngine to window for FreeDriveManager, TouchControls & AudioDSP coupling
   window.appEngine = {

@@ -280,9 +280,7 @@
   window.TrackRendererClass = TrackRenderer;
 
   if (window.CanvasStage && typeof window.CanvasStage.addRender === 'function') {
-    window.CanvasStage.addRender((ctx, width, height) => {
-      // Clear stage
-      ctx.clearRect(0, 0, width, height);
+    window.CanvasStage.addRender((ctx) => {
       defaultRenderer.render(ctx, { x: 0, y: 0, zoom: 1 });
     });
   }

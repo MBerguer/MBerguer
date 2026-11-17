@@ -121,9 +121,17 @@
       const dt = Math.min((now - lastTime) / 1000, 0.1);
       lastTime = now;
 
-      // If ScrollyCar is present, synchronize with its speed
-      if (window.ScrollyCar) {
+      // Determine active speed source
+      if (window.FreeDriveManager && window.FreeDriveManager.isActive && window.appEngine && window.appEngine.kart) {
+        const kartKmh = Math.abs(window.appEngine.kart.speed * 0.55);
+        updateSpeed(kartKmh, dt);
+      } else if (window.appLenis && Math.abs(window.appLenis.velocity || 0) > 0.05) {
+        const scrollKmh = Math.min(335, Math.abs(window.appLenis.velocity) * 0.38);
+        updateSpeed(scrollKmh, dt);
+      } else if (window.ScrollyCar) {
         updateSpeed(window.ScrollyCar.speed, dt);
+      } else {
+        updateSpeed(0, dt);
       }
 
       requestAnimationFrame(tick);
