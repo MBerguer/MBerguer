@@ -35,19 +35,6 @@
   let lastTime = performance.now();
   let currentMode = 'gp'; // 'gp' or 'console'
 
-  // Only resize if CanvasStage is not already handling high-DPI scaling
-  if (!window.CanvasStage) {
-    function resizeCanvas() {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      const rect = canvas.getBoundingClientRect();
-      canvas.width = rect.width * dpr;
-      canvas.height = rect.height * dpr;
-      ctx.scale(dpr, dpr);
-    }
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-  }
-
   // Keyboard controls
   window.addEventListener('keydown', (e) => {
     switch (e.key) {

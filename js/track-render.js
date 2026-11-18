@@ -23,14 +23,14 @@
       pCanvas.height = 64;
       const pCtx = pCanvas.getContext('2d');
 
-      pCtx.fillStyle = '#141824';
+      pCtx.fillStyle = '#1c2333';
       pCtx.fillRect(0, 0, 64, 64);
 
       // Noise grains
       const imgData = pCtx.getImageData(0, 0, 64, 64);
       const data = imgData.data;
       for (let i = 0; i < data.length; i += 4) {
-        const noise = (Math.random() - 0.5) * 24;
+        const noise = (Math.random() - 0.5) * 22;
         data[i] = Math.min(255, Math.max(0, data[i] + noise));         // R
         data[i + 1] = Math.min(255, Math.max(0, data[i + 1] + noise)); // G
         data[i + 2] = Math.min(255, Math.max(0, data[i + 2] + noise)); // B
@@ -62,23 +62,23 @@
       ctx.beginPath();
       for (let i = 0; i < samples.length; i++) {
         const s = samples[i];
-        const nx = s.normal.x * 12;
-        const ny = s.normal.y * 12;
+        const nx = s.normal.x * 14;
+        const ny = s.normal.y * 14;
         const pt = { x: s.left.x + nx, y: s.left.y + ny };
         if (i === 0) ctx.moveTo(pt.x, pt.y);
         else ctx.lineTo(pt.x, pt.y);
       }
       for (let i = samples.length - 1; i >= 0; i--) {
         const s = samples[i];
-        const nx = s.normal.x * 12;
-        const ny = s.normal.y * 12;
+        const nx = s.normal.x * 14;
+        const ny = s.normal.y * 14;
         ctx.lineTo(s.right.x - nx, s.right.y - ny);
       }
       ctx.closePath();
-      ctx.fillStyle = '#0a0d14';
+      ctx.fillStyle = '#0f1420';
       ctx.fill();
-      ctx.strokeStyle = '#1a2233';
-      ctx.lineWidth = 1.5;
+      ctx.strokeStyle = '#1f293d';
+      ctx.lineWidth = 2.0;
       ctx.stroke();
 
       // 2. Main Track Asphalt Surface
@@ -96,13 +96,32 @@
       if (this.asphaltPattern) {
         ctx.fillStyle = this.asphaltPattern;
       } else {
-        ctx.fillStyle = '#141824';
+        ctx.fillStyle = '#1c2333';
       }
       ctx.fill();
 
-      // 3. Track Edge Boundary Lines (Crisp technical white lines)
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
-      ctx.lineWidth = 2;
+      // 3. Track Edge Boundary Lines (High-contrast crisp borders & technical white lines)
+      ctx.strokeStyle = '#2a364f';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      for (let i = 0; i < samples.length; i++) {
+        const pt = samples[i].left;
+        if (i === 0) ctx.moveTo(pt.x, pt.y);
+        else ctx.lineTo(pt.x, pt.y);
+      }
+      ctx.stroke();
+
+      ctx.beginPath();
+      for (let i = 0; i < samples.length; i++) {
+        const pt = samples[i].right;
+        if (i === 0) ctx.moveTo(pt.x, pt.y);
+        else ctx.lineTo(pt.x, pt.y);
+      }
+      ctx.stroke();
+
+      // Inner crisp white lines
+      ctx.strokeStyle = 'rgba(248, 250, 252, 0.75)';
+      ctx.lineWidth = 1.5;
       ctx.beginPath();
       for (let i = 0; i < samples.length; i++) {
         const pt = samples[i].left;
@@ -126,24 +145,27 @@
         if (i === 0) ctx.moveTo(pt.x, pt.y);
         else ctx.lineTo(pt.x, pt.y);
       }
-      ctx.strokeStyle = 'rgba(5, 7, 12, 0.5)';
+      ctx.strokeStyle = 'rgba(5, 7, 12, 0.55)';
       ctx.lineWidth = 28;
       ctx.lineCap = 'round';
       ctx.lineJoin = 'round';
       ctx.stroke();
 
-      // 5. Centerline Racing Telemetry Tracer
+      // 5. Centerline Racing Telemetry Tracer (High-visibility neon cyan with glow)
       ctx.beginPath();
       for (let i = 0; i < samples.length; i++) {
         const pt = samples[i].center;
         if (i === 0) ctx.moveTo(pt.x, pt.y);
         else ctx.lineTo(pt.x, pt.y);
       }
-      ctx.strokeStyle = 'rgba(0, 240, 255, 0.25)';
-      ctx.lineWidth = 1.5;
-      ctx.setLineDash([8, 12]);
+      ctx.strokeStyle = '#06b6d4';
+      ctx.lineWidth = 2.5;
+      ctx.shadowColor = '#06b6d4';
+      ctx.shadowBlur = 6;
+      ctx.setLineDash([12, 12]);
       ctx.stroke();
       ctx.setLineDash([]);
+      ctx.shadowBlur = 0;
 
       ctx.restore();
     }
@@ -159,7 +181,7 @@
       if (samples.length < 2) return;
 
       ctx.save();
-      const kerbWidth = 10;
+      const kerbWidth = 11;
 
       for (let i = 0; i < samples.length - 1; i++) {
         const sA = samples[i];
@@ -168,10 +190,13 @@
         // Alternating tooth pattern every 3 samples
         const tooth = Math.floor(i / 3) % 2 === 0;
 
-        // Colors: FIA Red & White, with Cyan accent near sector transitions
+        // Colors: Neon Red & White, with Cyan accent near sector transitions
         const isCyanZone = (sA.t > 0.30 && sA.t < 0.40) || (sA.t > 0.65 && sA.t < 0.75);
-        const colActive = isCyanZone ? '#00f0ff' : '#e10600';
-        const colWhite = '#ffffff';
+        const colActive = isCyanZone ? '#06b6d4' : '#ef4444';
+        const colWhite = '#f8fafc';
+
+        ctx.shadowColor = tooth ? colActive : 'rgba(255,255,255,0.4)';
+        ctx.shadowBlur = tooth ? 8 : 4;
 
         // Left Kerb
         ctx.fillStyle = tooth ? colActive : colWhite;
@@ -194,6 +219,7 @@
         ctx.fill();
       }
 
+      ctx.shadowBlur = 0;
       ctx.restore();
     }
 
@@ -279,10 +305,18 @@
   window.TrackRenderer = defaultRenderer;
   window.TrackRendererClass = TrackRenderer;
 
-  if (window.CanvasStage && typeof window.CanvasStage.addRender === 'function') {
-    window.CanvasStage.addRender((ctx) => {
-      defaultRenderer.render(ctx, { x: 0, y: 0, zoom: 1 });
-    });
+  function registerTrackRenderer() {
+    if (window.CanvasStage && typeof window.CanvasStage.addRender === 'function') {
+      window.CanvasStage.addRender((ctx) => {
+        defaultRenderer.render(ctx, { x: 0, y: 0, zoom: 1 });
+      });
+      return true;
+    }
+    return false;
+  }
+
+  if (!registerTrackRenderer()) {
+    window.addEventListener('DOMContentLoaded', registerTrackRenderer);
   }
 
   console.log('[TrackRenderer] Procedural 16-bit asphalt and FIA kerbs renderer initialized.');

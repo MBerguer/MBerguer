@@ -69,6 +69,11 @@
     // Initial sizing
     resize();
 
+    let camX = 0;
+    let camY = 0;
+    let camScale = 1.0;
+    let camInitialized = false;
+
     // 3. Central Render Loop with Delta Time
     let lastTime = performance.now();
     function tick(now) {
@@ -85,14 +90,43 @@
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.scale(dpr, dpr);
 
-      // 2. Responsive World Transform: auto-scales and centers the 1280x960 Grand Prix circuit
-      const scale = Math.min(width / 1280, height / 960, 1.0);
-      const offsetX = (width - 1280 * scale) / 2;
-      const offsetY = (height - 960 * scale) / 2;
+      // 2. Dynamic Camera Transform (Centered Overview in Scrollytelling, Chase Camera in Free-Drive)
+      const isFreeDrive = window.FreeDriveManager && window.FreeDriveManager.isActive;
+      const kart = window.appEngine && window.appEngine.kart;
+
+      let targetX = 0;
+      let targetY = 0;
+      let targetScale = 1.0;
+
+      if (isFreeDrive && kart) {
+        // Chase Camera: keeps the player kart perfectly centered in viewport
+        const chaseScale = Math.min(Math.max(width / 950, 0.85), 1.25);
+        targetScale = chaseScale;
+        targetX = width / 2 - kart.x * chaseScale;
+        targetY = height / 2 - kart.y * chaseScale;
+      } else {
+        // Scrollytelling Overview: scales and centers the full 1280x960 circuit
+        const overviewScale = Math.min(width / 1280, height / 960, 1.0);
+        targetScale = overviewScale;
+        targetX = (width - 1280 * overviewScale) / 2;
+        targetY = (height - 960 * overviewScale) / 2;
+      }
+
+      if (!camInitialized) {
+        camX = targetX;
+        camY = targetY;
+        camScale = targetScale;
+        camInitialized = true;
+      } else {
+        const lerpFactor = isFreeDrive ? Math.min(1, 12 * dt) : Math.min(1, 8 * dt);
+        camX += (targetX - camX) * lerpFactor;
+        camY += (targetY - camY) * lerpFactor;
+        camScale += (targetScale - camScale) * lerpFactor;
+      }
 
       ctx.save();
-      ctx.translate(offsetX, offsetY);
-      ctx.scale(scale, scale);
+      ctx.translate(camX, camY);
+      ctx.scale(camScale, camScale);
 
       renderCallbacks.forEach((cb) => {
         try {
@@ -145,6 +179,7 @@
       get height() { return height; },
       get dpr() { return dpr; },
       get isSuspended() { return isSuspended; },
+      get camera() { return { x: camX, y: camY, scale: camScale }; },
       get worldScale() { return Math.min(width / 1280, height / 960, 1.0); },
       get worldOffsetX() { return (width - 1280 * Math.min(width / 1280, height / 960, 1.0)) / 2; },
       get worldOffsetY() { return (height - 960 * Math.min(width / 1280, height / 960, 1.0)) / 2; },
@@ -186,7 +221,9 @@
     return StageAPI;
   }
 
-  if (document.readyState === 'loading') {
+  if (document.getElementById('circuit-canvas')) {
+    initCanvasStage();
+  } else if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initCanvasStage);
   } else {
     initCanvasStage();

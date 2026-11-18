@@ -150,12 +150,19 @@
   window.ParticleSystem = defaultParticleSystem;
   window.ParticleSystemClass = ParticleSystem;
 
-  // Register with CanvasStage if available
-  if (window.CanvasStage && typeof window.CanvasStage.addRender === 'function') {
-    window.CanvasStage.addRender((ctx, width, height, dt) => {
-      defaultParticleSystem.update(dt || 0.016);
-      defaultParticleSystem.draw(ctx);
-    });
+  function registerParticles() {
+    if (window.CanvasStage && typeof window.CanvasStage.addRender === 'function') {
+      window.CanvasStage.addRender((ctx, width, height, dt) => {
+        defaultParticleSystem.update(dt || 0.016);
+        defaultParticleSystem.draw(ctx);
+      });
+      return true;
+    }
+    return false;
+  }
+
+  if (!registerParticles()) {
+    window.addEventListener('DOMContentLoaded', registerParticles);
   }
 
   console.log(`[ParticleSystem] Initialized static object pool of ${POOL_SIZE} zero-allocation particles.`);

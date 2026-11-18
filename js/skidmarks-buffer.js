@@ -98,11 +98,18 @@
   window.SkidmarksBuffer = defaultBuffer;
   window.SkidmarksBufferClass = SkidmarksBuffer;
 
-  // Register with CanvasStage if available
-  if (window.CanvasStage && typeof window.CanvasStage.addRender === 'function') {
-    window.CanvasStage.addRender((ctx) => {
-      defaultBuffer.render(ctx);
-    });
+  function registerSkidmarks() {
+    if (window.CanvasStage && typeof window.CanvasStage.addRender === 'function') {
+      window.CanvasStage.addRender((ctx) => {
+        defaultBuffer.render(ctx);
+      });
+      return true;
+    }
+    return false;
+  }
+
+  if (!registerSkidmarks()) {
+    window.addEventListener('DOMContentLoaded', registerSkidmarks);
   }
 
   console.log('[SkidmarksBuffer] Initialized persistent offscreen skidmarks accumulator.');

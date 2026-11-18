@@ -113,8 +113,12 @@ class Kart {
     if (this.weightTransfer < -0.15) {
       currentGrip *= (1.0 + this.weightTransfer * 0.6);
     }
-    if (input.handbrake || (Math.abs(this.steerAngle) > 0.5 && this.speed > 250)) {
-      currentGrip = 0.52;
+    const isDrifting = input.handbrake && Math.abs(this.speed) > 10;
+    if (isDrifting || (Math.abs(this.steerAngle) > 0.5 && this.speed > 160)) {
+      currentGrip = 0.28; // Dynamic loose grip for authentic drift & counter-steer
+      if (Math.abs(this.steerAngle) > 0.05) {
+        this.angle += Math.sign(this.steerAngle) * 2.2 * dt * (this.speed >= 0 ? 1 : -1);
+      }
     }
 
     const gripLerp = Math.min(1, currentGrip * 9 * dt);
@@ -130,10 +134,12 @@ class Kart {
     this.x += this.vx * dt;
     this.y += this.vy * dt;
 
-    // 6. Skid Marks & Smoke
-    if (this.driftFactor > 0.35 && Math.abs(this.speed) > 120) {
+    // 6. Skid Marks & Smoke (Triggered on Shift / Handbrake or High-G Drift)
+    const wantsDriftFx = isDrifting || (this.driftFactor > 0.28 && Math.abs(this.speed) > 35);
+    if (wantsDriftFx) {
+      this.driftFactor = Math.max(this.driftFactor, isDrifting ? 0.8 : 0.4);
       this.addSkidMarks();
-      if (Math.random() < 0.6) this.emitSmoke();
+      this.emitSmoke();
       if (!this.isAi && window.soundEngine) {
         window.soundEngine.updateSkid(this.driftFactor);
       }
@@ -243,7 +249,7 @@ class Kart {
       for (let i = 1; i < this.skidMarks.length; i++) {
         const p0 = this.skidMarks[i - 1];
         const p1 = this.skidMarks[i];
-        ctx.strokeStyle = `rgba(5, 8, 14, ${p1.alpha})`;
+        ctx.strokeStyle = `rgba(0, 0, 0, ${Math.min(0.5, (p1.alpha || 0.4) * 0.8)})`;
         ctx.lineWidth = 4.5;
         ctx.beginPath();
         ctx.moveTo(p0.lX, p0.lY);
@@ -258,11 +264,11 @@ class Kart {
       ctx.restore();
     }
 
-    // 2. Smoke Particles
+    // 2. Smoke Particles (White/Grey expanding puffs)
     if (this.particles.length > 0) {
       ctx.save();
       for (const p of this.particles) {
-        ctx.fillStyle = `rgba(220, 230, 245, ${p.life * 0.35})`;
+        ctx.fillStyle = `rgba(220, 220, 230, ${p.life * 0.45})`;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
         ctx.fill();
@@ -270,10 +276,11 @@ class Kart {
       ctx.restore();
     }
 
-    // 3. Kart Body (High-Detail F1 Style - Zero Headlights)
+    // 3. Kart Body (High-Detail F1 Style with Visual Drift Yaw - Zero Headlights)
     ctx.save();
     ctx.translate(this.x, this.y);
-    ctx.rotate(this.angle);
+    const visualDriftAngle = this.driftFactor > 0.1 ? (this.steerAngle * 0.45 * this.driftFactor) : 0;
+    ctx.rotate(this.angle + visualDriftAngle);
 
     // Drop Shadow
     ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';

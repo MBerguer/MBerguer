@@ -128,6 +128,71 @@ class TelemetrySystem {
 
     this.lapStartTime = Date.now();
     this.bestLapMs = null;
+    this.lastTrack = null;
+
+    this.initMinimapInteractions();
+  }
+
+  initMinimapInteractions() {
+    if (!this.minimapCanvas) return;
+
+    this.minimapCanvas.addEventListener('click', (e) => {
+      const rect = this.minimapCanvas.getBoundingClientRect();
+      const clickX = (e.clientX - rect.left) * (this.minimapCanvas.width / rect.width);
+      const clickY = (e.clientY - rect.top) * (this.minimapCanvas.height / rect.height);
+
+      // Minimap transformation parameters matching drawMinimap
+      const w = this.minimapCanvas.width;
+      const h = this.minimapCanvas.height;
+      const scaleX = w / 1400;
+      const scaleY = h / 1100;
+      const scale = Math.min(scaleX, scaleY);
+      const offsetX = 20;
+      const offsetY = 15;
+
+      const worldX = (clickX - offsetX) / scale;
+      const worldY = (clickY - offsetY) / scale;
+
+      // Find closest centerline point on track
+      let closestIdx = 0;
+      let minDist = Infinity;
+      const pts = (this.lastTrack && this.lastTrack.centerline) ||
+                  (window.TrackGeometry && window.TrackGeometry.points) || [];
+
+      if (pts.length === 0) return;
+
+      for (let i = 0; i < pts.length; i++) {
+        const d = Math.hypot(pts[i].x - worldX, pts[i].y - worldY);
+        if (d < minDist) {
+          minDist = d;
+          closestIdx = i;
+        }
+      }
+
+      const progress = closestIdx / pts.length;
+
+      // If in Free-Drive, teleport kart to clicked position
+      if (window.FreeDriveManager && window.FreeDriveManager.isActive && window.appEngine && window.appEngine.kart) {
+        const pt = pts[closestIdx];
+        window.appEngine.kart.x = pt.x;
+        window.appEngine.kart.y = pt.y;
+        window.appEngine.kart.speed = 0;
+        window.appEngine.kart.vx = 0;
+        window.appEngine.kart.vy = 0;
+        if (this.lastTrack) {
+          this.drawMinimap(this.lastTrack, window.appEngine.kart);
+        }
+      } else {
+        // In Scrollytelling, smooth scroll to the selected sector
+        const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+        const targetScroll = Math.min(maxScroll, Math.max(0, progress * maxScroll));
+        if (window.appLenis) {
+          window.appLenis.scrollTo(targetScroll, { duration: 1.2 });
+        } else {
+          window.scrollTo({ top: targetScroll, behavior: 'smooth' });
+        }
+      }
+    });
   }
 
   updateHUD(kart) {
@@ -168,6 +233,7 @@ class TelemetrySystem {
 
   drawMinimap(track, kart, aiRacers = []) {
     if (!this.minimapCtx) return;
+    this.lastTrack = track;
     const ctx = this.minimapCtx;
     const w = this.minimapCanvas.width;
     const h = this.minimapCanvas.height;

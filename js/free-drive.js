@@ -179,6 +179,8 @@
         this.scrollyTrack.classList.add('freedrive-hidden');
       }
 
+      document.body.classList.add('freedrive-active');
+
       if (this.btnToggle) {
         this.btnToggle.classList.add('active');
         this.btnToggle.innerHTML = '<span>EXIT FREE-DRIVE (T)</span> ✕';
@@ -206,6 +208,8 @@
       if (this.scrollyTrack) {
         this.scrollyTrack.classList.remove('freedrive-hidden');
       }
+
+      document.body.classList.remove('freedrive-active');
 
       if (this.btnToggle) {
         this.btnToggle.classList.remove('active');
