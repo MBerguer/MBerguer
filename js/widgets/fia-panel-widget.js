@@ -88,9 +88,10 @@
     render() {
       if (!this.ctx || !this.canvas) return;
 
-      // Flash timer
+      // Flash timer (faster 2.8 Hz alternation for Double Yellow diagonal flash)
       const now = Date.now();
-      const period = 1000 / (this.flashRateHz * 2);
+      const effectiveHz = this.currentFlag === 'DOUBLE_YELLOW' ? 2.8 : this.flashRateHz;
+      const period = 1000 / (effectiveHz * 2);
       let flashChanged = false;
       if (now - this.lastToggle > period) {
         this.isFlashOn = !this.isFlashOn;
@@ -127,7 +128,7 @@
           ledColor = this.isFlashOn ? '#ffaa00' : '#2a2000';
           break;
         case 'DOUBLE_YELLOW':
-          ledColor = this.isFlashOn ? '#ffaa00' : '#2a2000';
+          ledColor = '#ffaa00';
           break;
         case 'RED':
           ledColor = '#ff0033';
@@ -153,8 +154,24 @@
           const cy = padY + r * dotPitchY + dotPitchY / 2;
 
           let isLit = true;
-          // If SC mode, draw "SC" letters on matrix
-          if (this.currentFlag === 'SC') {
+          let pixelColor = ledColor;
+
+          // If DOUBLE_YELLOW, alternate between the two diagonal yellow triangles
+          if (this.currentFlag === 'DOUBLE_YELLOW') {
+            const nx = c / (this.cols - 1);
+            const ny = r / (this.rows - 1);
+            const diagDiff = nx - ny;
+            // Outer border frame (1 LED thick) or diagonal separator trench
+            const isDiagonalTrench = Math.abs(diagDiff) <= 0.042;
+            if (isDiagonalTrench) {
+              isLit = false;
+            } else {
+              const inUpperTriangle = diagDiff > 0;
+              const activeTriangle = this.isFlashOn ? inUpperTriangle : !inUpperTriangle;
+              pixelColor = activeTriangle ? '#ffaa00' : '#241a04';
+            }
+          } else if (this.currentFlag === 'SC') {
+            // If SC mode, draw "SC" letters on matrix
             isLit = this.isScPixel(c, r);
           }
 
@@ -162,7 +179,7 @@
           ctx.arc(cx, cy, dotRadius, 0, Math.PI * 2);
 
           if (isLit) {
-            ctx.fillStyle = ledColor;
+            ctx.fillStyle = pixelColor;
             ctx.fill();
           } else {
             ctx.fillStyle = '#111827';
