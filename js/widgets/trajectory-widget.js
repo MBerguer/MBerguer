@@ -252,11 +252,32 @@
       ctx.fillText('ST', this.target.x, this.target.y);
       ctx.restore();
 
-      // 5. Draggable Playmaker Node (Player #10)
+      // 5. Draggable Playmaker Node (Player #10) with interactive affordance halo
       ctx.save();
+      // Outer dashed affordance ring
+      ctx.strokeStyle = 'rgba(245, 158, 11, 0.75)';
+      ctx.lineWidth = 1.4;
+      ctx.setLineDash([3, 3]);
+      ctx.beginPath();
+      ctx.arc(this.player.x, this.player.y, this.player.radius + 6, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Floating "DRAG ME" callout pill above player #10
+      const pillY = Math.max(22, this.player.y - 24);
+      ctx.fillStyle = 'rgba(245, 158, 11, 0.92)';
+      ctx.beginPath();
+      ctx.roundRect(this.player.x - 24, pillY - 7, 48, 13, 4);
+      ctx.fill();
+      ctx.fillStyle = '#000';
+      ctx.font = 'bold 8px monospace';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('✥ DRAG', this.player.x, pillY);
+
       ctx.fillStyle = '#f59e0b';
       ctx.shadowColor = '#f59e0b';
-      ctx.shadowBlur = this.player.isDragging ? 16 : 8;
+      ctx.shadowBlur = this.player.isDragging ? 16 : 10;
       ctx.beginPath();
       ctx.arc(this.player.x, this.player.y, this.player.radius, 0, Math.PI * 2);
       ctx.fill();
