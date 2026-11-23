@@ -6,6 +6,39 @@
 (function () {
   'use strict';
 
+  // Smooth fade-in and parallax reveal for scrollytelling sections (runs regardless of CDN state)
+  function initSmoothSectionTransitions() {
+    const sections = document.querySelectorAll('.scrolly-section');
+    if (!sections.length) return;
+
+    function updateSectionsVisibility() {
+      const vh = window.innerHeight || 900;
+      sections.forEach((sec, idx) => {
+        if (idx === 0 || sec.id === 'hero-section') {
+          sec.classList.remove('section-below-fold');
+          return;
+        }
+        const rect = sec.getBoundingClientRect();
+        // Only dim sections that haven't entered the bottom 8% of the viewport yet
+        if (rect.top > vh * 0.92) {
+          sec.classList.add('section-below-fold');
+        } else {
+          sec.classList.remove('section-below-fold');
+        }
+      });
+    }
+
+    window.addEventListener('scroll', updateSectionsVisibility, { passive: true });
+    window.addEventListener('resize', updateSectionsVisibility, { passive: true });
+    updateSectionsVisibility();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSmoothSectionTransitions);
+  } else {
+    initSmoothSectionTransitions();
+  }
+
   // 1. Check prerequisites loaded via CDN
   if (typeof window.Lenis === 'undefined' || typeof window.gsap === 'undefined') {
     console.warn('[MotionBridge] Waiting for Lenis and GSAP to load...');
@@ -30,43 +63,6 @@
   });
 
   window.appLenis = lenis;
-
-  // Smooth fade-in and parallax reveal for scrollytelling sections
-  function initSmoothSectionTransitions() {
-    const sections = document.querySelectorAll('.scrolly-section');
-    if (!sections.length) return;
-
-    sections.forEach((sec, idx) => {
-      if (idx === 0 || sec.id === 'hero-section') {
-        sec.classList.add('section-in-view');
-      }
-    });
-
-    if (typeof IntersectionObserver !== 'undefined') {
-      const io = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('section-in-view');
-          } else if (entry.boundingClientRect.top > window.innerHeight * 0.82) {
-            entry.target.classList.remove('section-in-view');
-          }
-        });
-      }, {
-        threshold: [0.06, 0.18],
-        rootMargin: '0px 0px -6% 0px'
-      });
-
-      sections.forEach((sec) => io.observe(sec));
-    } else {
-      sections.forEach((sec) => sec.classList.add('section-in-view'));
-    }
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initSmoothSectionTransitions);
-  } else {
-    initSmoothSectionTransitions();
-  }
 
   // 4. Zero-Lag Ticker Synchronization Bridge
   // Notify ScrollTrigger whenever Lenis updates scroll
