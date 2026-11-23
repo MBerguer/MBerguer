@@ -818,6 +818,24 @@ body {
   pointer-events: auto;
 }
 
+.scrolly-section:not(#hero-section) .console-container {
+  opacity: 0.12;
+  transform: translate3d(0, 32px, 0) scale(0.985);
+  filter: blur(2px);
+  transition:
+    opacity 0.95s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.95s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+
+.scrolly-section.section-in-view .console-container,
+#hero-section .console-container {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+  filter: blur(0);
+}
+
 /* LAYER 3: FIXED PIT-WALL HUD & OVERLAY */
 #pitwall-hud-overlay {
   position: fixed;

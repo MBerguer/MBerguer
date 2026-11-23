@@ -20,16 +20,53 @@
     window.gsap.registerPlugin(window.ScrollToPlugin);
   }
 
-  // 3. Initialize Lenis Smooth Scroll Engine
+  // 3. Initialize Lenis Smooth Scroll Engine (Tuned for silky velocity-aliased inertia)
   const lenis = new window.Lenis({
-    lerp: 0.085,
+    lerp: 0.062,
     smoothWheel: true,
     smoothTouch: false,
-    wheelMultiplier: 1.1,
+    wheelMultiplier: 0.92,
     infinite: false,
   });
 
   window.appLenis = lenis;
+
+  // Smooth fade-in and parallax reveal for scrollytelling sections
+  function initSmoothSectionTransitions() {
+    const sections = document.querySelectorAll('.scrolly-section');
+    if (!sections.length) return;
+
+    sections.forEach((sec, idx) => {
+      if (idx === 0 || sec.id === 'hero-section') {
+        sec.classList.add('section-in-view');
+      }
+    });
+
+    if (typeof IntersectionObserver !== 'undefined') {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('section-in-view');
+          } else if (entry.boundingClientRect.top > window.innerHeight * 0.82) {
+            entry.target.classList.remove('section-in-view');
+          }
+        });
+      }, {
+        threshold: [0.06, 0.18],
+        rootMargin: '0px 0px -6% 0px'
+      });
+
+      sections.forEach((sec) => io.observe(sec));
+    } else {
+      sections.forEach((sec) => sec.classList.add('section-in-view'));
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSmoothSectionTransitions);
+  } else {
+    initSmoothSectionTransitions();
+  }
 
   // 4. Zero-Lag Ticker Synchronization Bridge
   // Notify ScrollTrigger whenever Lenis updates scroll

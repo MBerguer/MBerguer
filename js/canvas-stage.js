@@ -72,7 +72,15 @@
     let camX = 0;
     let camY = 0;
     let camScale = 1.0;
+    let camVelX = 0;
+    let camVelY = 0;
     let camInitialized = false;
+
+    // Quintic C2 smoothstep (0 velocity and 0 acceleration at endpoints)
+    function quinticSmooth(edge0, edge1, x) {
+      const t = Math.min(1, Math.max(0, (x - edge0) / (edge1 - edge0)));
+      return t * t * t * (t * (t * 6 - 15) + 10);
+    }
 
     // 3. Central Render Loop with Delta Time
     let lastTime = performance.now();
@@ -109,15 +117,20 @@
         const scrollyScale = Math.min(Math.max(width / 1200, 0.75), 1.05);
         targetScale = scrollyScale;
 
+        // Continuous C2 quintic blend between left and right gutters (eliminates abrupt midline snap)
+        const sideBlend = quinticSmooth(400, 880, car.x);
+
         if (width >= 1150) {
           const cardWidth = Math.min(width - 240, 960);
           const marginWidth = (width - cardWidth) / 2;
           const leftCenter = Math.max(90, marginWidth * 0.48);
           const rightCenter = Math.min(width - 90, width - marginWidth * 0.48);
-          const desiredScreenX = car.x <= 640 ? leftCenter : rightCenter;
+          const desiredScreenX = leftCenter + (rightCenter - leftCenter) * sideBlend;
           targetX = desiredScreenX - car.x * scrollyScale;
         } else {
-          const desiredScreenX = car.x <= 640 ? width * 0.14 : width * 0.86;
+          const leftSide = width * 0.14;
+          const rightSide = width * 0.86;
+          const desiredScreenX = leftSide + (rightSide - leftSide) * sideBlend;
           targetX = desiredScreenX - car.x * scrollyScale;
         }
 
@@ -136,12 +149,27 @@
         camX = targetX;
         camY = targetY;
         camScale = targetScale;
+        camVelX = 0;
+        camVelY = 0;
         camInitialized = true;
-      } else {
-        const lerpFactor = isFreeDrive ? Math.min(1, 12 * dt) : Math.min(1, 8 * dt);
+      } else if (isFreeDrive) {
+        const lerpFactor = Math.min(1, 10 * dt);
         camX += (targetX - camX) * lerpFactor;
         camY += (targetY - camY) * lerpFactor;
         camScale += (targetScale - camScale) * lerpFactor;
+        camVelX = 0;
+        camVelY = 0;
+      } else {
+        // Critically-damped spring-damper velocity smoothing for silky scrollytelling camera motion
+        const omega = 4.2; // Natural frequency (rad/s) - gentle, non-violent camera glide
+        const zeta = 1.05; // Slightly overdamped to prevent any overshoot oscillation
+        const ax = omega * omega * (targetX - camX) - 2 * zeta * omega * camVelX;
+        const ay = omega * omega * (targetY - camY) - 2 * zeta * omega * camVelY;
+        camVelX += ax * dt;
+        camVelY += ay * dt;
+        camX += camVelX * dt;
+        camY += camVelY * dt;
+        camScale += (targetScale - camScale) * (1 - Math.exp(-3.5 * dt));
       }
 
       ctx.save();

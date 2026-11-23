@@ -14,6 +14,7 @@
 
       // Position & Physics state
       this.targetProgress = 0;
+      this.midProgress = 0;
       this.currentProgress = 0;
       this.x = 300;
       this.y = 600;
@@ -56,31 +57,21 @@
 
       window.addEventListener('scroll', onScrollUpdate, { passive: true });
       onScrollUpdate();
-
-      if (window.ScrollTrigger && window.gsap) {
-        window.ScrollTrigger.create({
-          trigger: '#scrollytelling-track',
-          start: 'top top',
-          end: 'bottom bottom',
-          scrub: 0.5,
-          onUpdate: (selfST) => {
-            self.targetProgress = selfST.progress;
-          }
-        });
-      }
     }
 
     /**
-     * Updates physics, lerp interpolation, and heading every frame
+     * Updates physics, 2-stage velocity-smoothed interpolation, and heading every frame
      */
     update(dt) {
       if (!this.geometry) this.geometry = window.TrackGeometry;
       if (!this.geometry) return;
 
-      // Smooth progress lerp
-      const progressLerp = 1 - Math.exp(-12 * dt);
+      // Two-stage critically-damped low-pass velocity filter for silky progression
+      const stage1Lerp = 1 - Math.exp(-6.5 * dt);
+      const stage2Lerp = 1 - Math.exp(-5.5 * dt);
       const prevProgress = this.currentProgress;
-      this.currentProgress += (this.targetProgress - this.currentProgress) * progressLerp;
+      this.midProgress += (this.targetProgress - this.midProgress) * stage1Lerp;
+      this.currentProgress += (this.midProgress - this.currentProgress) * stage2Lerp;
 
       // Sample geometry at interpolated progress
       const pt = this.geometry.getPointAtProgress(this.currentProgress);
@@ -91,10 +82,10 @@
       this.x = pt.x + (-pt.tangentY) * lateral;
       this.y = pt.y + pt.tangentX * lateral;
 
-      // Calculate heading angle with Math.atan2
+      // Calculate heading angle with Math.atan2 and smooth angular velocity damping
       this.targetAngle = Math.atan2(pt.tangentY, pt.tangentX);
       const angleDiff = this.diffAngle(this.targetAngle, this.angle);
-      this.angle += angleDiff * Math.min(1, 15 * dt);
+      this.angle += angleDiff * (1 - Math.exp(-8.5 * dt));
 
       // Instantaneous speed estimation based on scroll velocity & Lenis motion
       if (window.appLenis && Math.abs(window.appLenis.velocity || 0) > 0.05) {
