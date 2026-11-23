@@ -291,23 +291,23 @@ body {
   font-weight: 700;
 }
 
-/* Sector & Lap Time - Top Center */
+/* Sector & Lap Time - Top Left */
 #timing-hud {
   position: absolute;
-  top: 8px;
-  left: 50%;
-  transform: translateX(-50%);
+  top: 76px;
+  left: 24px;
+  transform: none;
   background: var(--bg-surface);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
-  padding: 6px 16px;
+  padding: 8px 16px;
   display: flex;
   align-items: center;
   gap: 18px;
   font-family: var(--font-mono);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
   z-index: 60;
   pointer-events: auto;
 }

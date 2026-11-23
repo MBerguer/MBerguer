@@ -153,13 +153,14 @@
 
       // Sub-segment Catmull-Rom re-evaluation for smooth continuity
       const n = this.points.length;
-      const seg = pA.seg;
+      const seg = pB.seg;
       const p0 = this.points[(seg - 1 + n) % n];
       const p1 = this.points[seg];
       const p2 = this.points[(seg + 1) % n];
       const p3 = this.points[(seg + 2) % n];
 
-      const localU = pA.u + alpha * (pB.u - pA.u);
+      const uA = (pA.seg === pB.seg) ? pA.u : 0.0;
+      const localU = uA + alpha * (pB.u - uA);
       const x = this.catmullRom(p0.x, p1.x, p2.x, p3.x, localU);
       const y = this.catmullRom(p0.y, p1.y, p2.y, p3.y, localU);
 
