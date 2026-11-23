@@ -286,6 +286,10 @@ class TelemetrySystem {
   }
 
   openProject(projectId) {
+    if (window.FreeDriveManager && typeof window.FreeDriveManager.openDrawerById === 'function') {
+      window.FreeDriveManager.openDrawerById(projectId);
+      return;
+    }
     const data = PROJECT_DATA[projectId];
     if (!data) return;
 
@@ -322,6 +326,10 @@ class TelemetrySystem {
   }
 
   closeDrawer() {
+    if (window.FreeDriveManager && typeof window.FreeDriveManager.closeDrawer === 'function') {
+      window.FreeDriveManager.closeDrawer();
+      return;
+    }
     if (this.drawer) {
       this.drawer.classList.remove('open');
     }

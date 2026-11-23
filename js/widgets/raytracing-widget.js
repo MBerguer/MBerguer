@@ -156,7 +156,7 @@
 
     render() {
       if (!this.ctx || !this.canvas) return;
-      if (!this.isVisible || (window.FreeDriveManager && window.FreeDriveManager.isActive)) return;
+      if (!this.inDrawer && (!this.isVisible || (window.FreeDriveManager && window.FreeDriveManager.isActive))) return;
       const ctx = this.ctx;
       const w = this.canvas.width;
       const h = this.canvas.height;

@@ -37,6 +37,7 @@
 
   // Keyboard controls
   window.addEventListener('keydown', (e) => {
+    if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
     switch (e.key) {
       case 'ArrowUp':
       case 'w':

@@ -112,9 +112,23 @@
 
       this.checkpoints = CHECKPOINTS_DATA;
       this.activeCheckpointId = null;
+      this.dismissedCheckpointId = null;
       this.spawnGraceActive = false;
       this.spawnX = 300;
       this.spawnY = 600;
+
+      // Live widget re-parenting state for Free-Drive drawer
+      this.widgetMount = document.getElementById('drawer-widget-mount');
+      this.mountedWidgetEl = null;
+      this.mountedWidgetParent = null;
+      this.mountedWidgetNextSibling = null;
+      this.widgetCardMap = {
+        'tsp-light-panel': 'fia-panel-interactive-card',
+        'abuse-2026': 'raytrace-interactive-card',
+        'alloy-zksync': 'zerocopy-widget-container',
+        'tesis-futbol': 'trajectory-interactive-card',
+        'udelartex': 'latex-interactive-card'
+      };
 
       this.initEvents();
       this.initCanvasRender();
@@ -149,6 +163,20 @@
           self.closeDrawer();
         });
       }
+
+      // Sector quick-switcher tabs inside the drawer header
+      const tabPills = document.querySelectorAll('.drawer-tab-pill');
+      tabPills.forEach((pill) => {
+        pill.addEventListener('click', () => {
+          const cpId = pill.getAttribute('data-cp-id');
+          const targetCp = self.checkpoints.find((c) => c.id === cpId);
+          if (targetCp) {
+            self.activeCheckpointId = targetCp.id;
+            self.dismissedCheckpointId = null;
+            self.openDrawer(targetCp);
+          }
+        });
+      });
     }
 
     toggleFreeDrive() {
@@ -253,15 +281,85 @@
         }
       }
 
+      let insideAny = false;
       for (const cp of this.checkpoints) {
         const dist = Math.hypot(kartX - cp.x, kartY - cp.y);
         if (dist <= cp.radius) {
+          insideAny = true;
+          if (cp.id === this.dismissedCheckpointId) {
+            return;
+          }
           if (this.activeCheckpointId !== cp.id) {
             this.activeCheckpointId = cp.id;
             this.openDrawer(cp);
           }
           return;
         }
+      }
+
+      if (!insideAny) {
+        this.dismissedCheckpointId = null;
+      }
+    }
+
+    mountLiveWidget(checkpointId) {
+      this.restoreLiveWidget();
+      if (!this.widgetMount) {
+        this.widgetMount = document.getElementById('drawer-widget-mount');
+      }
+      if (!this.widgetMount) return;
+
+      const cardId = this.widgetCardMap[checkpointId];
+      const cardEl = cardId ? document.getElementById(cardId) : null;
+      if (!cardEl) return;
+
+      this.mountedWidgetEl = cardEl;
+      this.mountedWidgetParent = cardEl.parentNode;
+      this.mountedWidgetNextSibling = cardEl.nextSibling;
+
+      this.widgetMount.appendChild(cardEl);
+
+      // Wake up and force immediate render of the live widget inside the drawer
+      if (checkpointId === 'tsp-light-panel' && window.activeFiaWidget) {
+        window.activeFiaWidget.needsRedraw = true;
+        window.activeFiaWidget.render();
+      } else if (checkpointId === 'abuse-2026' && window.activeRaytraceWidget) {
+        window.activeRaytraceWidget.inDrawer = true;
+        window.activeRaytraceWidget.render();
+      } else if (checkpointId === 'alloy-zksync' && window.activeZeroCopyWidget) {
+        window.activeZeroCopyWidget.simulateRun();
+      } else if (checkpointId === 'tesis-futbol' && window.activeTrajectoryWidget) {
+        window.activeTrajectoryWidget.needsRedraw = true;
+        window.activeTrajectoryWidget.render();
+      } else if (checkpointId === 'udelartex' && window.activeLatexWidget) {
+        window.activeLatexWidget.renderPreview();
+      }
+    }
+
+    restoreLiveWidget() {
+      if (window.activeRaytraceWidget) {
+        window.activeRaytraceWidget.inDrawer = false;
+      }
+      if (this.mountedWidgetEl && this.mountedWidgetParent) {
+        if (this.mountedWidgetNextSibling && this.mountedWidgetNextSibling.parentNode === this.mountedWidgetParent) {
+          this.mountedWidgetParent.insertBefore(this.mountedWidgetEl, this.mountedWidgetNextSibling);
+        } else {
+          this.mountedWidgetParent.appendChild(this.mountedWidgetEl);
+        }
+        // Trigger redraw back in scrollytelling layout
+        if (window.activeFiaWidget) window.activeFiaWidget.needsRedraw = true;
+        if (window.activeTrajectoryWidget) window.activeTrajectoryWidget.needsRedraw = true;
+      }
+      this.mountedWidgetEl = null;
+      this.mountedWidgetParent = null;
+      this.mountedWidgetNextSibling = null;
+    }
+
+    openDrawerById(checkpointId) {
+      const cp = this.checkpoints.find((c) => c.id === checkpointId);
+      if (cp) {
+        this.activeCheckpointId = cp.id;
+        this.openDrawer(cp);
       }
     }
 
@@ -286,6 +384,19 @@
       if (archEl) archEl.textContent = cp.arch;
       if (linkEl) linkEl.href = cp.gh;
 
+      // Update active state on drawer header quick-switcher tabs
+      const tabPills = document.querySelectorAll('.drawer-tab-pill');
+      tabPills.forEach((pill) => {
+        if (pill.getAttribute('data-cp-id') === cp.id) {
+          pill.classList.add('active');
+        } else {
+          pill.classList.remove('active');
+        }
+      });
+
+      // Mount the live interactive widget for this sector into the drawer
+      this.mountLiveWidget(cp.id);
+
       if (specsEl && cp.specs) {
         specsEl.innerHTML = cp.specs.map(s => `
           <div class="spec-card">
@@ -306,10 +417,12 @@
     }
 
     closeDrawer() {
+      this.restoreLiveWidget();
       if (this.drawer) {
         this.drawer.classList.remove('active');
         this.drawer.classList.remove('open');
       }
+      this.dismissedCheckpointId = this.activeCheckpointId;
       this.activeCheckpointId = null;
     }
 

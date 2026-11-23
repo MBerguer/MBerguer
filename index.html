@@ -531,7 +531,16 @@
   <!-- PROJECT TELEMETRY DRAWER (SLIDE-OVER) -->
   <aside id="project-drawer">
     <div class="drawer-header">
-      <span class="drawer-sector-tag" id="drawer-sector">SECTOR 01</span>
+      <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+        <span class="drawer-sector-tag" id="drawer-sector">SECTOR 01</span>
+        <div class="drawer-sector-Booking-pills" id="drawer-sector-tabs" style="display: flex; gap: 4px;">
+          <button type="button" class="sector-pill drawer-tab-pill" data-cp-id="tsp-light-panel">S1</button>
+          <button type="button" class="sector-pill drawer-tab-pill" data-cp-id="abuse-2026">S2</button>
+          <button type="button" class="sector-pill drawer-tab-pill" data-cp-id="alloy-zksync">S3</button>
+          <button type="button" class="sector-pill drawer-tab-pill" data-cp-id="tesis-futbol">S4</button>
+          <button type="button" class="sector-pill drawer-tab-pill" data-cp-id="udelartex">S5</button>
+        </div>
+      </div>
       <button id="btn-close-drawer" class="btn-close-drawer" title="Close Drawer">✕</button>
     </div>
 
@@ -539,6 +548,12 @@
       <div>
         <h2 class="drawer-title" id="drawer-title">Project Title</h2>
         <p class="drawer-subtitle" id="drawer-sub">Project Subtitle</p>
+      </div>
+
+      <!-- LIVE INTERACTIVE WIDGET MOUNT (DYNAMICALLY RE-PARENTED FROM SECTOR) -->
+      <div id="drawer-widget-section" class="drawer-widget-section">
+        <h4 class="drawer-section-title">🕹️ Interactive Live Telemetry</h4>
+        <div id="drawer-widget-mount" class="drawer-widget-mount"></div>
       </div>
 
       <!-- SPECS GRID -->

@@ -369,9 +369,9 @@ body {
   position: fixed;
   top: 60px;
   bottom: 0;
-  right: -540px;
-  width: 520px;
-  max-width: 92vw;
+  right: -600px;
+  width: 580px;
+  max-width: 94vw;
   background: rgba(11, 15, 24, 0.96);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
