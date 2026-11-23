@@ -196,7 +196,7 @@ class TelemetrySystem {
   }
 
   updateHUD(kart) {
-    const kmh = Math.abs(Math.round(kart.speed * 0.45));
+    const kmh = Math.abs(Math.round(kart.speed * (360 / 540)));
     if (this.speedEl) this.speedEl.textContent = kmh;
     if (this.gearEl) this.gearEl.textContent = kart.gear;
     if (this.rpmNumEl) this.rpmNumEl.textContent = kart.rpm;

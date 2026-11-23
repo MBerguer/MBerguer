@@ -1,6 +1,6 @@
 /**
  * GRAND PRIX TELEMETRY // REAL-TIME COCKPIT SPEEDOMETER & LED TACHOMETER HUD
- * High-frequency digital speedometer scaling dynamically from 0 to 318 KM/H with
+ * High-frequency digital speedometer scaling dynamically from 0 to 360 KM/H with
  * rapid unit-by-unit deceleration/acceleration tickers and 16-segment RPM shift lights.
  */
 
@@ -32,14 +32,14 @@
      * Directly set target speed (0 - 350 KM/H)
      */
     function setSpeed(val) {
-      targetSpeed = Math.max(0, Math.min(350, Math.round(val)));
+      targetSpeed = Math.max(0, Math.min(360, Math.round(val)));
     }
 
     /**
      * Updates speed with realistic high-rate stepped tick (incrementing/decrementing unit-by-unit)
      */
     function updateSpeed(target, dt = 0.016) {
-      targetSpeed = Math.max(0, Math.min(350, Math.round(target)));
+      targetSpeed = Math.max(0, Math.min(360, Math.round(target)));
 
       // Step-by-step deceleration / acceleration ticker
       if (currentSpeed < targetSpeed) {
@@ -59,30 +59,10 @@
         lastSpeedStr = speedStr;
       }
 
-      // Calculate Gear & RPM based on current speed
-      let gear = 1;
-      if (currentSpeed < 10) {
-        gear = currentSpeed === 0 ? 'N' : 1;
-        targetRpm = 850 + currentSpeed * 250;
-      } else if (currentSpeed < 65) {
-        gear = 2;
-        targetRpm = 5000 + (currentSpeed - 10) * 110;
-      } else if (currentSpeed < 125) {
-        gear = 3;
-        targetRpm = 6800 + (currentSpeed - 65) * 85;
-      } else if (currentSpeed < 190) {
-        gear = 4;
-        targetRpm = 8000 + (currentSpeed - 125) * 65;
-      } else if (currentSpeed < 255) {
-        gear = 5;
-        targetRpm = 9200 + (currentSpeed - 190) * 55;
-      } else if (currentSpeed < 305) {
-        gear = 6;
-        targetRpm = 10400 + (currentSpeed - 255) * 45;
-      } else {
-        gear = 7;
-        targetRpm = 11600 + (currentSpeed - 305) * 40;
-      }
+      // Calculate Gear & RPM (8-speed F1 gearbox, 360 km/h)
+      const pt = window.F1Powertrain.resolve(currentSpeed);
+      const gear = pt.gear;
+      targetRpm = pt.rpm;
 
       // Smooth RPM lerp
       targetRpm = Math.min(13500, Math.max(800, targetRpm));
@@ -144,10 +124,10 @@
 
       // Determine active speed source
       if (window.FreeDriveManager && window.FreeDriveManager.isActive && window.appEngine && window.appEngine.kart) {
-        const kartKmh = Math.abs(window.appEngine.kart.speed * 0.55);
+        const kartKmh = Math.abs(window.appEngine.kart.speed * (360 / 540));
         updateSpeed(kartKmh, dt);
       } else if (window.appLenis && Math.abs(window.appLenis.velocity || 0) > 0.05) {
-        const scrollKmh = Math.min(335, Math.abs(window.appLenis.velocity) * 0.38);
+        const scrollKmh = Math.min(360, Math.abs(window.appLenis.velocity) * 0.38);
         updateSpeed(scrollKmh, dt);
       } else if (window.ScrollyCar) {
         updateSpeed(window.ScrollyCar.speed, dt);

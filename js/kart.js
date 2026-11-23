@@ -22,8 +22,8 @@ class Kart {
     this.driftFactor = 0;
 
     // Visuals & styling
-    this.width = 26;
-    this.length = 46;
+    this.width = 24;
+    this.length = 62;
     this.wheelTurnAngle = 0;
     this.skidMarks = [];
     this.particles = [];
@@ -58,6 +58,7 @@ class Kart {
     this.wheelTurnAngle = this.steerAngle;
 
     // 2. Acceleration / Braking
+    this.isBraking = !!(input.down && this.speed > 5);
     if (input.up) {
       if (this.speed < this.maxSpeed) {
         this.speed += this.accelPower * dt;
@@ -205,33 +206,19 @@ class Kart {
   }
 
   updateTelemetry(dt) {
-    const kmh = Math.abs(Math.round(this.speed * 0.45));
+    const kmh = Math.abs(Math.round(this.speed * Kart.KMH_PER_UNIT));
     let g = 1;
-    let rpmBase = 0;
+    let rpm = 0;
     if (this.speed < -5) {
       g = 'R';
-      rpmBase = (Math.abs(this.speed) / this.reverseMaxSpeed) * 6000;
-    } else if (kmh < 45) {
-      g = 1;
-      rpmBase = 2000 + (kmh / 45) * 9000;
-    } else if (kmh < 85) {
-      g = 2;
-      rpmBase = 3500 + ((kmh - 45) / 40) * 8000;
-    } else if (kmh < 130) {
-      g = 3;
-      rpmBase = 4500 + ((kmh - 85) / 45) * 7500;
-    } else if (kmh < 175) {
-      g = 4;
-      rpmBase = 5200 + ((kmh - 130) / 45) * 7000;
-    } else if (kmh < 215) {
-      g = 5;
-      rpmBase = 6000 + ((kmh - 175) / 40) * 6500;
+      rpm = 3000 + (Math.abs(this.speed) / this.reverseMaxSpeed) * 3000;
     } else {
-      g = 6;
-      rpmBase = 7000 + ((kmh - 215) / 50) * 5500;
+      const pt = window.F1Powertrain.resolve(kmh);
+      g = pt.gear;
+      rpm = pt.rpm;
     }
     this.gear = g;
-    this.rpm = Math.min(13500, Math.max(1200, Math.round(rpmBase)));
+    this.rpm = Math.min(13500, Math.max(1200, Math.round(rpm)));
 
     const accelKmh = (this.speed - this.prevSpeed) / dt;
     this.gForce = Math.abs((accelKmh / 9.81) * 0.05) + (this.driftFactor * 1.8);
@@ -282,96 +269,17 @@ class Kart {
     const visualDriftAngle = this.driftFactor > 0.1 ? (this.steerAngle * 0.45 * this.driftFactor) : 0;
     ctx.rotate(this.angle + visualDriftAngle);
 
-    // Drop Shadow
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
-    ctx.fillRect(-this.length * 0.45 + 3, -this.width * 0.5 + 4, this.length * 0.9, this.width);
-
-    // Front Wishbone Suspension Arms
-    ctx.strokeStyle = '#64748b';
-    ctx.lineWidth = 1.6;
-    ctx.beginPath();
-    ctx.moveTo(6, -6); ctx.lineTo(14, -this.width * 0.52);
-    ctx.moveTo(12, -6); ctx.lineTo(15, -this.width * 0.52);
-    ctx.moveTo(6, 6); ctx.lineTo(14, this.width * 0.52);
-    ctx.moveTo(12, 6); ctx.lineTo(15, this.width * 0.52);
-    // Rear Wishbones
-    ctx.moveTo(-10, -8); ctx.lineTo(-15, -this.width * 0.52);
-    ctx.moveTo(-10, 8); ctx.lineTo(-15, this.width * 0.52);
-    ctx.stroke();
-
-    // 4 Wide Slick Tires with Colored Sidewall Line
-    this.drawTire(ctx, -this.length * 0.3, -this.width * 0.52, 0);
-    this.drawTire(ctx, -this.length * 0.3, this.width * 0.52, 0);
-    this.drawTire(ctx, this.length * 0.28, -this.width * 0.52, this.wheelTurnAngle);
-    this.drawTire(ctx, this.length * 0.28, this.width * 0.52, this.wheelTurnAngle);
-
-    // Rear Aerodynamic Wing with Endplates
-    ctx.fillStyle = this.primaryColor;
-    ctx.fillRect(-this.length * 0.46, -this.width * 0.58, 6, this.width * 1.16);
-    ctx.fillStyle = this.secondaryColor;
-    ctx.fillRect(-this.length * 0.48, -this.width * 0.6, 10, 3);
-    ctx.fillRect(-this.length * 0.48, this.width * 0.6 - 3, 10, 3);
-    // Rain light
-    ctx.fillStyle = '#ff0044';
-    ctx.beginPath();
-    ctx.arc(-this.length * 0.46, 0, 2, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Chassis Monocoque (Aerodynamic tapered nose)
-    ctx.fillStyle = '#0f172a';
-    ctx.beginPath();
-    ctx.moveTo(this.length * 0.45, 0);
-    ctx.lineTo(this.length * 0.15, -this.width * 0.28);
-    ctx.lineTo(-this.length * 0.35, -this.width * 0.4);
-    ctx.lineTo(-this.length * 0.4, 0);
-    ctx.lineTo(-this.length * 0.35, this.width * 0.4);
-    ctx.lineTo(this.length * 0.15, this.width * 0.28);
-    ctx.closePath();
-    ctx.fill();
-
-    // Colored Livery Sidepods
-    ctx.fillStyle = this.primaryColor;
-    ctx.beginPath();
-    ctx.roundRect(-this.length * 0.3, -this.width * 0.42, this.length * 0.45, 4, 2);
-    ctx.roundRect(-this.length * 0.3, this.width * 0.42 - 4, this.length * 0.45, 4, 2);
-    ctx.fill();
-
-    // Front Wing with Multi-element Flaps
-    ctx.fillStyle = this.primaryColor;
-    ctx.fillRect(this.length * 0.38, -this.width * 0.54, 5, this.width * 1.08);
-    ctx.fillStyle = this.secondaryColor;
-    ctx.fillRect(this.length * 0.32, -this.width * 0.56, 11, 3);
-    ctx.fillRect(this.length * 0.32, this.width * 0.56 - 3, 11, 3);
-
-    // Cockpit Tub & Halo
-    ctx.fillStyle = '#020617';
-    ctx.beginPath();
-    ctx.ellipse(0, 0, 8, 5, 0, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Halo Safety Ring
-    ctx.strokeStyle = this.primaryColor;
-    ctx.lineWidth = 1.4;
-    ctx.stroke();
-
-    // Driver Helmet & Visor
-    ctx.fillStyle = this.helmetColor;
-    ctx.beginPath();
-    ctx.arc(-2, 0, 5, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.fillStyle = this.visorColor;
-    ctx.fillRect(0, -3.5, 3.5, 7);
-
-    // Number Badge
-    ctx.fillStyle = '#ffffff';
-    ctx.beginPath();
-    ctx.arc(this.length * 0.22, 0, 4, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.fillStyle = '#000000';
-    ctx.font = 'bold 6px monospace';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(this.number, this.length * 0.22, 0);
+    window.F1Car.draw(ctx, {
+      primary: this.primaryColor,
+      secondary: this.secondaryColor,
+      helmet: this.helmetColor,
+      visor: this.visorColor,
+      number: this.number,
+      steer: this.wheelTurnAngle,
+      drs: Math.abs(this.speed) * Kart.KMH_PER_UNIT > 285 && Math.abs(this.steerAngle) < 0.15,
+      brake: !!this.isBraking,
+      rainLight: !this.isAi && (Date.now() % 400 < 200)
+    });
 
     ctx.restore();
   }
@@ -396,6 +304,8 @@ class Kart {
 /**
  * AI Competitor Racer - Follows the circuit line autonomously
  */
+Kart.KMH_PER_UNIT = 360 / 540; // maxSpeed 540 units == 360 km/h
+
 class AiRacer extends Kart {
   constructor(x, y, waypoints, options = {}) {
     super(x, y, options);

@@ -25,7 +25,7 @@
       this.gear = 1;
 
       // Car visual dimensions
-      this.length = 44;
+      this.length = 62;
       this.width = 22;
 
       this.initScrollTrigger();
@@ -95,40 +95,21 @@
 
       // Instantaneous speed estimation based on scroll velocity & Lenis motion
       if (window.appLenis && Math.abs(window.appLenis.velocity || 0) > 0.05) {
-        this.targetSpeed = Math.min(335, Math.abs(window.appLenis.velocity) * 0.38);
+        this.targetSpeed = Math.min(360, Math.abs(window.appLenis.velocity) * 0.38);
       } else {
         const dProgress = Math.abs(this.currentProgress - prevProgress);
         const worldDistPerSec = (dProgress * (this.geometry.totalLength || 3000)) / Math.max(dt, 0.001);
         const rawSpeed = worldDistPerSec * 0.45;
-        this.targetSpeed = Math.min(340, rawSpeed);
+        this.targetSpeed = Math.min(360, rawSpeed);
       }
 
       // Smoothly lerp speed towards target
       this.speed += (this.targetSpeed - this.speed) * Math.min(1, 10 * dt);
 
-      // Gear and RPM calculation for HUD
-      if (this.speed < 15) {
-        this.gear = 1;
-        this.rpm = 4000 + this.speed * 200;
-      } else if (this.speed < 70) {
-        this.gear = 2;
-        this.rpm = 6000 + (this.speed - 15) * 110;
-      } else if (this.speed < 130) {
-        this.gear = 3;
-        this.rpm = 7500 + (this.speed - 70) * 85;
-      } else if (this.speed < 195) {
-        this.gear = 4;
-        this.rpm = 8500 + (this.speed - 130) * 65;
-      } else if (this.speed < 260) {
-        this.gear = 5;
-        this.rpm = 9500 + (this.speed - 195) * 55;
-      } else if (this.speed < 315) {
-        this.gear = 6;
-        this.rpm = 10500 + (this.speed - 260) * 45;
-      } else {
-        this.gear = 7;
-        this.rpm = 11800 + (this.speed - 315) * 40;
-      }
+      // Gear and RPM calculation for HUD (8-speed F1 gearbox)
+      const pwr = window.F1Powertrain.resolve(this.speed);
+      this.gear = pwr.gear;
+      this.rpm = pwr.rpm;
       this.rpm = Math.min(13500, Math.max(800, this.rpm));
     }
 
@@ -140,91 +121,16 @@
       ctx.translate(this.x, this.y);
       ctx.rotate(this.angle);
 
-      // 1. Aerodynamic Shadow
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
-      ctx.beginPath();
-      ctx.ellipse(2, 4, this.length * 0.52, this.width * 0.65, 0, 0, Math.PI * 2);
-      ctx.fill();
-
-      // 2. 4 Racing Slicks (Pirelli Zero)
-      const wheelW = 10;
-      const wheelL = 14;
-      ctx.fillStyle = '#0a0d14';
-      ctx.strokeStyle = '#222d3d';
-      ctx.lineWidth = 1;
-
-      // Front Left & Front Right
-      [-1, 1].forEach((side) => {
-        const wy = side * 13;
-        ctx.fillRect(10, wy - wheelW / 2, wheelL, wheelW);
-        ctx.strokeRect(10, wy - wheelW / 2, wheelL, wheelW);
+      const kmh = this.speed;
+      window.F1Car.draw(ctx, {
+        primary: '#00f0ff',
+        secondary: '#e10600',
+        helmet: '#f8fafc',
+        visor: '#00f0ff',
+        number: '1',
+        drs: kmh > 285,
+        rainLight: (Date.now() % 400 < 200)
       });
-
-      // Rear Left & Rear Right
-      [-1, 1].forEach((side) => {
-        const wy = side * 14;
-        ctx.fillRect(-18, wy - wheelW / 2, wheelL + 2, wheelW + 1);
-        ctx.strokeRect(-18, wy - wheelW / 2, wheelL + 2, wheelW + 1);
-      });
-
-      // 3. Carbon Fiber Chassis & Livery (Cyan / Black / Red)
-      // Main nosecone & tub
-      ctx.fillStyle = '#0f172a'; // Carbon
-      ctx.beginPath();
-      ctx.moveTo(22, 0);       // Nose tip
-      ctx.lineTo(8, -5);       // Front bulkhead
-      ctx.lineTo(-4, -9);      // Sidepod left
-      ctx.lineTo(-20, -9);     // Engine cover left
-      ctx.lineTo(-24, -4);     // Rear crash structure
-      ctx.lineTo(-24, 4);
-      ctx.lineTo(-20, 9);
-      ctx.lineTo(-4, 9);
-      ctx.lineTo(8, 5);
-      ctx.closePath();
-      ctx.fill();
-      ctx.strokeStyle = 'rgba(0, 240, 255, 0.4)';
-      ctx.lineWidth = 1;
-      ctx.stroke();
-
-      // Cyan livery accent stripe
-      ctx.fillStyle = '#00f0ff';
-      ctx.beginPath();
-      ctx.moveTo(20, 0);
-      ctx.lineTo(4, -2.5);
-      ctx.lineTo(-14, -2.5);
-      ctx.lineTo(-14, 2.5);
-      ctx.lineTo(4, 2.5);
-      ctx.closePath();
-      ctx.fill();
-
-      // F1 Red cockpit halo & rear accent
-      ctx.fillStyle = '#e10600';
-      ctx.fillRect(-6, -3, 6, 6);
-
-      // Driver Helmet (Gloss White / Cyan Visor)
-      ctx.fillStyle = '#f8fafc';
-      ctx.beginPath();
-      ctx.arc(-2, 0, 3, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = '#00f0ff';
-      ctx.fillRect(-1, -1.5, 2.5, 3);
-
-      // Front Wing Assembly
-      ctx.fillStyle = '#00f0ff';
-      ctx.fillRect(18, -14, 4, 28);
-      ctx.fillStyle = '#e10600';
-      ctx.fillRect(21, -15, 2, 3);
-      ctx.fillRect(21, 12, 2, 3);
-
-      // Rear Wing Assembly with DRS Flap
-      ctx.fillStyle = '#0f172a';
-      ctx.fillRect(-24, -13, 5, 26);
-      ctx.fillStyle = '#00f0ff';
-      ctx.fillRect(-22, -12, 2, 24);
-
-      // Rear Red Rain Safety LED (pulsing when active)
-      ctx.fillStyle = (Date.now() % 400 < 200) ? '#ff0033' : '#660011';
-      ctx.fillRect(-25, -1.5, 2, 3);
 
       // (NOTE: Strict adherence to prompt - ZERO headlights are drawn!)
       ctx.restore();
