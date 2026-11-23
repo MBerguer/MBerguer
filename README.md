@@ -19,13 +19,11 @@
 
 ---
 
-### 🕹️ 16-BIT TRACK TELEMETRY // REAL-TIME ARCADE
-
 <!-- 16-BIT CONTINUOUS FORWARD RACE ARCADE (CLICK TO DRIVE IN BROWSER) -->
 <div align="center">
 
 <a href="https://mberguer.github.io" target="_blank">
-  <img src="https://raw.githubusercontent.com/MBerguer/MBerguer/main/assets/tincho-gp-arcade.svg?v=4" width="100%" alt="16-Bit Track Telemetry Simulator" />
+  <img src="https://raw.githubusercontent.com/MBerguer/MBerguer/main/assets/tincho-gp-arcade.svg?v=5" width="100%" alt="16-Bit Track Telemetry Simulator" />
 </a>
 
 <p align="center">
