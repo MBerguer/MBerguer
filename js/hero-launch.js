@@ -132,11 +132,14 @@
     }
 
     // Unified single driver: GSAP ScrollTrigger if available, else native scroll listener
+    const getGantryScrollDist = () => (window.innerWidth <= 900 ? 130 : 500);
+
     if (window.ScrollTrigger && window.gsap) {
       window.ScrollTrigger.create({
         trigger: '#hero-section',
         start: 'top top',
-        end: '+=500',
+        end: () => `+=${getGantryScrollDist()}`,
+        invalidateOnRefresh: true,
         pin: false,
         onUpdate: (self) => {
           updateGantry(self.progress);
@@ -147,7 +150,7 @@
     } else {
       function onScrollFallback() {
         const scrollY = window.scrollY || document.documentElement.scrollTop || 0;
-        const p = Math.min(1.0, scrollY / 500);
+        const p = Math.min(1.0, scrollY / getGantryScrollDist());
         updateGantry(p);
       }
       window.addEventListener('scroll', onScrollFallback, { passive: true });

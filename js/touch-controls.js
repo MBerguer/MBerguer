@@ -34,6 +34,7 @@
      */
     initAutoDetect() {
       const detect = () => {
+        if (window.innerWidth <= 900) return;
         this.isTouchDevice = true;
         if (this.container) {
           this.container.classList.add('touch-active');
@@ -43,8 +44,8 @@
 
       window.addEventListener('touchstart', detect, { passive: true, once: true });
 
-      // Check media query for coarse pointer
-      if (window.matchMedia && window.matchMedia('(pointer: coarse)').matches) {
+      // Check media query for coarse pointer (only on viewports > 900px where Free-Drive is enabled)
+      if (window.innerWidth > 900 && window.matchMedia && window.matchMedia('(pointer: coarse)').matches) {
         this.isTouchDevice = true;
         if (this.container) {
           this.container.classList.add('touch-active');

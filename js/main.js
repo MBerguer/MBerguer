@@ -236,11 +236,11 @@
     set currentMode(m) { currentMode = m; }
   };
 
-  // 7. Default to Free-Drive mode on initial load (Auto-Pilot scroll suggested via emerging bubble)
+  // 7. Default to Free-Drive mode on desktop (> 900px); keep mobile in smooth scroll-only mode
   if (window.ScrollyCar && typeof window.ScrollyCar.update === 'function') {
     window.ScrollyCar.update(0.016);
   }
-  if (window.FreeDriveManager && typeof window.FreeDriveManager.enterFreeDrive === 'function') {
+  if (window.innerWidth > 900 && window.FreeDriveManager && typeof window.FreeDriveManager.enterFreeDrive === 'function') {
     window.FreeDriveManager.enterFreeDrive();
   }
 })();

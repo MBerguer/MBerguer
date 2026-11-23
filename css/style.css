@@ -724,24 +724,63 @@ body {
   display: flex;
 }
 
-@media (max-width: 768px) {
-  #mobile-controls {
-    display: flex;
+@media (max-width: 900px) {
+  #top-bar {
+    height: 54px;
+    padding: 0 12px;
+    gap: 8px;
   }
-  #controls-hint {
-    display: none;
+  .brand-section {
+    gap: 8px;
+    min-width: 0;
   }
-  #timing-hud {
-    display: none;
+  .brand-badge {
+    font-size: 9px;
+    padding: 3px 7px;
+    letter-spacing: 1px;
+    flex-shrink: 0;
+  }
+  .brand-title {
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .top-actions {
+    gap: 6px;
+    flex-shrink: 0;
+  }
+  .btn-telemetry {
+    padding: 5px 9px;
+    font-size: 10px;
+    gap: 4px;
+    white-space: nowrap;
+    line-height: 1.1;
+  }
+  #btn-toggle-freedrive,
+  #minimap-container,
+  #mobile-controls,
+  #autopilot-bubble,
+  #freedrive-banner,
+  #controls-hint,
+  #timing-hud,
+  #project-drawer {
+    display: none !important;
+  }
+  #scrollytelling-track {
+    padding-top: 54px;
   }
   #cockpit-hud {
-    bottom: 90px;
+    bottom: 14px;
     left: 14px;
-    min-width: 170px;
-    padding: 10px 14px;
+    min-width: 155px;
+    padding: 8px 12px;
+  }
+  .telemetry-meta {
+    gap: 10px;
   }
   .speed-value {
-    font-size: 34px;
+    font-size: 28px;
   }
 }
 

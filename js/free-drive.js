@@ -197,9 +197,24 @@
           }
         });
       }
+
+      // Mobile viewports (<= 900px) are scroll-only; exit Free-Drive on resize down
+      window.addEventListener('resize', () => {
+        if (self.isActive && self.isMobileViewport()) {
+          self.exitFreeDrive();
+        }
+      }, { passive: true });
+    }
+
+    isMobileViewport() {
+      return window.innerWidth <= 900;
     }
 
     toggleFreeDrive() {
+      if (this.isMobileViewport()) {
+        if (this.isActive) this.exitFreeDrive();
+        return;
+      }
       if (this.isActive) {
         this.exitFreeDrive();
       } else {
@@ -208,7 +223,7 @@
     }
 
     enterFreeDrive() {
-      if (this.isActive) return;
+      if (this.isActive || this.isMobileViewport()) return;
       this.isActive = true;
 
       this.spawnGraceActive = true;
