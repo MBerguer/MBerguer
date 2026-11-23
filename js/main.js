@@ -10,7 +10,7 @@
   const telemetry = window.telemetrySystem;
 
   // Player Kart (Tincho #1 - Cyan & Carbon)
-  const kart = new window.Kart(300, 720, {
+  const kart = new window.Kart(300, 600, {
     number: '1',
     primaryColor: '#00f0ff',
     secondaryColor: '#e10600',

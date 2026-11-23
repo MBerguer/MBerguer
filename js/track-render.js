@@ -159,9 +159,9 @@
         if (i === 0) ctx.moveTo(pt.x, pt.y);
         else ctx.lineTo(pt.x, pt.y);
       }
-      ctx.strokeStyle = '#06b6d4';
+      ctx.strokeStyle = '#fbbf24';
       ctx.lineWidth = 2.5;
-      ctx.shadowColor = '#06b6d4';
+      ctx.shadowColor = '#f59e0b';
       ctx.shadowBlur = 6;
       ctx.setLineDash([12, 12]);
       ctx.stroke();
@@ -199,6 +199,16 @@
         ctx.shadowColor = tooth ? colActive : 'rgba(255,255,255,0.4)';
         ctx.shadowBlur = tooth ? 8 : 4;
 
+        // Local turn radius from heading change over the segment arc length
+        let dA = sB.angle - sA.angle;
+        while (dA > Math.PI) dA -= Math.PI * 2;
+        while (dA < -Math.PI) dA += Math.PI * 2;
+        const ds = Math.hypot(sB.center.x - sA.center.x, sB.center.y - sA.center.y) || 1;
+        const kappa = dA / ds; // >0 turns toward +normal (left kerb side is inner)
+        const innerLimit = 1 / (this.geometry.trackWidth / 2 + kerbWidth + 4);
+        const skipLeft = kappa > innerLimit;
+        const skipRight = -kappa > innerLimit;
+
         // Left Kerb
         const lx1 = sA.left.x, ly1 = sA.left.y;
         const lx2 = sB.left.x, ly2 = sB.left.y;
@@ -208,7 +218,7 @@
         const lky1 = ly1 + sA.normal.y * kerbWidth;
 
         // Prevent self-intersection / triangular spikes on tight inside curves
-        if ((lx2 - lx1) * (lkx2 - lkx1) + (ly2 - ly1) * (lky2 - lky1) > 0) {
+        if (!skipLeft && (lx2 - lx1) * (lkx2 - lkx1) + (ly2 - ly1) * (lky2 - lky1) > 0) {
           ctx.fillStyle = tooth ? colActive : colWhite;
           ctx.beginPath();
           ctx.moveTo(lx1, ly1);
@@ -227,7 +237,7 @@
         const rkx1 = rx1 - sA.normal.x * kerbWidth;
         const rky1 = ry1 - sA.normal.y * kerbWidth;
 
-        if ((rx2 - rx1) * (rkx2 - rkx1) + (ry2 - ry1) * (rky2 - rky1) > 0) {
+        if (!skipRight && (rx2 - rx1) * (rkx2 - rkx1) + (ry2 - ry1) * (rky2 - rky1) > 0) {
           ctx.fillStyle = tooth ? colActive : colWhite;
           ctx.beginPath();
           ctx.moveTo(rx1, ry1);
@@ -250,48 +260,52 @@
       if (!this.geometry) return;
       ctx.save();
 
-      // Draw P1, P2, P3 starting grid slots at beginning of lap (progress 0.005 to 0.04)
+      // Staggered F1 grid BEHIND the start/finish line (P1 is nearest the line).
+      // P1 box is centred on progress 0, where the car starts; P2/P3 are 79px apart behind it.
       const gridSlots = [
-        { t: 0.012, pole: 'P1', offsetSide: 1 },
-        { t: 0.024, pole: 'P2', offsetSide: -1 },
-        { t: 0.036, pole: 'P3', offsetSide: 1 }
+        { t: 0.0, pole: 'P1', offsetSide: 1 },
+        { t: 0.97, pole: 'P2', offsetSide: -1 },
+        { t: 0.94, pole: 'P3', offsetSide: 1 }
       ];
+      const SLOT_OFFSET = 16;  // lateral stagger from centreline (px)
+      const HALF_LEN = 34;     // box half length
+      const HALF_WID = 19;     // box half width
+      const SIDE_LEN = 22;     // length of the side ticks (box is open at the rear)
 
       gridSlots.forEach((slot) => {
         const pt = this.geometry.getPointAtProgress(slot.t);
         const nx = -pt.tangentY;
         const ny = pt.tangentX;
-        const cx = pt.x + nx * (slot.offsetSide * 28);
-        const cy = pt.y + ny * (slot.offsetSide * 28);
+        const cx = pt.x + nx * (slot.offsetSide * SLOT_OFFSET);
+        const cy = pt.y + ny * (slot.offsetSide * SLOT_OFFSET);
 
         ctx.save();
         ctx.translate(cx, cy);
         ctx.rotate(pt.angle);
 
-        // Open bracket starting box
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.85)';
-        ctx.lineWidth = 2.5;
+        // +x is the driving direction: closed at the FRONT, open at the rear
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
+        ctx.lineWidth = 2.2;
+        ctx.lineCap = 'butt';
         ctx.beginPath();
-        // Closed at the FRONT (+x = driving direction), open at the rear
-        ctx.moveTo(16, -14);
-        ctx.lineTo(16, 14);
-        ctx.lineTo(6, 14);
-        ctx.moveTo(16, -14);
-        ctx.lineTo(6, -14);
+        ctx.moveTo(HALF_LEN - SIDE_LEN, -HALF_WID);
+        ctx.lineTo(HALF_LEN, -HALF_WID);
+        ctx.lineTo(HALF_LEN, HALF_WID);
+        ctx.lineTo(HALF_LEN - SIDE_LEN, HALF_WID);
         ctx.stroke();
 
-        // Pole label
-        ctx.fillStyle = slot.pole === 'P1' ? '#00f0ff' : '#ffffff';
+        // Pole label inside the box, rear of the car position
+        ctx.fillStyle = slot.pole === 'P1' ? '#fbbf24' : '#ffffff';
         ctx.font = 'bold 9px monospace';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText(slot.pole, -6, 0);
+        ctx.fillText(slot.pole, -HALF_LEN + 8, 0);
 
         ctx.restore();
       });
 
-      // Finish / Start Line (checkered strip across track)
-      const finishPt = this.geometry.getPointAtProgress(0.002);
+      // Start / Finish line (checkered strip) just ahead of the P1 box
+      const finishPt = this.geometry.getPointAtProgress(0.02);
       const halfW = this.geometry.trackWidth / 2;
       const fnx = -finishPt.tangentY;
       const fny = finishPt.tangentX;

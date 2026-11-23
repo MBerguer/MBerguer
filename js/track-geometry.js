@@ -10,7 +10,7 @@
 
   // Base waypoint definitions forming the closed Grand Prix circuit loop
   const WAYPOINTS = [
-    { x: 300, y: 750, name: 'Main Straight / Starting Grid' },
+    { x: 300, y: 600, name: 'Main Straight / Starting Grid' },
     { x: 300, y: 400, name: 'Turn 1 Approach' },
     { x: 420, y: 220, name: 'Sector 1: tsp-light-panel (FIA 3504)' },
     { x: 620, y: 180, name: 'Curva Grande High-Speed Arc' },
@@ -18,10 +18,12 @@
     { x: 980, y: 380, name: 'Sector 2: Abuse 2026 Raytracing Tunnel' },
     { x: 1100, y: 620, name: 'Tunnel Apex' },
     { x: 980, y: 840, name: 'Sector 3: alloy-zksync Turbo Straight' },
-    { x: 740, y: 850, name: 'Braking Zone' },
-    { x: 560, y: 720, name: 'Sector 4: tesis-futbol Chicane Apex' },
-    { x: 440, y: 830, name: 'Final Chicane & Parabolica' },
-    { x: 320, y: 865, name: 'Hook onto Main Straight' }
+    { x: 756, y: 848, name: 'Braking Zone' },
+    { x: 563, y: 748, name: 'Sector 4: tesis-futbol Chicane Apex' },
+    { x: 458, y: 824, name: 'Final Chicane Exit' },
+    { x: 389, y: 873, name: 'Parabolica Entry' },
+    { x: 336, y: 864, name: 'Parabolica Apex' },
+    { x: 300, y: 807, name: 'Hook onto Main Straight' }
   ];
 
   class TrackGeometry {

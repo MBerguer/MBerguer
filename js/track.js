@@ -5,7 +5,7 @@ class Track {
   constructor() {
     // Waypoints forming a high-speed technical circuit with chicanes, hairpins and straights
     this.centerline = [
-      { x: 300, y: 750 },  // Main Straight / Starting Grid
+      { x: 300, y: 600 },  // Main Straight / Starting Grid
       { x: 300, y: 400 },  // Turn 1 Approach
       { x: 420, y: 220 },  // Sector 1: FIA Light Panels (tsp-light-panel)
       { x: 620, y: 180 },  // Curva Grande High-Speed Arc
@@ -13,10 +13,12 @@ class Track {
       { x: 980, y: 380 },  // Sector 2: Abuse 2026 Raytracing Tunnel
       { x: 1100, y: 620 }, // Tunnel Apex
       { x: 980, y: 840 },  // Sector 3: alloy-zksync Turbo Straight
-      { x: 740, y: 850 },  // Braking Zone
-      { x: 560, y: 720 },  // Sector 4: tesis-futbol Chicane Apex
-      { x: 440, y: 830 },  // Final Chicane & Parabolica
-      { x: 320, y: 865 }   // Hook onto Main Straight
+      { x: 756, y: 848 },  // Braking Zone
+      { x: 563, y: 748 },  // Sector 4: tesis-futbol Chicane Apex
+      { x: 458, y: 824 },  // Final Chicane Exit
+      { x: 389, y: 873 },  // Parabolica Entry
+      { x: 336, y: 864 },  // Parabolica Apex
+      { x: 300, y: 807 }   // Hook onto Main Straight
     ];
 
     this.trackWidth = 110;
@@ -62,8 +64,8 @@ class Track {
         sector: 'SECTOR 04',
         title: 'tesis-futbol',
         subtitle: 'Predicción de Comportamiento y Trayectorias bajo Incertidumbre (UdelaR)',
-        x: 550,
-        y: 650,
+        x: 560,
+        y: 705,
         radius: 85,
         color: '#ffb800',
         active: false

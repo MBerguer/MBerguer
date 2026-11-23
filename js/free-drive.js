@@ -67,8 +67,8 @@
       sector: 'SECTOR 04',
       title: 'tesis-futbol (MSc UdelaR)',
       subtitle: 'State Estimation & Trajectory Prediction under Uncertainty',
-      x: 550,
-      y: 650,
+      x: 560,
+      y: 705,
       radius: 90,
       color: '#f59e0b',
       specs: [
@@ -114,7 +114,7 @@
       this.activeCheckpointId = null;
       this.spawnGraceActive = false;
       this.spawnX = 300;
-      this.spawnY = 750;
+      this.spawnY = 600;
 
       this.initEvents();
       this.initCanvasRender();
@@ -166,7 +166,7 @@
       this.spawnGraceActive = true;
       const k = window.appEngine && window.appEngine.kart;
       this.spawnX = k ? k.x : 300;
-      this.spawnY = k ? k.y : 750;
+      this.spawnY = k ? k.y : 600;
       this.activeCheckpointId = null;
 
       if (window.MotionBridge && typeof window.MotionBridge.pause === 'function') {
@@ -245,7 +245,7 @@
       if (!this.isActive) return;
 
       if (this.spawnGraceActive) {
-        const spawnDist = Math.hypot(kartX - (this.spawnX || 300), kartY - (this.spawnY || 750));
+        const spawnDist = Math.hypot(kartX - (this.spawnX || 300), kartY - (this.spawnY || 600));
         if (spawnDist > 110) {
           this.spawnGraceActive = false;
         } else {

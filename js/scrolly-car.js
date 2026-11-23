@@ -16,7 +16,7 @@
       this.targetProgress = 0;
       this.currentProgress = 0;
       this.x = 300;
-      this.y = 750;
+      this.y = 600;
       this.angle = -Math.PI / 2;
       this.targetAngle = -Math.PI / 2;
       this.speed = 0; // km/h
@@ -85,8 +85,11 @@
       // Sample geometry at interpolated progress
       const pt = this.geometry.getPointAtProgress(this.currentProgress);
 
-      this.x = pt.x;
-      this.y = pt.y;
+      // Start inside the staggered P1 grid box, then merge onto the racing line
+      const gridBlend = Math.max(0, 1 - this.currentProgress / 0.045);
+      const lateral = 16 * gridBlend * gridBlend * (3 - 2 * gridBlend);
+      this.x = pt.x + (-pt.tangentY) * lateral;
+      this.y = pt.y + pt.tangentX * lateral;
 
       // Calculate heading angle with Math.atan2
       this.targetAngle = Math.atan2(pt.tangentY, pt.tangentX);
