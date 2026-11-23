@@ -141,11 +141,6 @@ class Kart {
       this.driftFactor = Math.max(this.driftFactor, isDrifting ? 0.8 : 0.4);
       this.addSkidMarks();
       this.emitSmoke();
-      if (!this.isAi && window.soundEngine) {
-        window.soundEngine.updateSkid(this.driftFactor);
-      }
-    } else if (!this.isAi && window.soundEngine) {
-      window.soundEngine.updateSkid(0);
     }
 
     // 7. Update Particles
@@ -223,10 +218,6 @@ class Kart {
     const accelKmh = (this.speed - this.prevSpeed) / dt;
     this.gForce = Math.abs((accelKmh / 9.81) * 0.05) + (this.driftFactor * 1.8);
     this.prevSpeed = this.speed;
-
-    if (window.soundEngine) {
-      window.soundEngine.updateEngine(this.rpm / 13500, kmh);
-    }
   }
 
   draw(ctx) {

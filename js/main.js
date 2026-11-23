@@ -138,15 +138,6 @@
     });
   }
 
-  // Sound Toggle - Protected against null elements
-  const btnSound = document.getElementById('btn-sound');
-  if (btnSound && window.soundEngine && typeof window.soundEngine.toggleMute === 'function') {
-    btnSound.addEventListener('click', () => {
-      const isAudible = window.soundEngine.toggleMute();
-      btnSound.textContent = isAudible ? '🔊' : '🔇';
-    });
-  }
-
   // Close Drawer Button - Protected against null elements
   const btnCloseDrawer = document.getElementById('btn-close-drawer');
   if (btnCloseDrawer && telemetry && typeof telemetry.closeDrawer === 'function') {
@@ -234,7 +225,7 @@
     requestAnimationFrame(fallbackLoop);
   }
 
-  // 6. Export appEngine to window for FreeDriveManager, TouchControls & AudioDSP coupling
+  // 6. Export appEngine to window for FreeDriveManager & TouchControls coupling
   window.appEngine = {
     kart: kart,
     input: input,
@@ -244,4 +235,12 @@
     get currentMode() { return currentMode; },
     set currentMode(m) { currentMode = m; }
   };
+
+  // 7. Default to Free-Drive mode on initial load (Auto-Pilot scroll suggested via emerging bubble)
+  if (window.ScrollyCar && typeof window.ScrollyCar.update === 'function') {
+    window.ScrollyCar.update(0.016);
+  }
+  if (window.FreeDriveManager && typeof window.FreeDriveManager.enterFreeDrive === 'function') {
+    window.FreeDriveManager.enterFreeDrive();
+  }
 })();

@@ -177,6 +177,26 @@
           }
         });
       });
+
+      // Emerging Auto-Pilot Scroll Suggestion Bubble
+      this.autopilotBubble = document.getElementById('autopilot-bubble');
+      this.bubbleDismissed = false;
+      const btnSwitchAutopilot = document.getElementById('btn-switch-autopilot');
+      const btnDismissBubble = document.getElementById('btn-dismiss-autopilot-bubble');
+
+      if (btnSwitchAutopilot) {
+        btnSwitchAutopilot.addEventListener('click', () => {
+          self.exitFreeDrive();
+        });
+      }
+      if (btnDismissBubble) {
+        btnDismissBubble.addEventListener('click', () => {
+          self.bubbleDismissed = true;
+          if (self.autopilotBubble) {
+            self.autopilotBubble.classList.remove('visible');
+          }
+        });
+      }
     }
 
     toggleFreeDrive() {
@@ -220,15 +240,19 @@
 
       if (this.btnToggle) {
         this.btnToggle.classList.add('active');
-        this.btnToggle.innerHTML = '<span>EXIT FREE-DRIVE (T)</span> ✕';
+        this.btnToggle.innerHTML = '<span>AUTO-PILOT / SCROLL (T)</span> 📜';
       }
 
       if (this.banner) {
         this.banner.classList.add('visible');
       }
 
-      if (window.EngineAudio && typeof window.EngineAudio.unmute === 'function') {
-        window.EngineAudio.unmute();
+      if (this.autopilotBubble && !this.bubbleDismissed) {
+        setTimeout(() => {
+          if (this.isActive && !this.bubbleDismissed && this.autopilotBubble) {
+            this.autopilotBubble.classList.add('visible');
+          }
+        }, 650);
       }
     }
 
@@ -236,6 +260,10 @@
       if (!this.isActive) return;
       this.isActive = false;
       this.spawnGraceActive = false;
+
+      if (this.autopilotBubble) {
+        this.autopilotBubble.classList.remove('visible');
+      }
 
       if (window.MotionBridge && typeof window.MotionBridge.resume === 'function') {
         window.MotionBridge.resume();

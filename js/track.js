@@ -105,7 +105,6 @@ class Track {
       if (d < cp.radius) {
         if (!cp.active) {
           cp.active = true;
-          if (window.soundEngine) window.soundEngine.playCheckpointChime();
           if (onTriggerCheckpoint) onTriggerCheckpoint(cp);
         }
       } else if (d > cp.radius * 1.5) {

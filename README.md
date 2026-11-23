@@ -27,7 +27,7 @@
 </a>
 
 <p align="center">
-  <sub>👆 <b>Haz click en el simulador 16-bit para tomar el volante en tiempo real (60 FPS + audio de motor sintetizado).</b></sub><br/>
+  <sub>👆 <b>Haz click en el simulador 16-bit para tomar el volante en tiempo real (60 FPS).</b></sub><br/>
   <sub>Controles: <code>W</code> <code>A</code> <code>S</code> <code>D</code> / Flechas para pilotar &bull; <code>ESPACIO</code> / <code>SHIFT</code> para derrapar en las curvas.</sub>
 </p>
 

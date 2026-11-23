@@ -293,28 +293,21 @@ def v_task_020():
     return True, "TASK-020: Touch controls verified"
 
 def v_task_021():
-    """TASK-021: Web Audio Context Lifecycle & Subtractive F1 V6 Synthesis"""
-    ok, err = run_node_check("js/audio-dsp.js")
-    if not ok:
-        return False, err
-    js = read_file("js/audio-dsp.js")
-    if "AudioContext" not in js and "webkitAudioContext" not in js:
-        return False, "Missing AudioContext in js/audio-dsp.js"
-    if "sawtooth" not in js:
-        return False, "Missing sawtooth oscillators in js/audio-dsp.js"
-    return True, "TASK-021: Web Audio engine verified"
+    """TASK-021: Audio Engine Decommissioned & Silent Telemetry Verified"""
+    html = read_file("index.html")
+    if "btn-sound" in html or "audio-dsp.js" in html or "js/engine.js" in html:
+        return False, "index.html still references removed engine audio"
+    return True, "TASK-021: Engine audio cleanly removed"
 
 def v_task_022():
-    """TASK-022: RPM Modulation, Rev-Limiter AM Stutter & Tire Squeal"""
-    ok, err = run_node_check("js/audio-dsp.js")
-    if not ok:
-        return False, err
-    js = read_file("js/audio-dsp.js")
-    if "setRpm" not in js:
-        return False, "Missing setRpm method in js/audio-dsp.js"
-    if "localStorage" not in js:
-        return False, "Missing localStorage audio mute sync in js/audio-dsp.js"
-    return True, "TASK-022: Dynamic DSP modulation verified"
+    """TASK-022: Default Free-Drive Mode & Auto-Pilot Suggestion Bubble Verified"""
+    html = read_file("index.html")
+    js = read_file("js/main.js")
+    if "autopilot-bubble" not in html:
+        return False, "index.html missing #autopilot-bubble"
+    if "enterFreeDrive" not in js:
+        return False, "js/main.js missing default enterFreeDrive() startup"
+    return True, "TASK-022: Default Free-Drive & Auto-Pilot bubble verified"
 
 def v_task_023():
     """TASK-023: Zero CLS, WebKit Polish & Critical Performance Pass"""

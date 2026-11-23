@@ -464,7 +464,6 @@
         <button id="btn-toggle-freedrive" class="btn-telemetry" style="background: rgba(0, 240, 255, 0.15); border-color: var(--accent-cyan); color: var(--accent-cyan);">
           <span>FREE-DRIVE (T)</span> 🕹️
         </button>
-        <button id="btn-sound" class="btn-sound" title="Toggle Engine Audio">🔇</button>
         <a href="https://github.com/MBerguer" target="_blank" class="btn-telemetry" style="text-decoration:none;">
           <span>GitHub ↗</span>
         </a>
@@ -511,6 +510,16 @@
       <div><span class="key-badge">W</span> <span class="key-badge">A</span> <span class="key-badge">S</span> <span class="key-badge">D</span> / Arrows: Drive</div>
       <div><span class="key-badge">SPACE</span> / <span class="key-badge">SHIFT</span>: Drift &amp; Skid</div>
       <div>Drive through <b style="color:var(--accent-cyan);">Hologram Sectors</b> to inspect projects</div>
+    </div>
+
+    <!-- EMERGING BUBBLE: AUTO-PILOT SCROLL SUGGESTION -->
+    <div id="autopilot-bubble" class="autopilot-bubble hud-cluster" role="status" aria-live="polite">
+      <span class="autopilot-bubble-icon">💡</span>
+      <span class="autopilot-bubble-text">¿Prefieres leer haciendo scroll?</span>
+      <button type="button" id="btn-switch-autopilot" class="autopilot-bubble-btn">
+        AUTO-PILOT (T) 📜
+      </button>
+      <button type="button" id="btn-dismiss-autopilot-bubble" class="autopilot-bubble-close" title="Cerrar sugerencia" aria-label="Cerrar sugerencia">✕</button>
     </div>
 
     <!-- MOBILE TOUCH CONTROLS -->
@@ -603,10 +612,8 @@
   <script src="js/widgets/latex-widget.js"></script>
   <script src="js/free-drive.js"></script>
   <script src="js/touch-controls.js"></script>
-  <script src="js/audio-dsp.js"></script>
 
   <!-- SCRIPTS -->
-  <script src="js/engine.js"></script>
   <script src="js/kart.js"></script>
   <script src="js/track.js"></script>
   <script src="js/telemetry.js"></script>
