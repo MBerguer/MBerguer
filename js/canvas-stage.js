@@ -26,8 +26,8 @@
 
     // 1. High-DPI Viewport Resizing
     function resize() {
-      // Cap DPR to 2 for performance on ultra-dense displays (e.g. Retina / 4K)
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      // Cap DPR to 1.25 for peak 60 FPS performance on ultra-dense displays (e.g. Retina / 4K)
+      dpr = Math.min(window.devicePixelRatio || 1, 1.25);
 
       width = window.innerWidth;
       height = window.innerHeight;
@@ -40,9 +40,9 @@
       ctx.setTransform(1, 0, 0, 1, 0, 0); // Reset transform before scaling
       ctx.scale(dpr, dpr);
 
-      // Disable image smoothing for crisp pixel-art / technical lines if desired, or keep smooth
+      // Fast image smoothing quality to eliminate bicubic re-sampling overhead
       ctx.imageSmoothingEnabled = true;
-      ctx.imageSmoothingQuality = 'high';
+      ctx.imageSmoothingQuality = 'low';
 
       // Notify resize listeners
       resizeCallbacks.forEach((cb) => {

@@ -8,7 +8,7 @@
   'use strict';
 
   class SkidmarksBuffer {
-    constructor(width = 2000, height = 2000) {
+    constructor(width = 1350, height = 1050) {
       this.width = width;
       this.height = height;
 
@@ -21,6 +21,7 @@
       this.lastLeft = null;
       this.lastRight = null;
       this.decayCounter = 0;
+      this.hasMarks = false;
     }
 
     /**
@@ -45,6 +46,7 @@
       this.ctx.lineCap = 'round';
 
       if (this.lastLeft && this.lastRight) {
+        this.hasMarks = true;
         this.ctx.beginPath();
         this.ctx.moveTo(this.lastLeft.x, this.lastLeft.y);
         this.ctx.lineTo(rearLeft.x, rearLeft.y);
@@ -72,7 +74,7 @@
      * Blits the offscreen skidmark layer onto the main canvas
      */
     render(ctx) {
-      if (!this.offCanvas || !ctx) return;
+      if (!this.hasMarks || !this.offCanvas || !ctx) return;
       ctx.drawImage(this.offCanvas, 0, 0);
 
       // Very slow subtle fade/decay over time (every 120 frames)
@@ -90,11 +92,12 @@
       if (this.ctx) {
         this.ctx.clearRect(0, 0, this.width, this.height);
       }
+      this.hasMarks = false;
       this.breakMark();
     }
   }
 
-  const defaultBuffer = new SkidmarksBuffer(2400, 2400);
+  const defaultBuffer = new SkidmarksBuffer(1350, 1050);
   window.SkidmarksBuffer = defaultBuffer;
   window.SkidmarksBufferClass = SkidmarksBuffer;
 

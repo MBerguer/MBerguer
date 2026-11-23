@@ -20,6 +20,14 @@
     let targetRpm = 800;
     let lateralG = 0;
 
+    // Dirty-checking cache to eliminate layout recalculations
+    let lastSpeedStr = '';
+    let lastGearStr = '';
+    let lastRpmStr = '';
+    let lastWidthStr = '';
+    let lastGStr = '';
+    let lastRpmBg = '';
+
     /**
      * Directly set target speed (0 - 350 KM/H)
      */
@@ -45,8 +53,10 @@
       }
 
       // Update Speedometer UI
-      if (speedNum) {
-        speedNum.textContent = String(Math.round(currentSpeed));
+      const speedStr = String(Math.round(currentSpeed));
+      if (speedNum && speedStr !== lastSpeedStr) {
+        speedNum.textContent = speedStr;
+        lastSpeedStr = speedStr;
       }
 
       // Calculate Gear & RPM based on current speed
@@ -79,39 +89,50 @@
       currentRpm += (targetRpm - currentRpm) * Math.min(1, 16 * dt);
 
       // Gear badge
-      if (gearNum) {
-        gearNum.textContent = String(gear);
+      const gearStr = String(gear);
+      if (gearNum && gearStr !== lastGearStr) {
+        gearNum.textContent = gearStr;
+        lastGearStr = gearStr;
       }
 
       // RPM fill and numeric readout
       if (rpmFill) {
         const rpmPercent = Math.min(100, Math.max(0, ((currentRpm - 800) / (13500 - 800)) * 100));
-        rpmFill.style.width = rpmPercent.toFixed(1) + '%';
+        const widthStr = rpmPercent.toFixed(1) + '%';
+        if (widthStr !== lastWidthStr) {
+          rpmFill.style.width = widthStr;
+          lastWidthStr = widthStr;
+        }
 
         // Dynamic LED color gradient
+        let targetBg = '#10b981';
         if (currentRpm > 12200) {
-          // Shift light flash (blue/violet shift flash)
-          rpmFill.style.background = (Date.now() % 160 < 80) ? '#00f0ff' : '#a855f7';
+          targetBg = (Date.now() % 160 < 80) ? '#00f0ff' : '#a855f7';
         } else if (currentRpm > 10500) {
-          // Red zone
-          rpmFill.style.background = 'linear-gradient(90deg, #eab308, #ff0033)';
+          targetBg = 'linear-gradient(90deg, #eab308, #ff0033)';
         } else if (currentRpm > 7500) {
-          // Amber zone
-          rpmFill.style.background = 'linear-gradient(90deg, #10b981, #eab308)';
-        } else {
-          // Green zone
-          rpmFill.style.background = '#10b981';
+          targetBg = 'linear-gradient(90deg, #10b981, #eab308)';
+        }
+        if (targetBg !== lastRpmBg) {
+          rpmFill.style.background = targetBg;
+          lastRpmBg = targetBg;
         }
       }
 
-      if (rpmNum) {
-        rpmNum.textContent = String(Math.round(currentRpm));
+      const rpmStr = String(Math.round(currentRpm));
+      if (rpmNum && rpmStr !== lastRpmStr) {
+        rpmNum.textContent = rpmStr;
+        lastRpmStr = rpmStr;
       }
 
       // Lateral G estimation
       if (gNum) {
         const lateral = (currentSpeed > 50) ? (Math.sin(Date.now() * 0.003) * 2.8 * (currentSpeed / 300)).toFixed(1) : '0.0';
-        gNum.textContent = `${lateral}G`;
+        const gStr = `${lateral}G`;
+        if (gStr !== lastGStr) {
+          gNum.textContent = gStr;
+          lastGStr = gStr;
+        }
       }
     }
 

@@ -17,6 +17,7 @@
       this.flashRateHz = 2.0;
       this.lastToggle = Date.now();
       this.isFlashOn = true;
+      this.needsRedraw = true;
 
       this.cols = 28;
       this.rows = 20;
@@ -33,6 +34,7 @@
 
       const prev = this.currentFlag;
       this.currentFlag = state;
+      this.needsRedraw = true;
 
       const latencyMicros = (Math.random() * 8 + 6).toFixed(1);
       this.logEvent('FLAG_CHANGE', `Transition [${prev}] -> [${state}] committed in ${latencyMicros}μs (axum::ws broadcast)`);
@@ -86,17 +88,22 @@
     render() {
       if (!this.ctx || !this.canvas) return;
 
-      const ctx = this.ctx;
-      const w = this.canvas.width;
-      const h = this.canvas.height;
-
       // Flash timer
       const now = Date.now();
       const period = 1000 / (this.flashRateHz * 2);
+      let flashChanged = false;
       if (now - this.lastToggle > period) {
         this.isFlashOn = !this.isFlashOn;
         this.lastToggle = now;
+        flashChanged = true;
       }
+
+      if (!flashChanged && !this.needsRedraw) return;
+      this.needsRedraw = false;
+
+      const ctx = this.ctx;
+      const w = this.canvas.width;
+      const h = this.canvas.height;
 
       // Background housing
       ctx.fillStyle = '#0a0d14';
@@ -157,13 +164,8 @@
           if (isLit) {
             ctx.fillStyle = ledColor;
             ctx.fill();
-            if (this.isFlashOn || !isFlashing) {
-              ctx.shadowColor = ledColor;
-              ctx.shadowBlur = 4;
-            }
           } else {
             ctx.fillStyle = '#111827';
-            ctx.shadowBlur = 0;
             ctx.fill();
           }
         }

@@ -20,6 +20,7 @@
 
       this.valSigma = document.getElementById('val-sigma-num');
       this.valProb = document.getElementById('val-pass-prob');
+      this.needsRedraw = true;
 
       this.initEvents();
       this.startLoop();
@@ -111,6 +112,7 @@
       if (this.valProb) {
         this.valProb.textContent = `${(adjusted * 100).toFixed(1)}%`;
       }
+      this.needsRedraw = true;
     }
 
     startLoop() {
@@ -123,7 +125,7 @@
     }
 
     render() {
-      if (!this.ctx || !this.canvas) return;
+      if (!this.ctx || !this.canvas || !this.needsRedraw) return;
       const ctx = this.ctx;
       const w = this.canvas.width;
       const h = this.canvas.height;
@@ -273,6 +275,7 @@
       ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
       ctx.font = '9px monospace';
       ctx.fillText(`DRAG #10 | GAUSSIAN KALMAN CONE N(μ, Σ) | σ=${this.sigma.toFixed(1)}`, 20, h - 8);
+      this.needsRedraw = false;
     }
   }
 

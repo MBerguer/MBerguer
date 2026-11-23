@@ -11,6 +11,7 @@
     constructor(geometry = null) {
       this.geometry = geometry || window.TrackGeometry;
       this.asphaltPattern = null;
+      this.bakedCanvas = null;
       this.createAsphaltPattern();
     }
 
@@ -310,12 +311,37 @@
     }
 
     /**
+     * Pre-renders (bakes) the static track ribbon, kerbs, and grid slots into an offscreen canvas
+     */
+    ensureBakedTrack() {
+      if (this.bakedCanvas) return;
+      if (!this.geometry) this.geometry = window.TrackGeometry;
+      if (!this.geometry) return;
+
+      const bCanvas = document.createElement('canvas');
+      bCanvas.width = 1350;
+      bCanvas.height = 1050;
+      const bCtx = bCanvas.getContext('2d');
+
+      this.drawAsphalt(bCtx, { x: 0, y: 0, zoom: 1 });
+      this.drawKerbs(bCtx, { x: 0, y: 0, zoom: 1 });
+      this.drawGridSlots(bCtx);
+
+      this.bakedCanvas = bCanvas;
+    }
+
+    /**
      * Unified render call
      */
     render(ctx, camera) {
-      this.drawAsphalt(ctx, camera);
-      this.drawKerbs(ctx, camera);
-      this.drawGridSlots(ctx);
+      this.ensureBakedTrack();
+      if (this.bakedCanvas) {
+        ctx.drawImage(this.bakedCanvas, 0, 0);
+      } else {
+        this.drawAsphalt(ctx, camera);
+        this.drawKerbs(ctx, camera);
+        this.drawGridSlots(ctx);
+      }
     }
   }
 

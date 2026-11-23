@@ -153,6 +153,8 @@
   }
 
   let passedSector4 = false;
+  let lastMmX = -999;
+  let lastMmY = -999;
 
   // Initial draw of Minimap so it never starts black
   if (telemetry && typeof telemetry.drawMinimap === 'function') {
@@ -203,9 +205,14 @@
           telemetry.drawMinimap(track, kart);
         }
       } else {
-        // Scrollytelling mode: update minimap following ScrollyCar
+        // Scrollytelling mode: update minimap following ScrollyCar with threshold dirty checking
         if (telemetry && typeof telemetry.drawMinimap === 'function' && window.ScrollyCar) {
-          telemetry.drawMinimap(track, window.ScrollyCar);
+          const car = window.ScrollyCar;
+          if (Math.hypot(car.x - lastMmX, car.y - lastMmY) > 1.5) {
+            telemetry.drawMinimap(track, car);
+            lastMmX = car.x;
+            lastMmY = car.y;
+          }
         }
       }
     });

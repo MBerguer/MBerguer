@@ -34,6 +34,16 @@
       this.segments = [];
       this.buildSegments();
 
+      this.isVisible = true;
+      if (typeof IntersectionObserver !== 'undefined' && this.canvas) {
+        this.observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            this.isVisible = entry.isIntersecting;
+          });
+        }, { threshold: 0.05 });
+        this.observer.observe(this.canvas);
+      }
+
       this.initEvents();
       this.startLoop();
     }
@@ -146,6 +156,7 @@
 
     render() {
       if (!this.ctx || !this.canvas) return;
+      if (!this.isVisible || (window.FreeDriveManager && window.FreeDriveManager.isActive)) return;
       const ctx = this.ctx;
       const w = this.canvas.width;
       const h = this.canvas.height;

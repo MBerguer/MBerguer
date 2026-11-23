@@ -15,21 +15,39 @@
 
     let startTime = Date.now();
     let isTimingActive = true;
+    let lastTimerUpdate = 0;
 
-    // 1. Live Lap Timer Ticker (F1 Style MM:SS.mmm)
+    // 1. Live Lap Timer Ticker (F1 Style MM:SS.mmm, throttled to 15 FPS for peak performance)
     function updateTimer() {
       if (!isTimingActive || !lapTimeVal) return;
-      const elapsed = Date.now() - startTime;
-      const minutes = Math.floor(elapsed / 60000);
-      const seconds = Math.floor((elapsed % 60000) / 1000);
-      const centis = Math.floor((elapsed % 1000) / 10);
-      lapTimeVal.textContent =
-        String(minutes).padStart(2, '0') + ':' +
-        String(seconds).padStart(2, '0') + '.' +
-        String(centis).padStart(2, '0');
+      const now = Date.now();
+      if (now - lastTimerUpdate >= 65) {
+        lastTimerUpdate = now;
+        const elapsed = now - startTime;
+        const minutes = Math.floor(elapsed / 60000);
+        const seconds = Math.floor((elapsed % 60000) / 1000);
+        const centis = Math.floor((elapsed % 1000) / 10);
+        lapTimeVal.textContent =
+          String(minutes).padStart(2, '0') + ':' +
+          String(seconds).padStart(2, '0') + '.' +
+          String(centis).padStart(2, '0');
+      }
       requestAnimationFrame(updateTimer);
     }
     requestAnimationFrame(updateTimer);
+
+    // Cached sector elements for zero-query DOM traversal in scroll listener
+    const sections = [
+      { id: '#hero-section', sector: 0, el: document.querySelector('#hero-section') },
+      { id: '#sector-01', sector: 1, el: document.querySelector('#sector-01') },
+      { id: '#sector-02', sector: 2, el: document.querySelector('#sector-02') },
+      { id: '#sector-03', sector: 3, el: document.querySelector('#sector-03') },
+      { id: '#sector-04', sector: 4, el: document.querySelector('#sector-04') },
+      { id: '#sector-05', sector: 5, el: document.querySelector('#sector-05') }
+    ];
+
+    let lastActiveSector = -1;
+    let lastProgressStr = '';
 
     // 2. Scroll Progress Synchronization
     function updateScrubber() {
@@ -37,39 +55,36 @@
       const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
       const progress = maxScroll > 0 ? Math.min(Math.max(scrollY / maxScroll, 0), 1) : 0;
 
-      if (progressBar) {
-        progressBar.style.width = (progress * 100).toFixed(2) + '%';
+      const pStr = (progress * 100).toFixed(1) + '%';
+      if (progressBar && pStr !== lastProgressStr) {
+        progressBar.style.width = pStr;
+        lastProgressStr = pStr;
       }
 
-      // Update active sector pill
-      const sections = [
-        { id: '#hero-section', sector: 0 },
-        { id: '#sector-01', sector: 1 },
-        { id: '#sector-02', sector: 2 },
-        { id: '#sector-03', sector: 3 },
-        { id: '#sector-04', sector: 4 },
-        { id: '#sector-05', sector: 5 }
-      ];
-
       let currentSector = 0;
-      sections.forEach((sec) => {
-        const el = document.querySelector(sec.id);
+      const threshold = window.innerHeight * 0.45;
+      for (let i = 0; i < sections.length; i++) {
+        const sec = sections[i];
+        const el = sec.el || (sec.el = document.querySelector(sec.id));
         if (el) {
           const rect = el.getBoundingClientRect();
-          if (rect.top <= window.innerHeight * 0.45) {
+          if (rect.top <= threshold) {
             currentSector = sec.sector;
           }
         }
-      });
+      }
 
-      sectorPills.forEach((pill) => {
-        const s = parseInt(pill.getAttribute('data-sector') || '0', 10);
-        if (s === currentSector) {
-          pill.classList.add('active');
-        } else {
-          pill.classList.remove('active');
-        }
-      });
+      if (currentSector !== lastActiveSector) {
+        lastActiveSector = currentSector;
+        sectorPills.forEach((pill) => {
+          const s = parseInt(pill.getAttribute('data-sector') || '0', 10);
+          if (s === currentSector) {
+            pill.classList.add('active');
+          } else {
+            pill.classList.remove('active');
+          }
+        });
+      }
     }
 
     window.addEventListener('scroll', updateScrubber, { passive: true });
