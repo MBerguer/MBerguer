@@ -3,7 +3,7 @@
   --bg-surface: rgba(13, 17, 26, 0.88);
   --bg-panel: #0d121d;
   --bg-card: rgba(16, 22, 34, 0.75);
-  --bg-card-glass: rgba(8, 12, 20, 0.75);
+  --bg-card-glass: rgba(8, 12, 20, 0.55);
   --border-card-subtle: rgba(255, 255, 255, 0.08);
   --glow-cyan: 0 0 20px rgba(0, 240, 255, 0.25);
   --glow-f1-red: 0 0 20px rgba(225, 6, 0, 0.3);
@@ -293,19 +293,23 @@ body {
 
 /* Sector & Lap Time - Top Center */
 #timing-hud {
-  top: 76px;
+  position: absolute;
+  top: 8px;
   left: 50%;
   transform: translateX(-50%);
   background: var(--bg-surface);
   backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 8px;
-  padding: 9px 20px;
+  padding: 6px 16px;
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 18px;
   font-family: var(--font-mono);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  z-index: 60;
+  pointer-events: auto;
 }
 
 .timing-item {
@@ -314,17 +318,20 @@ body {
   align-items: center;
 }
 
-.timing-title {
+.timing-title, .timing-label {
   font-size: 9px;
   color: var(--text-muted);
   letter-spacing: 1.5px;
   font-weight: 700;
+  white-space: nowrap;
 }
 
-.timing-val {
+.timing-val, .timing-value {
   font-weight: 800;
   color: #fff;
   font-size: 15px;
+  line-height: 1.1;
+  white-space: nowrap;
 }
 
 /* Controls Hint - Bottom Right */
@@ -359,7 +366,7 @@ body {
    PROJECT TELEMETRY DRAWER (SLIDE-OVER MODAL)
    ============================================================================== */
 #project-drawer {
-  position: absolute;
+  position: fixed;
   top: 60px;
   bottom: 0;
   right: -540px;
@@ -367,15 +374,17 @@ body {
   max-width: 92vw;
   background: rgba(11, 15, 24, 0.96);
   backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   border-left: 1px solid rgba(0, 240, 255, 0.3);
   box-shadow: -15px 0 50px rgba(0, 0, 0, 0.85), 0 0 30px rgba(0, 240, 255, 0.1);
-  z-index: 60;
+  z-index: 85;
   transition: right 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
   flex-direction: column;
 }
 
-#project-drawer.open {
+#project-drawer.open,
+#project-drawer.active {
   right: 0;
 }
 
@@ -830,8 +839,8 @@ body {
 /* Upgraded Bento Glass styling */
 .bento-card {
   background: var(--bg-card-glass);
-  backdrop-filter: blur(14px) saturate(180%);
-  -webkit-backdrop-filter: blur(14px) saturate(180%);
+  backdrop-filter: blur(8px) saturate(160%);
+  -webkit-backdrop-filter: blur(8px) saturate(160%);
   border: 1px solid var(--border-card-subtle);
 }
 
@@ -1049,8 +1058,13 @@ body.freedrive-active #pitwall-hud-overlay {
 /* ==============================================================================
    TASK-023: ZERO CLS & WEBKIT ENGINE HARDENING
    ============================================================================== */
-img, canvas, svg {
+img, svg {
   content-visibility: auto;
+}
+
+#circuit-canvas,
+#minimap-canvas {
+  content-visibility: visible !important;
 }
 
 .console-hero-banner img {

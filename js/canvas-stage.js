@@ -104,6 +104,30 @@
         targetScale = chaseScale;
         targetX = width / 2 - kart.x * chaseScale;
         targetY = height / 2 - kart.y * chaseScale;
+      } else if (window.ScrollyCar) {
+        // Scrollytelling Mode: dynamic lateral framing keeping ScrollyCar in prominent view
+        const car = window.ScrollyCar;
+        const scrollyScale = Math.min(Math.max(width / 1200, 0.72), 1.05);
+        targetScale = scrollyScale;
+
+        // Position car in visible lateral margins beside bento cards when viewport allows
+        if (width >= 1150) {
+          const cardWidth = Math.min(width - 240, 960);
+          const leftGutter = Math.max(70, (width - cardWidth) / 2 - 45);
+          const rightGutter = Math.min(width - 70, (width + cardWidth) / 2 + 45);
+          const desiredScreenX = car.x < 620 ? leftGutter : rightGutter;
+          targetX = desiredScreenX - car.x * scrollyScale;
+        } else {
+          // Narrower viewports: centered overview with gentle lateral tracking
+          const centerOverviewX = (width - 1280 * scrollyScale) / 2;
+          const lateralBias = (car.x < 620 ? 0.08 : -0.08) * width;
+          targetX = centerOverviewX + lateralBias;
+        }
+
+        // Vertical tracking centered around track midpoint with smooth vertical influence
+        const centerY = (height - 960 * scrollyScale) / 2;
+        const verticalBias = (480 - car.y) * 0.25 * scrollyScale;
+        targetY = centerY + verticalBias;
       } else {
         // Scrollytelling Overview: scales and centers the full 1280x960 circuit
         const overviewScale = Math.min(width / 1280, height / 960, 1.0);

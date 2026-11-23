@@ -199,24 +199,43 @@
         ctx.shadowBlur = tooth ? 8 : 4;
 
         // Left Kerb
-        ctx.fillStyle = tooth ? colActive : colWhite;
-        ctx.beginPath();
-        ctx.moveTo(sA.left.x, sA.left.y);
-        ctx.lineTo(sB.left.x, sB.left.y);
-        ctx.lineTo(sB.left.x + sB.normal.x * kerbWidth, sB.left.y + sB.normal.y * kerbWidth);
-        ctx.lineTo(sA.left.x + sA.normal.x * kerbWidth, sA.left.y + sA.normal.y * kerbWidth);
-        ctx.closePath();
-        ctx.fill();
+        const lx1 = sA.left.x, ly1 = sA.left.y;
+        const lx2 = sB.left.x, ly2 = sB.left.y;
+        const lkx2 = lx2 + sB.normal.x * kerbWidth;
+        const lky2 = ly2 + sB.normal.y * kerbWidth;
+        const lkx1 = lx1 + sA.normal.x * kerbWidth;
+        const lky1 = ly1 + sA.normal.y * kerbWidth;
+
+        // Prevent self-intersection / triangular spikes on tight inside curves
+        if ((lx2 - lx1) * (lkx2 - lkx1) + (ly2 - ly1) * (lky2 - lky1) > 0) {
+          ctx.fillStyle = tooth ? colActive : colWhite;
+          ctx.beginPath();
+          ctx.moveTo(lx1, ly1);
+          ctx.lineTo(lx2, ly2);
+          ctx.lineTo(lkx2, lky2);
+          ctx.lineTo(lkx1, lky1);
+          ctx.closePath();
+          ctx.fill();
+        }
 
         // Right Kerb
-        ctx.fillStyle = tooth ? colActive : colWhite;
-        ctx.beginPath();
-        ctx.moveTo(sA.right.x, sA.right.y);
-        ctx.lineTo(sB.right.x, sB.right.y);
-        ctx.lineTo(sB.right.x - sB.normal.x * kerbWidth, sB.right.y - sB.normal.y * kerbWidth);
-        ctx.lineTo(sA.right.x - sA.normal.x * kerbWidth, sA.right.y - sA.normal.y * kerbWidth);
-        ctx.closePath();
-        ctx.fill();
+        const rx1 = sA.right.x, ry1 = sA.right.y;
+        const rx2 = sB.right.x, ry2 = sB.right.y;
+        const rkx2 = rx2 - sB.normal.x * kerbWidth;
+        const rky2 = ry2 - sB.normal.y * kerbWidth;
+        const rkx1 = rx1 - sA.normal.x * kerbWidth;
+        const rky1 = ry1 - sA.normal.y * kerbWidth;
+
+        if ((rx2 - rx1) * (rkx2 - rkx1) + (ry2 - ry1) * (rky2 - rky1) > 0) {
+          ctx.fillStyle = tooth ? colActive : colWhite;
+          ctx.beginPath();
+          ctx.moveTo(rx1, ry1);
+          ctx.lineTo(rx2, ry2);
+          ctx.lineTo(rkx2, rky2);
+          ctx.lineTo(rkx1, rky1);
+          ctx.closePath();
+          ctx.fill();
+        }
       }
 
       ctx.shadowBlur = 0;

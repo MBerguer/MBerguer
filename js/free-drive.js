@@ -112,6 +112,9 @@
 
       this.checkpoints = CHECKPOINTS_DATA;
       this.activeCheckpointId = null;
+      this.spawnGraceActive = false;
+      this.spawnX = 300;
+      this.spawnY = 750;
 
       this.initEvents();
       this.initCanvasRender();
@@ -160,6 +163,12 @@
       if (this.isActive) return;
       this.isActive = true;
 
+      this.spawnGraceActive = true;
+      const k = window.appEngine && window.appEngine.kart;
+      this.spawnX = k ? k.x : 300;
+      this.spawnY = k ? k.y : 750;
+      this.activeCheckpointId = null;
+
       if (window.MotionBridge && typeof window.MotionBridge.pause === 'function') {
         window.MotionBridge.pause();
       } else if (window.appLenis) {
@@ -198,6 +207,7 @@
     exitFreeDrive() {
       if (!this.isActive) return;
       this.isActive = false;
+      this.spawnGraceActive = false;
 
       if (window.MotionBridge && typeof window.MotionBridge.resume === 'function') {
         window.MotionBridge.resume();
@@ -233,6 +243,15 @@
      */
     checkSectorCheckpoints(kartX, kartY) {
       if (!this.isActive) return;
+
+      if (this.spawnGraceActive) {
+        const spawnDist = Math.hypot(kartX - (this.spawnX || 300), kartY - (this.spawnY || 750));
+        if (spawnDist > 110) {
+          this.spawnGraceActive = false;
+        } else {
+          return;
+        }
+      }
 
       for (const cp of this.checkpoints) {
         const dist = Math.hypot(kartX - cp.x, kartY - cp.y);
@@ -283,11 +302,13 @@
       }
 
       this.drawer.classList.add('active');
+      this.drawer.classList.add('open');
     }
 
     closeDrawer() {
       if (this.drawer) {
         this.drawer.classList.remove('active');
+        this.drawer.classList.remove('open');
       }
       this.activeCheckpointId = null;
     }

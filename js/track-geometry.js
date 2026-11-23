@@ -18,14 +18,14 @@
     { x: 980, y: 380, name: 'Sector 2: Abuse 2026 Raytracing Tunnel' },
     { x: 1100, y: 620, name: 'Tunnel Apex' },
     { x: 980, y: 840, name: 'Sector 3: alloy-zksync Turbo Straight' },
-    { x: 740, y: 860, name: 'Braking Zone' },
-    { x: 560, y: 660, name: 'Sector 4: tesis-futbol Chicane Apex' },
-    { x: 440, y: 820, name: 'Final Chicane & Parabolica' },
-    { x: 300, y: 880, name: 'Hook onto Main Straight' }
+    { x: 740, y: 850, name: 'Braking Zone' },
+    { x: 560, y: 720, name: 'Sector 4: tesis-futbol Chicane Apex' },
+    { x: 440, y: 830, name: 'Final Chicane & Parabolica' },
+    { x: 320, y: 865, name: 'Hook onto Main Straight' }
   ];
 
   class TrackGeometry {
-    constructor(points = WAYPOINTS, trackWidth = 140) {
+    constructor(points = WAYPOINTS, trackWidth = 110) {
       this.points = points;
       this.trackWidth = trackWidth;
       this.lut = []; // Arc-length lookup table
@@ -237,7 +237,7 @@
   }
 
   // Expose singleton and class to global window
-  const defaultGeometry = new TrackGeometry(WAYPOINTS, 140);
+  const defaultGeometry = new TrackGeometry(WAYPOINTS, 110);
   window.TrackGeometry = defaultGeometry;
   window.TrackGeometryClass = TrackGeometry;
 
