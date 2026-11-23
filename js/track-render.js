@@ -272,11 +272,12 @@
         ctx.strokeStyle = 'rgba(255, 255, 255, 0.85)';
         ctx.lineWidth = 2.5;
         ctx.beginPath();
-        ctx.moveTo(-16, -14);
-        ctx.lineTo(-16, 14);
-        ctx.lineTo(-6, 14);
-        ctx.moveTo(-16, -14);
-        ctx.lineTo(-6, -14);
+        // Closed at the FRONT (+x = driving direction), open at the rear
+        ctx.moveTo(16, -14);
+        ctx.lineTo(16, 14);
+        ctx.lineTo(6, 14);
+        ctx.moveTo(16, -14);
+        ctx.lineTo(6, -14);
         ctx.stroke();
 
         // Pole label
@@ -284,7 +285,7 @@
         ctx.font = 'bold 9px monospace';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText(slot.pole, 6, 0);
+        ctx.fillText(slot.pole, -6, 0);
 
         ctx.restore();
       });
