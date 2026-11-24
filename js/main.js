@@ -144,6 +144,24 @@
     btnCloseDrawer.addEventListener('click', () => telemetry.closeDrawer());
   }
 
+  // Click-to-reveal contact email (anti-scraper: assembled only on user click)
+  const btnRevealEmail = document.getElementById('btn-reveal-email');
+  if (btnRevealEmail) {
+    btnRevealEmail.addEventListener('click', () => {
+      const codes = [109,97,114,116,105,110,46,98,101,114,103,117,101,114,64,103,109,97,105,108,46,99,111,109];
+      const addr = String.fromCharCode(...codes);
+      if (btnRevealEmail.dataset.revealed === '1') {
+        window.location.href = 'mai' + 'lto:' + addr;
+        return;
+      }
+      btnRevealEmail.dataset.revealed = '1';
+      btnRevealEmail.textContent = addr + ' (click to email)';
+      if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+        navigator.clipboard.writeText(addr).catch(() => {});
+      }
+    });
+  }
+
   let passedSector4 = false;
   let lastMmX = -999;
   let lastMmY = -999;

@@ -167,7 +167,7 @@
 <div align="center">
 
 ```
- [ PIT STOP: martin.berguer@gmail.com ] • [ MONTEVIDEO, UY ] • [ STATUS: READY TO RACE ]
+ [ PIT STOP: linkedin.com/in/mberguer ] • [ MONTEVIDEO, UY ] • [ STATUS: READY TO RACE ]
 ```
 
 </div>
