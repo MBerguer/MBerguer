@@ -170,6 +170,4 @@
  [ PIT STOP: martin.berguer@gmail.com ] • [ MONTEVIDEO, UY ] • [ STATUS: READY TO RACE ]
 ```
 
-<sub>Diseñado con precisión. Cero métricas genéricas de IA. Solo ingeniería de sistemas, baja latencia y código limpio.</sub>
-
 </div>
